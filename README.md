@@ -1,6 +1,6 @@
 # Sonar Bat
 
-Sonar Bat is a massive network detection system designed to help users configure and execute network-related tasks on specific endpoints or hosts. It features a user-friendly web interface (webui) for task configuration and is built using a microservice architecture with Go as the primary programming language.
+🦇 Sonar Bat is a large-scale network detection system designed to help users configure and execute network-related tasks on specific endpoints or hosts. It features a user-friendly web interface (webui) for task configuration and is built using a microservice architecture with Go as the primary programming language.
 
 ## Features
 
@@ -9,6 +9,7 @@ Sonar Bat is a massive network detection system designed to help users configure
 - **Host Matching**: Dispatch tasks to specific endpoints based on host characteristics and requirements.
 - **Microservice Architecture**: The service is composed of independent microservices for scalability and maintainability.
 - **Efficient and Concurrent**: Leverages Go's performance and concurrency capabilities for efficient task execution.
+- **Massive Task Support**: Sonar Bat can handle and process a large volume of tasks simultaneously, making it suitable for large-scale network operations.
 
 ## Installation
 (WIP)

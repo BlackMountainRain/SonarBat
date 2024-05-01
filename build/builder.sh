@@ -28,7 +28,7 @@ source "$info_path"
 
 # override org name
 if [[ -n "$org_name" ]]; then
-  DOCKER_ORG="$org_name"
+  DOCKER_ORG=$(echo "$org_name" | tr '[:upper:]' '[:lower:]')
 fi
 
 tags=(latest)

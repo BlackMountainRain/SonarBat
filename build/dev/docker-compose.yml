@@ -2,7 +2,7 @@ services:
   db:
     image: postgres:16
     container_name: sb-postgres16
-    restart: on-failure
+    restart: always
     # set shared memory limit when using docker-compose
     shm_size: 128mb
     ports:
@@ -15,3 +15,8 @@ services:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASS}
+
+  backend:
+    image: golang:1.22.2
+    container_name: sb-backend
+    restart: always

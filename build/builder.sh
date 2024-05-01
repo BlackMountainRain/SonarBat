@@ -54,6 +54,7 @@ for tag in "${tags[@]}"; do
 done
 if [[ $push -eq 1 ]]; then
   args+=" --push"
+  echo "Pushing to $DOCKER_REPOSITORY after build"
 fi
 
 docker buildx build \

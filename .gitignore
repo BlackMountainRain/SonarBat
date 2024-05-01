@@ -58,6 +58,8 @@ Thumbs.db
 *.key
 *.log
 bin/
+cache/
+.env
 
 # Develop tools
 .vscode/

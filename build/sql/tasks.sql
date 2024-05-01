@@ -10,6 +10,6 @@ CREATE TABLE IF NOT EXISTS tasks (
     created_at timestamptz DEFAULT CURRENT_TIMESTAMP NULL,
     updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NULL
 );
-CREATE INDEX idx_name ON tasks USING btree (name);
+CREATE INDEX idx_tasks_name ON tasks USING btree (name);
 COMMENT ON COLUMN tasks.updated_by IS 'latest updated user id';
 COMMENT ON COLUMN tasks.created_by IS 'creator user id';

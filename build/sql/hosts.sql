@@ -4,7 +4,7 @@ CREATE TYPE ip_with_info AS (
     is_ipv6 BOOLEAN
 );
 
-CREATE TABLE hosts (
+CREATE TABLE IF NOT EXISTS hosts (
    id uuid DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
    status boolean DEFAULT true NOT NULL,
 
@@ -21,7 +21,7 @@ CREATE TABLE hosts (
    created_at timestamptz DEFAULT CURRENT_TIMESTAMP NULL,
    updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NULL
 );
-CREATE INDEX idx_name ON hosts USING btree (name);
+CREATE INDEX idx_hosts_name ON hosts USING btree (name);
 COMMENT ON COLUMN hosts.name IS 'endpoint name, maybe hostname or ip';
 COMMENT ON COLUMN hosts.is_agent_installed IS 'this host is installed agent or not, only installed agent can run tasks';
 COMMENT ON COLUMN hosts.agent_version IS 'agent version if installed';

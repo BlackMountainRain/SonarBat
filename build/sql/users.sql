@@ -10,5 +10,5 @@ CREATE TABLE IF NOT EXISTS users (
     created_at timestamptz DEFAULT CURRENT_TIMESTAMP NULL,
     updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NULL
 );
-CREATE INDEX idx_username ON users USING btree (username);
-CREATE UNIQUE INDEX idx_email ON users USING btree (email);
+CREATE INDEX idx_users_username ON users USING btree (username);
+CREATE UNIQUE INDEX idx_users_email ON users USING btree (email);

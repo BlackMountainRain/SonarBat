@@ -19,8 +19,8 @@ CREATE TABLE IF NOT EXISTS subtasks (
     created_at timestamptz DEFAULT CURRENT_TIMESTAMP NULL,
     updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NULL
 );
-CREATE INDEX idx_task_id ON subtasks USING btree (task_id);
-CREATE INDEX idx_detection_type ON subtasks USING btree (detection_type);
+CREATE INDEX idx_subtasks_task_id ON subtasks USING btree (task_id);
+CREATE INDEX idx_subtasks_detection_type ON subtasks USING btree (detection_type);
 COMMENT ON COLUMN subtasks.detection_type IS 'detect type: 1: Ping, 2: TcpPing, 3: UdpPing, 4: Http, 5: Tcp, 6: Udp, 7: Dns, 8: Mtr';
 COMMENT ON COLUMN subtasks.src_ep_filter_strategy IS '{key: value} to filter endpoints';
 COMMENT ON COLUMN subtasks.src_ep_sel_strategy IS '{key: value} to select endpoints from filtered pool';

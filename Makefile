@@ -81,3 +81,9 @@ help:
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
 .DEFAULT_GOAL := help
+
+dev:
+	docker compose --env-file .env -f ./build/dev/docker-compose.yml --project-directory . up -d
+
+down:
+	docker compose --env-file .env -f ./build/dev/docker-compose.yml --project-directory . down

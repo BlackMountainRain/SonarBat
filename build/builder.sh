@@ -59,6 +59,6 @@ fi
 
 docker buildx build \
   $args \
-  --platform linux/386,linux/amd64,linux/arm64/v8,linux/arm/v7 \
+  --platform linux/amd64,linux/arm64/v8,linux/arm/v7 \
   --provenance=false \
   -f "$dockerfile_path" "$DOCKER_BASE_DIR"

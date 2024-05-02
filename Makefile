@@ -82,8 +82,10 @@ help:
 
 .DEFAULT_GOAL := help
 
+# start the dev environment
 dev:
 	docker compose --env-file .env -f ./build/dev/docker-compose.yml --project-directory . up -d
 
+# tear down the dev environment
 down:
 	docker compose --env-file .env -f ./build/dev/docker-compose.yml --project-directory . down

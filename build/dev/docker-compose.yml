@@ -17,6 +17,13 @@ services:
       - POSTGRES_PASSWORD=${DB_PASS}
 
   backend:
-    image: golang:1.22.2
+    image: ghcr.io/blackmountainrain/sb-go-dev:latest
     container_name: sb-backend
     restart: always
+    volumes:
+      - .:/go/src/sb
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+

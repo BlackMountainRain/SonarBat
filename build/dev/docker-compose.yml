@@ -20,10 +20,14 @@ services:
     image: ghcr.io/blackmountainrain/sb-go-dev:latest
     container_name: sb-backend
     restart: always
+    ports:
+      - 8000:8000
+      - 9000:9000
     volumes:
       - .:/go/src/sb
     environment:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
-
+      - GOPROXY=https://goproxy.cn,direct
+    command: sh -c "make all && kratos run"

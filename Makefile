@@ -89,3 +89,10 @@ dev:
 # tear down the dev environment
 down:
 	docker compose --env-file .env -f ./build/dev/docker-compose.yml --project-directory . down
+
+# dive into the dev container by service name
+in:
+	@docker compose --env-file .env -f ./build/dev/docker-compose.yml --project-directory . exec $(filter-out $@,$(MAKECMDGOALS))
+
+%:
+	@:

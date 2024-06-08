@@ -30,4 +30,4 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
       - GOPROXY=https://goproxy.cn,direct
-    command: sh -c "make all && kratos run"
+    command: sh -c "make all && tail -f /dev/null"

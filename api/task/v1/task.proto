@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package api.task.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "sonar-bat/api/task/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.task.v1";
+
+service Task {
+	rpc CreateTask (CreateTaskRequest) returns (CreateTaskReply) {
+		option (google.api.http) = {
+			post: "/api/v1/tasks"
+			body: "*"
+		};
+	};
+	rpc UpdateTask (UpdateTaskRequest) returns (UpdateTaskReply) {
+		option (google.api.http) = {
+			patch: "/api/v1/tasks/{id}"
+			body: "*"
+		};
+	};
+	rpc OverwriteTask (OverwriteTaskRequest) returns (OverwriteTaskReply) {
+		option (google.api.http) = {
+			put: "/api/v1/tasks/{id}"
+			body: "*"
+		};
+	};
+	rpc DeleteTask (DeleteTaskRequest) returns (DeleteTaskReply) {
+		option (google.api.http) = {
+			delete: "/api/v1/tasks/{id}"
+		};
+	};
+	rpc GetTask (GetTaskRequest) returns (GetTaskReply) {
+		option (google.api.http) = {
+			get: "/api/v1/tasks/{id}"
+		};
+	};
+	rpc GetTasks (GetTasksRequest) returns (GetTasksReply) {
+		option (google.api.http) = {
+			get: "/api/v1/tasks"
+		};
+	};
+}
+
+
+message CreateTaskRequest {
+	bool status = 1;
+	string name = 2;
+	string comment = 3;
+}
+message CreateTaskReply {
+	string id = 1;
+}
+
+message UpdateTaskRequest {
+	string id = 1;
+	optional bool status = 2;
+	optional string name = 3;
+	optional string comment = 4;
+}
+message UpdateTaskReply {
+	uint32 rows_affected = 1;
+}
+
+message OverwriteTaskRequest {
+	string id = 1;
+	bool status = 2;
+	string name = 3;
+	string comment = 4;
+}
+message OverwriteTaskReply {
+	uint32 rows_affected = 1;
+}
+
+message DeleteTaskRequest {
+	string id = 1;
+}
+message DeleteTaskReply {
+	uint32 rows_affected = 1;
+}
+
+message GetTaskRequest {
+	string id = 1;
+}
+message GetTaskReply {
+	string id = 1;
+	bool status = 2;
+	string name = 3;
+	string comment = 4;
+	string updated_by = 5;
+	string created_by = 6;
+	string created_at = 7;
+	string updated_at = 8;
+}
+
+message SingleTask {
+	string id = 1;
+	bool status = 2;
+	string name = 3;
+	string comment = 4;
+	string updated_by = 5;
+	string created_by = 6;
+	string created_at = 7;
+	string updated_at = 8;
+}
+message GetTasksRequest {}
+message GetTasksReply {
+	repeated SingleTask tasks = 1;
+}

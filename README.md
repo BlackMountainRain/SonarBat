@@ -17,6 +17,27 @@
 ## Usage
 (WIP)
 
+## Development
+```bash
+# Create a new proto in api
+kratos proto add api/task/v1/task.proto
+
+# generate the client codes based on the proto
+make api
+
+# generate the server codes based on the proto
+kratos proto server api/task/v1/task.proto -t internal/task/service
+```
+
+### Create a new table
+```bash
+go run -mod=mod entgo.io/ent/cmd/ent new Task
+```
+Edit the schema in `ent/schema/task.go` and run the following command to generate the table
+```bash
+go run -mod=mod entgo.io/ent/cmd/ent generate ./ent
+```
+
 ## Contributing
 
 Contributions are welcome! Please follow the guidelines outlined in the [CONTRIBUTING.md](CONTRIBUTING.md) file.

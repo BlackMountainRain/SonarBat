@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS host_blacklist (
 
     reason varchar(50) NOT NULL,
 
+    updated_by uuid NOT NULL,
+    created_by uuid NOT NULL,
     created_at timestamptz DEFAULT CURRENT_TIMESTAMP NULL,
     updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NULL
 );

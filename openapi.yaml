@@ -3,10 +3,119 @@
 
 openapi: 3.0.3
 info:
-    title: Greeter API
-    description: The greeting service definition.
+    title: ""
     version: 0.0.1
 paths:
+    /api/v1/tasks:
+        get:
+            tags:
+                - Task
+            operationId: Task_GetTasks
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.task.v1.GetTasksReply'
+        post:
+            tags:
+                - Task
+            operationId: Task_CreateTask
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.task.v1.CreateTaskRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.task.v1.CreateTaskReply'
+    /api/v1/tasks/{id}:
+        get:
+            tags:
+                - Task
+            operationId: Task_GetTask
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.task.v1.GetTaskReply'
+        put:
+            tags:
+                - Task
+            operationId: Task_OverwriteTask
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.task.v1.OverwriteTaskRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.task.v1.OverwriteTaskReply'
+        delete:
+            tags:
+                - Task
+            operationId: Task_DeleteTask
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.task.v1.DeleteTaskReply'
+        patch:
+            tags:
+                - Task
+            operationId: Task_UpdateTask
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.task.v1.UpdateTaskRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.task.v1.UpdateTaskReply'
     /helloworld/{name}:
         get:
             tags:
@@ -26,8 +135,429 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/helloworld.v1.HelloReply'
+    /v1/tasks/{taskId}/subtasks:
+        get:
+            tags:
+                - Subtask
+            operationId: Subtask_GetSubtasks
+            parameters:
+                - name: taskId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.task.v1.GetSubtasksReply'
+        post:
+            tags:
+                - Subtask
+            operationId: Subtask_CreateSubtask
+            parameters:
+                - name: taskId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.task.v1.CreateSubtaskRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.task.v1.CreateSubtaskReply'
+    /v1/tasks/{taskId}/subtasks/{subtaskId}:
+        get:
+            tags:
+                - Subtask
+            operationId: Subtask_GetSubtask
+            parameters:
+                - name: taskId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: subtaskId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.task.v1.GetSubtaskReply'
+        put:
+            tags:
+                - Subtask
+            operationId: Subtask_UpdateSubtask
+            parameters:
+                - name: taskId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: subtaskId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.task.v1.UpdateSubtaskRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.task.v1.UpdateSubtaskReply'
+        delete:
+            tags:
+                - Subtask
+            operationId: Subtask_DeleteSubtask
+            parameters:
+                - name: taskId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: subtaskId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.task.v1.DeleteSubtaskReply'
+        patch:
+            tags:
+                - Subtask
+            operationId: Subtask_OverwriteSubtask
+            parameters:
+                - name: taskId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: subtaskId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.task.v1.OverwriteSubtaskRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.task.v1.OverwriteSubtaskReply'
 components:
     schemas:
+        api.task.v1.CreateSubtaskReply:
+            type: object
+            properties:
+                subtaskId:
+                    type: string
+        api.task.v1.CreateSubtaskRequest:
+            type: object
+            properties:
+                taskId:
+                    type: string
+                status:
+                    type: boolean
+                detectionType:
+                    type: integer
+                    format: int32
+                params:
+                    type: string
+                srcEpFilterStrategy:
+                    type: string
+                srcEpSelStrategy:
+                    type: string
+                srcEpSelNum:
+                    type: integer
+                    format: int32
+                dstEpFilterStrategy:
+                    type: string
+                dstEpSelStrategy:
+                    type: string
+                dstEpSelNum:
+                    type: integer
+                    format: int32
+        api.task.v1.CreateTaskReply:
+            type: object
+            properties:
+                id:
+                    type: string
+        api.task.v1.CreateTaskRequest:
+            type: object
+            properties:
+                status:
+                    type: boolean
+                name:
+                    type: string
+                comment:
+                    type: string
+        api.task.v1.DeleteSubtaskReply:
+            type: object
+            properties:
+                rowsAffected:
+                    type: integer
+                    format: uint32
+        api.task.v1.DeleteTaskReply:
+            type: object
+            properties:
+                rowsAffected:
+                    type: integer
+                    format: uint32
+        api.task.v1.GetSubtaskReply:
+            type: object
+            properties:
+                subtaskId:
+                    type: string
+                status:
+                    type: boolean
+                detectionType:
+                    type: integer
+                    format: int32
+                params:
+                    type: string
+                srcEpFilterStrategy:
+                    type: string
+                srcEpSelStrategy:
+                    type: string
+                srcEpSelNum:
+                    type: integer
+                    format: int32
+                dstEpFilterStrategy:
+                    type: string
+                dstEpSelStrategy:
+                    type: string
+                dstEpSelNum:
+                    type: integer
+                    format: int32
+                updatedBy:
+                    type: string
+                createdBy:
+                    type: string
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+        api.task.v1.GetSubtasksReply:
+            type: object
+            properties:
+                subtasks:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.task.v1.SingleSubtask'
+        api.task.v1.GetTaskReply:
+            type: object
+            properties:
+                id:
+                    type: string
+                status:
+                    type: boolean
+                name:
+                    type: string
+                comment:
+                    type: string
+                updatedBy:
+                    type: string
+                createdBy:
+                    type: string
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+        api.task.v1.GetTasksReply:
+            type: object
+            properties:
+                tasks:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.task.v1.SingleTask'
+        api.task.v1.OverwriteSubtaskReply:
+            type: object
+            properties:
+                rowsAffected:
+                    type: integer
+                    format: uint32
+        api.task.v1.OverwriteSubtaskRequest:
+            type: object
+            properties:
+                taskId:
+                    type: string
+                subtaskId:
+                    type: string
+                status:
+                    type: boolean
+                detectionType:
+                    type: integer
+                    format: int32
+                params:
+                    type: string
+                srcEpFilterStrategy:
+                    type: string
+                srcEpSelStrategy:
+                    type: string
+                srcEpSelNum:
+                    type: integer
+                    format: int32
+                dstEpFilterStrategy:
+                    type: string
+                dstEpSelStrategy:
+                    type: string
+                dstEpSelNum:
+                    type: integer
+                    format: int32
+        api.task.v1.OverwriteTaskReply:
+            type: object
+            properties:
+                rowsAffected:
+                    type: integer
+                    format: uint32
+        api.task.v1.OverwriteTaskRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                status:
+                    type: boolean
+                name:
+                    type: string
+                comment:
+                    type: string
+        api.task.v1.SingleSubtask:
+            type: object
+            properties:
+                subtaskId:
+                    type: string
+                status:
+                    type: boolean
+                detectionType:
+                    type: integer
+                    format: int32
+                params:
+                    type: string
+                srcEpFilterStrategy:
+                    type: string
+                srcEpSelStrategy:
+                    type: string
+                srcEpSelNum:
+                    type: integer
+                    format: int32
+                dstEpFilterStrategy:
+                    type: string
+                dstEpSelStrategy:
+                    type: string
+                dstEpSelNum:
+                    type: integer
+                    format: int32
+                updatedBy:
+                    type: string
+                createdBy:
+                    type: string
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+        api.task.v1.SingleTask:
+            type: object
+            properties:
+                id:
+                    type: string
+                status:
+                    type: boolean
+                name:
+                    type: string
+                comment:
+                    type: string
+                updatedBy:
+                    type: string
+                createdBy:
+                    type: string
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+        api.task.v1.UpdateSubtaskReply:
+            type: object
+            properties:
+                rowsAffected:
+                    type: integer
+                    format: uint32
+        api.task.v1.UpdateSubtaskRequest:
+            type: object
+            properties:
+                taskId:
+                    type: string
+                subtaskId:
+                    type: string
+                status:
+                    type: boolean
+                detectionType:
+                    type: integer
+                    format: int32
+                params:
+                    type: string
+                srcEpFilterStrategy:
+                    type: string
+                srcEpSelStrategy:
+                    type: string
+                srcEpSelNum:
+                    type: integer
+                    format: int32
+                dstEpFilterStrategy:
+                    type: string
+                dstEpSelStrategy:
+                    type: string
+                dstEpSelNum:
+                    type: integer
+                    format: int32
+        api.task.v1.UpdateTaskReply:
+            type: object
+            properties:
+                rowsAffected:
+                    type: integer
+                    format: uint32
+        api.task.v1.UpdateTaskRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                status:
+                    type: boolean
+                name:
+                    type: string
+                comment:
+                    type: string
         helloworld.v1.HelloReply:
             type: object
             properties:
@@ -36,3 +566,6 @@ components:
             description: The response message containing the greetings
 tags:
     - name: Greeter
+      description: The greeting service definition.
+    - name: Subtask
+    - name: Task

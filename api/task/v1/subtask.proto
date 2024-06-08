@@ -1,0 +1,147 @@
+syntax = "proto3";
+
+package api.task.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "sonar-bat/api/task/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.task.v1";
+
+service Subtask {
+	rpc CreateSubtask (CreateSubtaskRequest) returns (CreateSubtaskReply) {
+		option (google.api.http) = {
+			post: "/v1/tasks/{task_id}/subtasks"
+			body: "*"
+		};
+	};
+	rpc UpdateSubtask (UpdateSubtaskRequest) returns (UpdateSubtaskReply) {
+		option (google.api.http) = {
+			put: "/v1/tasks/{task_id}/subtasks/{subtask_id}"
+			body: "*"
+		};
+	};
+	rpc OverwriteSubtask (OverwriteSubtaskRequest) returns (OverwriteSubtaskReply){
+		option (google.api.http) = {
+			patch: "/v1/tasks/{task_id}/subtasks/{subtask_id}"
+			body: "*"
+		};
+	};
+	rpc DeleteSubtask (DeleteSubtaskRequest) returns (DeleteSubtaskReply) {
+		option (google.api.http) = {
+			delete: "/v1/tasks/{task_id}/subtasks/{subtask_id}"
+		};
+	};
+	rpc GetSubtask (GetSubtaskRequest) returns (GetSubtaskReply) {
+		option (google.api.http) = {
+			get: "/v1/tasks/{task_id}/subtasks/{subtask_id}"
+		};
+	};
+	rpc GetSubtasks (GetSubtasksRequest) returns (GetSubtasksReply) {
+		option (google.api.http) = {
+			get: "/v1/tasks/{task_id}/subtasks"
+		};
+	};
+}
+
+message CreateSubtaskRequest {
+	string task_id = 1;
+	bool status = 2;
+	int32 detection_type = 3;
+	string params = 4;
+	string src_ep_filter_strategy = 5;
+	string src_ep_sel_strategy = 6;
+	int32 src_ep_sel_num = 7;
+	string dst_ep_filter_strategy = 8;
+	string dst_ep_sel_strategy = 9;
+	int32 dst_ep_sel_num = 10;
+}
+message CreateSubtaskReply {
+	string subtask_id = 1;
+}
+
+message UpdateSubtaskRequest {
+	string task_id = 1;
+	string subtask_id = 2;
+	optional bool status = 3;
+	optional int32 detection_type = 4;
+	optional string params = 5;
+	optional string src_ep_filter_strategy = 6;
+	optional string src_ep_sel_strategy = 7;
+	optional int32 src_ep_sel_num = 8;
+	optional string dst_ep_filter_strategy = 9;
+	optional string dst_ep_sel_strategy = 10;
+	optional int32 dst_ep_sel_num = 11;
+}
+message UpdateSubtaskReply {
+	uint32 rows_affected = 1;
+}
+
+message OverwriteSubtaskRequest {
+	string task_id = 1;
+	string subtask_id = 2;
+	bool status = 3;
+	int32 detection_type = 4;
+	string params = 5;
+	string src_ep_filter_strategy = 6;
+	string src_ep_sel_strategy = 7;
+	int32 src_ep_sel_num = 8;
+	string dst_ep_filter_strategy = 9;
+	string dst_ep_sel_strategy = 10;
+	int32 dst_ep_sel_num = 11;
+}
+message OverwriteSubtaskReply {
+	uint32 rows_affected = 1;
+}
+
+message DeleteSubtaskRequest {
+	string task_id = 1;
+	string subtask_id = 2;
+}
+message DeleteSubtaskReply {
+	uint32 rows_affected = 1;
+}
+
+message GetSubtaskRequest {
+	string task_id = 1;
+	string subtask_id = 2;
+}
+message GetSubtaskReply {
+	string subtask_id = 1;
+	bool status = 2;
+	int32 detection_type = 3;
+	string params = 4;
+	string src_ep_filter_strategy = 5;
+	string src_ep_sel_strategy = 6;
+	int32 src_ep_sel_num = 7;
+	string dst_ep_filter_strategy = 8;
+	string dst_ep_sel_strategy = 9;
+	int32 dst_ep_sel_num = 10;
+	string updated_by = 11;
+	string created_by = 12;
+	string created_at = 13;
+	string updated_at = 14;
+}
+
+message SingleSubtask {
+	string subtask_id = 1;
+	bool status = 2;
+	int32 detection_type = 3;
+	string params = 4;
+	string src_ep_filter_strategy = 5;
+	string src_ep_sel_strategy = 6;
+	int32 src_ep_sel_num = 7;
+	string dst_ep_filter_strategy = 8;
+	string dst_ep_sel_strategy = 9;
+	int32 dst_ep_sel_num = 10;
+	string updated_by = 11;
+	string created_by = 12;
+	string created_at = 13;
+	string updated_at = 14;
+}
+message GetSubtasksRequest {
+	string task_id = 1;
+}
+message GetSubtasksReply {
+	repeated SingleSubtask subtasks = 1;
+}

@@ -84,15 +84,15 @@ help:
 
 # start the dev environment
 dev:
-	docker compose --env-file .env -f ./build/dev/docker-compose.yml --project-directory . up -d
+	docker compose -f ./build/dev/docker-compose.yml --project-directory . up -d
 
 # tear down the dev environment
 down:
-	docker compose --env-file .env -f ./build/dev/docker-compose.yml --project-directory . down
+	docker compose -f ./build/dev/docker-compose.yml --project-directory . down
 
 # dive into the dev container by service name
 in:
-	@docker compose --env-file .env -f ./build/dev/docker-compose.yml --project-directory . exec $(filter-out $@,$(MAKECMDGOALS))
+	@docker compose -f ./build/dev/docker-compose.yml --project-directory . exec $(filter-out $@,$(MAKECMDGOALS))
 
 %:
 	@:

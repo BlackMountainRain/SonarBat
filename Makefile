@@ -18,6 +18,8 @@ endif
 .PHONY: init
 # init env
 init:
+	go mod tidy
+	go get github.com/google/wire/cmd/wire@latest
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 	go install github.com/go-kratos/kratos/cmd/kratos/v2@latest
@@ -52,8 +54,6 @@ build:
 .PHONY: generate
 # generate
 generate:
-	go mod tidy
-	go get github.com/google/wire/cmd/wire@latest
 	go generate ./...
 
 .PHONY: all

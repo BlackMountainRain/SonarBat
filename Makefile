@@ -74,6 +74,11 @@ all:
 	make validate;
 	go mod tidy;
 
+.PHONY: test
+# run all tests
+test:
+	go test -v ./...
+
 # show help
 help:
 	@echo ''

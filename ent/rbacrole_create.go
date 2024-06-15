@@ -97,20 +97,28 @@ func (rrc *RbacRoleCreate) SetNillableDescription(s *string) *RbacRoleCreate {
 }
 
 // SetID sets the "id" field.
-func (rrc *RbacRoleCreate) SetID(i int64) *RbacRoleCreate {
-	rrc.mutation.SetID(i)
+func (rrc *RbacRoleCreate) SetID(u uuid.UUID) *RbacRoleCreate {
+	rrc.mutation.SetID(u)
+	return rrc
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (rrc *RbacRoleCreate) SetNillableID(u *uuid.UUID) *RbacRoleCreate {
+	if u != nil {
+		rrc.SetID(*u)
+	}
 	return rrc
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
-func (rrc *RbacRoleCreate) AddUserIDs(ids ...int64) *RbacRoleCreate {
+func (rrc *RbacRoleCreate) AddUserIDs(ids ...uuid.UUID) *RbacRoleCreate {
 	rrc.mutation.AddUserIDs(ids...)
 	return rrc
 }
 
 // AddUsers adds the "users" edges to the User entity.
 func (rrc *RbacRoleCreate) AddUsers(u ...*User) *RbacRoleCreate {
-	ids := make([]int64, len(u))
+	ids := make([]uuid.UUID, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
 	}
@@ -168,6 +176,10 @@ func (rrc *RbacRoleCreate) defaults() {
 		v := rbacrole.DefaultDescription
 		rrc.mutation.SetDescription(v)
 	}
+	if _, ok := rrc.mutation.ID(); !ok {
+		v := rbacrole.DefaultID()
+		rrc.mutation.SetID(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -217,9 +229,12 @@ func (rrc *RbacRoleCreate) sqlSave(ctx context.Context) (*RbacRole, error) {
 		}
 		return nil, err
 	}
-	if _spec.ID.Value != _node.ID {
-		id := _spec.ID.Value.(int64)
-		_node.ID = int64(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
 	}
 	rrc.mutation.id = &_node.ID
 	rrc.mutation.done = true
@@ -229,11 +244,11 @@ func (rrc *RbacRoleCreate) sqlSave(ctx context.Context) (*RbacRole, error) {
 func (rrc *RbacRoleCreate) createSpec() (*RbacRole, *sqlgraph.CreateSpec) {
 	var (
 		_node = &RbacRole{config: rrc.config}
-		_spec = sqlgraph.NewCreateSpec(rbacrole.Table, sqlgraph.NewFieldSpec(rbacrole.FieldID, field.TypeInt64))
+		_spec = sqlgraph.NewCreateSpec(rbacrole.Table, sqlgraph.NewFieldSpec(rbacrole.FieldID, field.TypeUUID))
 	)
 	if id, ok := rrc.mutation.ID(); ok {
 		_node.ID = id
-		_spec.ID.Value = id
+		_spec.ID.Value = &id
 	}
 	if value, ok := rrc.mutation.CreatedAt(); ok {
 		_spec.SetField(rbacrole.FieldCreatedAt, field.TypeTime, value)
@@ -271,7 +286,7 @@ func (rrc *RbacRoleCreate) createSpec() (*RbacRole, *sqlgraph.CreateSpec) {
 			Columns: rbacrole.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -327,10 +342,6 @@ func (rrcb *RbacRoleCreateBulk) Save(ctx context.Context) ([]*RbacRole, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int64(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

@@ -118,8 +118,16 @@ func (rpc *RbacPolicyCreate) SetNillableURI(s *string) *RbacPolicyCreate {
 }
 
 // SetID sets the "id" field.
-func (rpc *RbacPolicyCreate) SetID(i int64) *RbacPolicyCreate {
-	rpc.mutation.SetID(i)
+func (rpc *RbacPolicyCreate) SetID(u uuid.UUID) *RbacPolicyCreate {
+	rpc.mutation.SetID(u)
+	return rpc
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (rpc *RbacPolicyCreate) SetNillableID(u *uuid.UUID) *RbacPolicyCreate {
+	if u != nil {
+		rpc.SetID(*u)
+	}
 	return rpc
 }
 
@@ -165,6 +173,10 @@ func (rpc *RbacPolicyCreate) defaults() {
 	if _, ok := rpc.mutation.UpdatedAt(); !ok {
 		v := rbacpolicy.DefaultUpdatedAt()
 		rpc.mutation.SetUpdatedAt(v)
+	}
+	if _, ok := rpc.mutation.ID(); !ok {
+		v := rbacpolicy.DefaultID()
+		rpc.mutation.SetID(v)
 	}
 }
 
@@ -216,9 +228,12 @@ func (rpc *RbacPolicyCreate) sqlSave(ctx context.Context) (*RbacPolicy, error) {
 		}
 		return nil, err
 	}
-	if _spec.ID.Value != _node.ID {
-		id := _spec.ID.Value.(int64)
-		_node.ID = int64(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
 	}
 	rpc.mutation.id = &_node.ID
 	rpc.mutation.done = true
@@ -228,11 +243,11 @@ func (rpc *RbacPolicyCreate) sqlSave(ctx context.Context) (*RbacPolicy, error) {
 func (rpc *RbacPolicyCreate) createSpec() (*RbacPolicy, *sqlgraph.CreateSpec) {
 	var (
 		_node = &RbacPolicy{config: rpc.config}
-		_spec = sqlgraph.NewCreateSpec(rbacpolicy.Table, sqlgraph.NewFieldSpec(rbacpolicy.FieldID, field.TypeInt64))
+		_spec = sqlgraph.NewCreateSpec(rbacpolicy.Table, sqlgraph.NewFieldSpec(rbacpolicy.FieldID, field.TypeUUID))
 	)
 	if id, ok := rpc.mutation.ID(); ok {
 		_node.ID = id
-		_spec.ID.Value = id
+		_spec.ID.Value = &id
 	}
 	if value, ok := rpc.mutation.CreatedAt(); ok {
 		_spec.SetField(rbacpolicy.FieldCreatedAt, field.TypeTime, value)
@@ -314,10 +329,6 @@ func (rpcb *RbacPolicyCreateBulk) Save(ctx context.Context) ([]*RbacPolicy, erro
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int64(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

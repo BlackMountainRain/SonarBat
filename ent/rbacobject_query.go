@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // RbacObjectQuery is the builder for querying RbacObject entities.
@@ -81,8 +82,8 @@ func (roq *RbacObjectQuery) FirstX(ctx context.Context) *RbacObject {
 
 // FirstID returns the first RbacObject ID from the query.
 // Returns a *NotFoundError when no RbacObject ID was found.
-func (roq *RbacObjectQuery) FirstID(ctx context.Context) (id int64, err error) {
-	var ids []int64
+func (roq *RbacObjectQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = roq.Limit(1).IDs(setContextOp(ctx, roq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -94,7 +95,7 @@ func (roq *RbacObjectQuery) FirstID(ctx context.Context) (id int64, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (roq *RbacObjectQuery) FirstIDX(ctx context.Context) int64 {
+func (roq *RbacObjectQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := roq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -132,8 +133,8 @@ func (roq *RbacObjectQuery) OnlyX(ctx context.Context) *RbacObject {
 // OnlyID is like Only, but returns the only RbacObject ID in the query.
 // Returns a *NotSingularError when more than one RbacObject ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (roq *RbacObjectQuery) OnlyID(ctx context.Context) (id int64, err error) {
-	var ids []int64
+func (roq *RbacObjectQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = roq.Limit(2).IDs(setContextOp(ctx, roq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -149,7 +150,7 @@ func (roq *RbacObjectQuery) OnlyID(ctx context.Context) (id int64, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (roq *RbacObjectQuery) OnlyIDX(ctx context.Context) int64 {
+func (roq *RbacObjectQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := roq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -177,7 +178,7 @@ func (roq *RbacObjectQuery) AllX(ctx context.Context) []*RbacObject {
 }
 
 // IDs executes the query and returns a list of RbacObject IDs.
-func (roq *RbacObjectQuery) IDs(ctx context.Context) (ids []int64, err error) {
+func (roq *RbacObjectQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if roq.ctx.Unique == nil && roq.path != nil {
 		roq.Unique(true)
 	}
@@ -189,7 +190,7 @@ func (roq *RbacObjectQuery) IDs(ctx context.Context) (ids []int64, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (roq *RbacObjectQuery) IDsX(ctx context.Context) []int64 {
+func (roq *RbacObjectQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := roq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -364,7 +365,7 @@ func (roq *RbacObjectQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (roq *RbacObjectQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(rbacobject.Table, rbacobject.Columns, sqlgraph.NewFieldSpec(rbacobject.FieldID, field.TypeInt64))
+	_spec := sqlgraph.NewQuerySpec(rbacobject.Table, rbacobject.Columns, sqlgraph.NewFieldSpec(rbacobject.FieldID, field.TypeUUID))
 	_spec.From = roq.sql
 	if unique := roq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

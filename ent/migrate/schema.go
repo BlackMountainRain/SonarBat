@@ -10,7 +10,7 @@ import (
 var (
 	// DictionariesColumns holds the columns for the "dictionaries" table.
 	DictionariesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "category", Type: field.TypeString, Size: 20},
@@ -69,7 +69,7 @@ var (
 	}
 	// RbacObjectsColumns holds the columns for the "rbac_objects" table.
 	RbacObjectsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeUUID},
@@ -85,7 +85,7 @@ var (
 	}
 	// RbacPoliciesColumns holds the columns for the "rbac_policies" table.
 	RbacPoliciesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeUUID},
@@ -103,7 +103,7 @@ var (
 	}
 	// RbacRolesColumns holds the columns for the "rbac_roles" table.
 	RbacRolesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeUUID},
@@ -169,7 +169,7 @@ var (
 	}
 	// TokensColumns holds the columns for the "tokens" table.
 	TokensColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeUUID},
@@ -178,7 +178,7 @@ var (
 		{Name: "name", Type: field.TypeString, Size: 20},
 		{Name: "remark", Type: field.TypeString, Size: 200, Default: ""},
 		{Name: "token", Type: field.TypeString, Size: 100},
-		{Name: "user_id", Type: field.TypeInt64},
+		{Name: "user_id", Type: field.TypeUUID},
 	}
 	// TokensTable holds the schema information for the "tokens" table.
 	TokensTable = &schema.Table{
@@ -196,13 +196,12 @@ var (
 	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "updated_by", Type: field.TypeUUID},
-		{Name: "created_by", Type: field.TypeUUID},
 		{Name: "status", Type: field.TypeBool, Default: true},
 		{Name: "username", Type: field.TypeString, Size: 255},
+		{Name: "password", Type: field.TypeString, Size: 255},
 		{Name: "email", Type: field.TypeString, Size: 255},
 	}
 	// UsersTable holds the schema information for the "users" table.
@@ -213,8 +212,8 @@ var (
 	}
 	// RbacRoleUsersColumns holds the columns for the "rbac_role_users" table.
 	RbacRoleUsersColumns = []*schema.Column{
-		{Name: "rbac_role_id", Type: field.TypeInt64},
-		{Name: "user_id", Type: field.TypeInt64},
+		{Name: "rbac_role_id", Type: field.TypeUUID},
+		{Name: "user_id", Type: field.TypeUUID},
 	}
 	// RbacRoleUsersTable holds the schema information for the "rbac_role_users" table.
 	RbacRoleUsersTable = &schema.Table{

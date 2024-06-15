@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // RbacObject holds the schema definition for the RbacObject entity.
@@ -13,7 +14,7 @@ type RbacObject struct {
 // Fields of the RbacObject.
 func (RbacObject) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int64("id").Unique(),
+		field.UUID("id", uuid.UUID{}).Unique().Default(uuid.New),
 		field.Bool("status").Default(true),
 		field.String("value").NotEmpty().MaxLen(50),
 	}

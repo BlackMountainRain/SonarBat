@@ -146,7 +146,7 @@ func (rou *RbacObjectUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := rou.check(); err != nil {
 		return n, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(rbacobject.Table, rbacobject.Columns, sqlgraph.NewFieldSpec(rbacobject.FieldID, field.TypeInt64))
+	_spec := sqlgraph.NewUpdateSpec(rbacobject.Table, rbacobject.Columns, sqlgraph.NewFieldSpec(rbacobject.FieldID, field.TypeUUID))
 	if ps := rou.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -319,7 +319,7 @@ func (rouo *RbacObjectUpdateOne) sqlSave(ctx context.Context) (_node *RbacObject
 	if err := rouo.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(rbacobject.Table, rbacobject.Columns, sqlgraph.NewFieldSpec(rbacobject.FieldID, field.TypeInt64))
+	_spec := sqlgraph.NewUpdateSpec(rbacobject.Table, rbacobject.Columns, sqlgraph.NewFieldSpec(rbacobject.FieldID, field.TypeUUID))
 	id, ok := rouo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "RbacObject.id" for update`)}

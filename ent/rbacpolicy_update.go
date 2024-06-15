@@ -213,7 +213,7 @@ func (rpu *RbacPolicyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := rpu.check(); err != nil {
 		return n, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(rbacpolicy.Table, rbacpolicy.Columns, sqlgraph.NewFieldSpec(rbacpolicy.FieldID, field.TypeInt64))
+	_spec := sqlgraph.NewUpdateSpec(rbacpolicy.Table, rbacpolicy.Columns, sqlgraph.NewFieldSpec(rbacpolicy.FieldID, field.TypeUUID))
 	if ps := rpu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -471,7 +471,7 @@ func (rpuo *RbacPolicyUpdateOne) sqlSave(ctx context.Context) (_node *RbacPolicy
 	if err := rpuo.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(rbacpolicy.Table, rbacpolicy.Columns, sqlgraph.NewFieldSpec(rbacpolicy.FieldID, field.TypeInt64))
+	_spec := sqlgraph.NewUpdateSpec(rbacpolicy.Table, rbacpolicy.Columns, sqlgraph.NewFieldSpec(rbacpolicy.FieldID, field.TypeUUID))
 	id, ok := rpuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "RbacPolicy.id" for update`)}

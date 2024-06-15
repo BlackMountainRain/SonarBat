@@ -65,15 +65,15 @@ func (tu *TokenUpdate) SetNillableCreatedBy(u *uuid.UUID) *TokenUpdate {
 }
 
 // SetUserID sets the "user_id" field.
-func (tu *TokenUpdate) SetUserID(i int64) *TokenUpdate {
-	tu.mutation.SetUserID(i)
+func (tu *TokenUpdate) SetUserID(u uuid.UUID) *TokenUpdate {
+	tu.mutation.SetUserID(u)
 	return tu
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (tu *TokenUpdate) SetNillableUserID(i *int64) *TokenUpdate {
-	if i != nil {
-		tu.SetUserID(*i)
+func (tu *TokenUpdate) SetNillableUserID(u *uuid.UUID) *TokenUpdate {
+	if u != nil {
+		tu.SetUserID(*u)
 	}
 	return tu
 }
@@ -213,7 +213,7 @@ func (tu *TokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := tu.check(); err != nil {
 		return n, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(token.Table, token.Columns, sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64))
+	_spec := sqlgraph.NewUpdateSpec(token.Table, token.Columns, sqlgraph.NewFieldSpec(token.FieldID, field.TypeUUID))
 	if ps := tu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -250,7 +250,7 @@ func (tu *TokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{token.UserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -263,7 +263,7 @@ func (tu *TokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{token.UserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -326,15 +326,15 @@ func (tuo *TokenUpdateOne) SetNillableCreatedBy(u *uuid.UUID) *TokenUpdateOne {
 }
 
 // SetUserID sets the "user_id" field.
-func (tuo *TokenUpdateOne) SetUserID(i int64) *TokenUpdateOne {
-	tuo.mutation.SetUserID(i)
+func (tuo *TokenUpdateOne) SetUserID(u uuid.UUID) *TokenUpdateOne {
+	tuo.mutation.SetUserID(u)
 	return tuo
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (tuo *TokenUpdateOne) SetNillableUserID(i *int64) *TokenUpdateOne {
-	if i != nil {
-		tuo.SetUserID(*i)
+func (tuo *TokenUpdateOne) SetNillableUserID(u *uuid.UUID) *TokenUpdateOne {
+	if u != nil {
+		tuo.SetUserID(*u)
 	}
 	return tuo
 }
@@ -487,7 +487,7 @@ func (tuo *TokenUpdateOne) sqlSave(ctx context.Context) (_node *Token, err error
 	if err := tuo.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(token.Table, token.Columns, sqlgraph.NewFieldSpec(token.FieldID, field.TypeInt64))
+	_spec := sqlgraph.NewUpdateSpec(token.Table, token.Columns, sqlgraph.NewFieldSpec(token.FieldID, field.TypeUUID))
 	id, ok := tuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Token.id" for update`)}
@@ -541,7 +541,7 @@ func (tuo *TokenUpdateOne) sqlSave(ctx context.Context) (_node *Token, err error
 			Columns: []string{token.UserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -554,7 +554,7 @@ func (tuo *TokenUpdateOne) sqlSave(ctx context.Context) (_node *Token, err error
 			Columns: []string{token.UserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

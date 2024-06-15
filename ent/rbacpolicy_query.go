@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // RbacPolicyQuery is the builder for querying RbacPolicy entities.
@@ -81,8 +82,8 @@ func (rpq *RbacPolicyQuery) FirstX(ctx context.Context) *RbacPolicy {
 
 // FirstID returns the first RbacPolicy ID from the query.
 // Returns a *NotFoundError when no RbacPolicy ID was found.
-func (rpq *RbacPolicyQuery) FirstID(ctx context.Context) (id int64, err error) {
-	var ids []int64
+func (rpq *RbacPolicyQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = rpq.Limit(1).IDs(setContextOp(ctx, rpq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -94,7 +95,7 @@ func (rpq *RbacPolicyQuery) FirstID(ctx context.Context) (id int64, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (rpq *RbacPolicyQuery) FirstIDX(ctx context.Context) int64 {
+func (rpq *RbacPolicyQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := rpq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -132,8 +133,8 @@ func (rpq *RbacPolicyQuery) OnlyX(ctx context.Context) *RbacPolicy {
 // OnlyID is like Only, but returns the only RbacPolicy ID in the query.
 // Returns a *NotSingularError when more than one RbacPolicy ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (rpq *RbacPolicyQuery) OnlyID(ctx context.Context) (id int64, err error) {
-	var ids []int64
+func (rpq *RbacPolicyQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = rpq.Limit(2).IDs(setContextOp(ctx, rpq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -149,7 +150,7 @@ func (rpq *RbacPolicyQuery) OnlyID(ctx context.Context) (id int64, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (rpq *RbacPolicyQuery) OnlyIDX(ctx context.Context) int64 {
+func (rpq *RbacPolicyQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := rpq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -177,7 +178,7 @@ func (rpq *RbacPolicyQuery) AllX(ctx context.Context) []*RbacPolicy {
 }
 
 // IDs executes the query and returns a list of RbacPolicy IDs.
-func (rpq *RbacPolicyQuery) IDs(ctx context.Context) (ids []int64, err error) {
+func (rpq *RbacPolicyQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if rpq.ctx.Unique == nil && rpq.path != nil {
 		rpq.Unique(true)
 	}
@@ -189,7 +190,7 @@ func (rpq *RbacPolicyQuery) IDs(ctx context.Context) (ids []int64, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (rpq *RbacPolicyQuery) IDsX(ctx context.Context) []int64 {
+func (rpq *RbacPolicyQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := rpq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -364,7 +365,7 @@ func (rpq *RbacPolicyQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (rpq *RbacPolicyQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(rbacpolicy.Table, rbacpolicy.Columns, sqlgraph.NewFieldSpec(rbacpolicy.FieldID, field.TypeInt64))
+	_spec := sqlgraph.NewQuerySpec(rbacpolicy.Table, rbacpolicy.Columns, sqlgraph.NewFieldSpec(rbacpolicy.FieldID, field.TypeUUID))
 	_spec.From = rpq.sql
 	if unique := rpq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

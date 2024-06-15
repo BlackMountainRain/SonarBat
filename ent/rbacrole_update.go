@@ -107,14 +107,14 @@ func (rru *RbacRoleUpdate) SetNillableDescription(s *string) *RbacRoleUpdate {
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
-func (rru *RbacRoleUpdate) AddUserIDs(ids ...int64) *RbacRoleUpdate {
+func (rru *RbacRoleUpdate) AddUserIDs(ids ...uuid.UUID) *RbacRoleUpdate {
 	rru.mutation.AddUserIDs(ids...)
 	return rru
 }
 
 // AddUsers adds the "users" edges to the User entity.
 func (rru *RbacRoleUpdate) AddUsers(u ...*User) *RbacRoleUpdate {
-	ids := make([]int64, len(u))
+	ids := make([]uuid.UUID, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
 	}
@@ -133,14 +133,14 @@ func (rru *RbacRoleUpdate) ClearUsers() *RbacRoleUpdate {
 }
 
 // RemoveUserIDs removes the "users" edge to User entities by IDs.
-func (rru *RbacRoleUpdate) RemoveUserIDs(ids ...int64) *RbacRoleUpdate {
+func (rru *RbacRoleUpdate) RemoveUserIDs(ids ...uuid.UUID) *RbacRoleUpdate {
 	rru.mutation.RemoveUserIDs(ids...)
 	return rru
 }
 
 // RemoveUsers removes "users" edges to User entities.
 func (rru *RbacRoleUpdate) RemoveUsers(u ...*User) *RbacRoleUpdate {
-	ids := make([]int64, len(u))
+	ids := make([]uuid.UUID, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
 	}
@@ -202,7 +202,7 @@ func (rru *RbacRoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := rru.check(); err != nil {
 		return n, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(rbacrole.Table, rbacrole.Columns, sqlgraph.NewFieldSpec(rbacrole.FieldID, field.TypeInt64))
+	_spec := sqlgraph.NewUpdateSpec(rbacrole.Table, rbacrole.Columns, sqlgraph.NewFieldSpec(rbacrole.FieldID, field.TypeUUID))
 	if ps := rru.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -236,7 +236,7 @@ func (rru *RbacRoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: rbacrole.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -249,7 +249,7 @@ func (rru *RbacRoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: rbacrole.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -265,7 +265,7 @@ func (rru *RbacRoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: rbacrole.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -370,14 +370,14 @@ func (rruo *RbacRoleUpdateOne) SetNillableDescription(s *string) *RbacRoleUpdate
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
-func (rruo *RbacRoleUpdateOne) AddUserIDs(ids ...int64) *RbacRoleUpdateOne {
+func (rruo *RbacRoleUpdateOne) AddUserIDs(ids ...uuid.UUID) *RbacRoleUpdateOne {
 	rruo.mutation.AddUserIDs(ids...)
 	return rruo
 }
 
 // AddUsers adds the "users" edges to the User entity.
 func (rruo *RbacRoleUpdateOne) AddUsers(u ...*User) *RbacRoleUpdateOne {
-	ids := make([]int64, len(u))
+	ids := make([]uuid.UUID, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
 	}
@@ -396,14 +396,14 @@ func (rruo *RbacRoleUpdateOne) ClearUsers() *RbacRoleUpdateOne {
 }
 
 // RemoveUserIDs removes the "users" edge to User entities by IDs.
-func (rruo *RbacRoleUpdateOne) RemoveUserIDs(ids ...int64) *RbacRoleUpdateOne {
+func (rruo *RbacRoleUpdateOne) RemoveUserIDs(ids ...uuid.UUID) *RbacRoleUpdateOne {
 	rruo.mutation.RemoveUserIDs(ids...)
 	return rruo
 }
 
 // RemoveUsers removes "users" edges to User entities.
 func (rruo *RbacRoleUpdateOne) RemoveUsers(u ...*User) *RbacRoleUpdateOne {
-	ids := make([]int64, len(u))
+	ids := make([]uuid.UUID, len(u))
 	for i := range u {
 		ids[i] = u[i].ID
 	}
@@ -478,7 +478,7 @@ func (rruo *RbacRoleUpdateOne) sqlSave(ctx context.Context) (_node *RbacRole, er
 	if err := rruo.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(rbacrole.Table, rbacrole.Columns, sqlgraph.NewFieldSpec(rbacrole.FieldID, field.TypeInt64))
+	_spec := sqlgraph.NewUpdateSpec(rbacrole.Table, rbacrole.Columns, sqlgraph.NewFieldSpec(rbacrole.FieldID, field.TypeUUID))
 	id, ok := rruo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "RbacRole.id" for update`)}
@@ -529,7 +529,7 @@ func (rruo *RbacRoleUpdateOne) sqlSave(ctx context.Context) (_node *RbacRole, er
 			Columns: rbacrole.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -542,7 +542,7 @@ func (rruo *RbacRoleUpdateOne) sqlSave(ctx context.Context) (_node *RbacRole, er
 			Columns: rbacrole.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -558,7 +558,7 @@ func (rruo *RbacRoleUpdateOne) sqlSave(ctx context.Context) (_node *RbacRole, er
 			Columns: rbacrole.UsersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

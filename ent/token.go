@@ -18,7 +18,7 @@ import (
 type Token struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int64 `json:"id,omitempty"`
+	ID uuid.UUID `json:"id,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -28,7 +28,7 @@ type Token struct {
 	// CreatedBy holds the value of the "created_by" field.
 	CreatedBy uuid.UUID `json:"created_by,omitempty"`
 	// UserID holds the value of the "user_id" field.
-	UserID int64 `json:"user_id,omitempty"`
+	UserID uuid.UUID `json:"user_id,omitempty"`
 	// Status holds the value of the "status" field.
 	Status bool `json:"status,omitempty"`
 	// Name holds the value of the "name" field.
@@ -70,13 +70,11 @@ func (*Token) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case token.FieldStatus:
 			values[i] = new(sql.NullBool)
-		case token.FieldID, token.FieldUserID:
-			values[i] = new(sql.NullInt64)
 		case token.FieldName, token.FieldRemark, token.FieldToken:
 			values[i] = new(sql.NullString)
 		case token.FieldCreatedAt, token.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case token.FieldUpdatedBy, token.FieldCreatedBy:
+		case token.FieldID, token.FieldUpdatedBy, token.FieldCreatedBy, token.FieldUserID:
 			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -94,11 +92,11 @@ func (t *Token) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case token.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				t.ID = *value
 			}
-			t.ID = int64(value.Int64)
 		case token.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -124,10 +122,10 @@ func (t *Token) assignValues(columns []string, values []any) error {
 				t.CreatedBy = *value
 			}
 		case token.FieldUserID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
-			} else if value.Valid {
-				t.UserID = value.Int64
+			} else if value != nil {
+				t.UserID = *value
 			}
 		case token.FieldStatus:
 			if value, ok := values[i].(*sql.NullBool); !ok {

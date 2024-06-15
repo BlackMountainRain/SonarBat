@@ -29,8 +29,8 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 		return nil, nil, err
 	}
 	taskRepo := data.NewTaskRepo(dataData, logger)
-	TaskUseCase := biz.NewTaskUseCase(taskRepo, logger)
-	taskService := service.NewTaskService(TaskUseCase)
+	taskUseCase := biz.NewTaskUseCase(taskRepo, logger)
+	taskService := service.NewTaskService(taskUseCase)
 	subtaskService := service.NewSubtaskService(taskRepo)
 	grpcServer := server.NewGRPCServer(confServer, taskService, subtaskService, logger)
 	httpServer := server.NewHTTPServer(confServer, taskService, subtaskService, logger)

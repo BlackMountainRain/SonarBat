@@ -40,7 +40,7 @@ func (rpd *RbacPolicyDelete) ExecX(ctx context.Context) int {
 }
 
 func (rpd *RbacPolicyDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(rbacpolicy.Table, sqlgraph.NewFieldSpec(rbacpolicy.FieldID, field.TypeInt64))
+	_spec := sqlgraph.NewDeleteSpec(rbacpolicy.Table, sqlgraph.NewFieldSpec(rbacpolicy.FieldID, field.TypeUUID))
 	if ps := rpd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

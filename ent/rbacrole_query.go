@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // RbacRoleQuery is the builder for querying RbacRole entities.
@@ -106,8 +107,8 @@ func (rrq *RbacRoleQuery) FirstX(ctx context.Context) *RbacRole {
 
 // FirstID returns the first RbacRole ID from the query.
 // Returns a *NotFoundError when no RbacRole ID was found.
-func (rrq *RbacRoleQuery) FirstID(ctx context.Context) (id int64, err error) {
-	var ids []int64
+func (rrq *RbacRoleQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = rrq.Limit(1).IDs(setContextOp(ctx, rrq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -119,7 +120,7 @@ func (rrq *RbacRoleQuery) FirstID(ctx context.Context) (id int64, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (rrq *RbacRoleQuery) FirstIDX(ctx context.Context) int64 {
+func (rrq *RbacRoleQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := rrq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -157,8 +158,8 @@ func (rrq *RbacRoleQuery) OnlyX(ctx context.Context) *RbacRole {
 // OnlyID is like Only, but returns the only RbacRole ID in the query.
 // Returns a *NotSingularError when more than one RbacRole ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (rrq *RbacRoleQuery) OnlyID(ctx context.Context) (id int64, err error) {
-	var ids []int64
+func (rrq *RbacRoleQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = rrq.Limit(2).IDs(setContextOp(ctx, rrq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -174,7 +175,7 @@ func (rrq *RbacRoleQuery) OnlyID(ctx context.Context) (id int64, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (rrq *RbacRoleQuery) OnlyIDX(ctx context.Context) int64 {
+func (rrq *RbacRoleQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := rrq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -202,7 +203,7 @@ func (rrq *RbacRoleQuery) AllX(ctx context.Context) []*RbacRole {
 }
 
 // IDs executes the query and returns a list of RbacRole IDs.
-func (rrq *RbacRoleQuery) IDs(ctx context.Context) (ids []int64, err error) {
+func (rrq *RbacRoleQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if rrq.ctx.Unique == nil && rrq.path != nil {
 		rrq.Unique(true)
 	}
@@ -214,7 +215,7 @@ func (rrq *RbacRoleQuery) IDs(ctx context.Context) (ids []int64, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (rrq *RbacRoleQuery) IDsX(ctx context.Context) []int64 {
+func (rrq *RbacRoleQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := rrq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -404,8 +405,8 @@ func (rrq *RbacRoleQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Rb
 
 func (rrq *RbacRoleQuery) loadUsers(ctx context.Context, query *UserQuery, nodes []*RbacRole, init func(*RbacRole), assign func(*RbacRole, *User)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[int64]*RbacRole)
-	nids := make(map[int64]map[*RbacRole]struct{})
+	byID := make(map[uuid.UUID]*RbacRole)
+	nids := make(map[uuid.UUID]map[*RbacRole]struct{})
 	for i, node := range nodes {
 		edgeIDs[i] = node.ID
 		byID[node.ID] = node
@@ -434,11 +435,11 @@ func (rrq *RbacRoleQuery) loadUsers(ctx context.Context, query *UserQuery, nodes
 				if err != nil {
 					return nil, err
 				}
-				return append([]any{new(sql.NullInt64)}, values...), nil
+				return append([]any{new(uuid.UUID)}, values...), nil
 			}
 			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullInt64).Int64
-				inValue := values[1].(*sql.NullInt64).Int64
+				outValue := *values[0].(*uuid.UUID)
+				inValue := *values[1].(*uuid.UUID)
 				if nids[inValue] == nil {
 					nids[inValue] = map[*RbacRole]struct{}{byID[outValue]: {}}
 					return assign(columns[1:], values[1:])
@@ -474,7 +475,7 @@ func (rrq *RbacRoleQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (rrq *RbacRoleQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(rbacrole.Table, rbacrole.Columns, sqlgraph.NewFieldSpec(rbacrole.FieldID, field.TypeInt64))
+	_spec := sqlgraph.NewQuerySpec(rbacrole.Table, rbacrole.Columns, sqlgraph.NewFieldSpec(rbacrole.FieldID, field.TypeUUID))
 	_spec.From = rrq.sql
 	if unique := rrq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

@@ -40,7 +40,7 @@ func (rod *RbacObjectDelete) ExecX(ctx context.Context) int {
 }
 
 func (rod *RbacObjectDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(rbacobject.Table, sqlgraph.NewFieldSpec(rbacobject.FieldID, field.TypeInt64))
+	_spec := sqlgraph.NewDeleteSpec(rbacobject.Table, sqlgraph.NewFieldSpec(rbacobject.FieldID, field.TypeUUID))
 	if ps := rod.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

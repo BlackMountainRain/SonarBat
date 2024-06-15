@@ -11,6 +11,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // DictionaryCreate is the builder for creating a Dictionary entity.
@@ -67,8 +68,16 @@ func (dc *DictionaryCreate) SetValue(s string) *DictionaryCreate {
 }
 
 // SetID sets the "id" field.
-func (dc *DictionaryCreate) SetID(i int64) *DictionaryCreate {
-	dc.mutation.SetID(i)
+func (dc *DictionaryCreate) SetID(u uuid.UUID) *DictionaryCreate {
+	dc.mutation.SetID(u)
+	return dc
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (dc *DictionaryCreate) SetNillableID(u *uuid.UUID) *DictionaryCreate {
+	if u != nil {
+		dc.SetID(*u)
+	}
 	return dc
 }
 
@@ -114,6 +123,10 @@ func (dc *DictionaryCreate) defaults() {
 	if _, ok := dc.mutation.UpdatedAt(); !ok {
 		v := dictionary.DefaultUpdatedAt()
 		dc.mutation.SetUpdatedAt(v)
+	}
+	if _, ok := dc.mutation.ID(); !ok {
+		v := dictionary.DefaultID()
+		dc.mutation.SetID(v)
 	}
 }
 
@@ -163,9 +176,12 @@ func (dc *DictionaryCreate) sqlSave(ctx context.Context) (*Dictionary, error) {
 		}
 		return nil, err
 	}
-	if _spec.ID.Value != _node.ID {
-		id := _spec.ID.Value.(int64)
-		_node.ID = int64(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
 	}
 	dc.mutation.id = &_node.ID
 	dc.mutation.done = true
@@ -175,11 +191,11 @@ func (dc *DictionaryCreate) sqlSave(ctx context.Context) (*Dictionary, error) {
 func (dc *DictionaryCreate) createSpec() (*Dictionary, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Dictionary{config: dc.config}
-		_spec = sqlgraph.NewCreateSpec(dictionary.Table, sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeInt64))
+		_spec = sqlgraph.NewCreateSpec(dictionary.Table, sqlgraph.NewFieldSpec(dictionary.FieldID, field.TypeUUID))
 	)
 	if id, ok := dc.mutation.ID(); ok {
 		_node.ID = id
-		_spec.ID.Value = id
+		_spec.ID.Value = &id
 	}
 	if value, ok := dc.mutation.CreatedAt(); ok {
 		_spec.SetField(dictionary.FieldCreatedAt, field.TypeTime, value)
@@ -249,10 +265,6 @@ func (dcb *DictionaryCreateBulk) Save(ctx context.Context) ([]*Dictionary, error
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int64(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

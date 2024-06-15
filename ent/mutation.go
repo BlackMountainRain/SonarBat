@@ -52,7 +52,7 @@ type DictionaryMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *int64
+	id            *uuid.UUID
 	created_at    *time.Time
 	updated_at    *time.Time
 	category      *string
@@ -84,7 +84,7 @@ func newDictionaryMutation(c config, op Op, opts ...dictionaryOption) *Dictionar
 }
 
 // withDictionaryID sets the ID field of the mutation.
-func withDictionaryID(id int64) dictionaryOption {
+func withDictionaryID(id uuid.UUID) dictionaryOption {
 	return func(m *DictionaryMutation) {
 		var (
 			err   error
@@ -136,13 +136,13 @@ func (m DictionaryMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of Dictionary entities.
-func (m *DictionaryMutation) SetID(id int64) {
+func (m *DictionaryMutation) SetID(id uuid.UUID) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *DictionaryMutation) ID() (id int64, exists bool) {
+func (m *DictionaryMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -153,12 +153,12 @@ func (m *DictionaryMutation) ID() (id int64, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *DictionaryMutation) IDs(ctx context.Context) ([]int64, error) {
+func (m *DictionaryMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int64{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -2319,7 +2319,7 @@ type RbacObjectMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *int64
+	id            *uuid.UUID
 	created_at    *time.Time
 	updated_at    *time.Time
 	updated_by    *uuid.UUID
@@ -2352,7 +2352,7 @@ func newRbacObjectMutation(c config, op Op, opts ...rbacobjectOption) *RbacObjec
 }
 
 // withRbacObjectID sets the ID field of the mutation.
-func withRbacObjectID(id int64) rbacobjectOption {
+func withRbacObjectID(id uuid.UUID) rbacobjectOption {
 	return func(m *RbacObjectMutation) {
 		var (
 			err   error
@@ -2404,13 +2404,13 @@ func (m RbacObjectMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of RbacObject entities.
-func (m *RbacObjectMutation) SetID(id int64) {
+func (m *RbacObjectMutation) SetID(id uuid.UUID) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *RbacObjectMutation) ID() (id int64, exists bool) {
+func (m *RbacObjectMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -2421,12 +2421,12 @@ func (m *RbacObjectMutation) ID() (id int64, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *RbacObjectMutation) IDs(ctx context.Context) ([]int64, error) {
+func (m *RbacObjectMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int64{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -2921,7 +2921,7 @@ type RbacPolicyMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *int64
+	id            *uuid.UUID
 	created_at    *time.Time
 	updated_at    *time.Time
 	updated_by    *uuid.UUID
@@ -2956,7 +2956,7 @@ func newRbacPolicyMutation(c config, op Op, opts ...rbacpolicyOption) *RbacPolic
 }
 
 // withRbacPolicyID sets the ID field of the mutation.
-func withRbacPolicyID(id int64) rbacpolicyOption {
+func withRbacPolicyID(id uuid.UUID) rbacpolicyOption {
 	return func(m *RbacPolicyMutation) {
 		var (
 			err   error
@@ -3008,13 +3008,13 @@ func (m RbacPolicyMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of RbacPolicy entities.
-func (m *RbacPolicyMutation) SetID(id int64) {
+func (m *RbacPolicyMutation) SetID(id uuid.UUID) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *RbacPolicyMutation) ID() (id int64, exists bool) {
+func (m *RbacPolicyMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -3025,12 +3025,12 @@ func (m *RbacPolicyMutation) ID() (id int64, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *RbacPolicyMutation) IDs(ctx context.Context) ([]int64, error) {
+func (m *RbacPolicyMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int64{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -3710,7 +3710,7 @@ type RbacRoleMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *int64
+	id            *uuid.UUID
 	created_at    *time.Time
 	updated_at    *time.Time
 	updated_by    *uuid.UUID
@@ -3719,8 +3719,8 @@ type RbacRoleMutation struct {
 	name          *string
 	description   *string
 	clearedFields map[string]struct{}
-	users         map[int64]struct{}
-	removedusers  map[int64]struct{}
+	users         map[uuid.UUID]struct{}
+	removedusers  map[uuid.UUID]struct{}
 	clearedusers  bool
 	done          bool
 	oldValue      func(context.Context) (*RbacRole, error)
@@ -3747,7 +3747,7 @@ func newRbacRoleMutation(c config, op Op, opts ...rbacroleOption) *RbacRoleMutat
 }
 
 // withRbacRoleID sets the ID field of the mutation.
-func withRbacRoleID(id int64) rbacroleOption {
+func withRbacRoleID(id uuid.UUID) rbacroleOption {
 	return func(m *RbacRoleMutation) {
 		var (
 			err   error
@@ -3799,13 +3799,13 @@ func (m RbacRoleMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of RbacRole entities.
-func (m *RbacRoleMutation) SetID(id int64) {
+func (m *RbacRoleMutation) SetID(id uuid.UUID) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *RbacRoleMutation) ID() (id int64, exists bool) {
+func (m *RbacRoleMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -3816,12 +3816,12 @@ func (m *RbacRoleMutation) ID() (id int64, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *RbacRoleMutation) IDs(ctx context.Context) ([]int64, error) {
+func (m *RbacRoleMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int64{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -4084,9 +4084,9 @@ func (m *RbacRoleMutation) ResetDescription() {
 }
 
 // AddUserIDs adds the "users" edge to the User entity by ids.
-func (m *RbacRoleMutation) AddUserIDs(ids ...int64) {
+func (m *RbacRoleMutation) AddUserIDs(ids ...uuid.UUID) {
 	if m.users == nil {
-		m.users = make(map[int64]struct{})
+		m.users = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		m.users[ids[i]] = struct{}{}
@@ -4104,9 +4104,9 @@ func (m *RbacRoleMutation) UsersCleared() bool {
 }
 
 // RemoveUserIDs removes the "users" edge to the User entity by IDs.
-func (m *RbacRoleMutation) RemoveUserIDs(ids ...int64) {
+func (m *RbacRoleMutation) RemoveUserIDs(ids ...uuid.UUID) {
 	if m.removedusers == nil {
-		m.removedusers = make(map[int64]struct{})
+		m.removedusers = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		delete(m.users, ids[i])
@@ -4115,7 +4115,7 @@ func (m *RbacRoleMutation) RemoveUserIDs(ids ...int64) {
 }
 
 // RemovedUsers returns the removed IDs of the "users" edge to the User entity.
-func (m *RbacRoleMutation) RemovedUsersIDs() (ids []int64) {
+func (m *RbacRoleMutation) RemovedUsersIDs() (ids []uuid.UUID) {
 	for id := range m.removedusers {
 		ids = append(ids, id)
 	}
@@ -4123,7 +4123,7 @@ func (m *RbacRoleMutation) RemovedUsersIDs() (ids []int64) {
 }
 
 // UsersIDs returns the "users" edge IDs in the mutation.
-func (m *RbacRoleMutation) UsersIDs() (ids []int64) {
+func (m *RbacRoleMutation) UsersIDs() (ids []uuid.UUID) {
 	for id := range m.users {
 		ids = append(ids, id)
 	}
@@ -6398,7 +6398,7 @@ type TokenMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *int64
+	id            *uuid.UUID
 	created_at    *time.Time
 	updated_at    *time.Time
 	updated_by    *uuid.UUID
@@ -6408,7 +6408,7 @@ type TokenMutation struct {
 	remark        *string
 	token         *string
 	clearedFields map[string]struct{}
-	user          *int64
+	user          *uuid.UUID
 	cleareduser   bool
 	done          bool
 	oldValue      func(context.Context) (*Token, error)
@@ -6435,7 +6435,7 @@ func newTokenMutation(c config, op Op, opts ...tokenOption) *TokenMutation {
 }
 
 // withTokenID sets the ID field of the mutation.
-func withTokenID(id int64) tokenOption {
+func withTokenID(id uuid.UUID) tokenOption {
 	return func(m *TokenMutation) {
 		var (
 			err   error
@@ -6487,13 +6487,13 @@ func (m TokenMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of Token entities.
-func (m *TokenMutation) SetID(id int64) {
+func (m *TokenMutation) SetID(id uuid.UUID) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *TokenMutation) ID() (id int64, exists bool) {
+func (m *TokenMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -6504,12 +6504,12 @@ func (m *TokenMutation) ID() (id int64, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *TokenMutation) IDs(ctx context.Context) ([]int64, error) {
+func (m *TokenMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int64{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -6664,12 +6664,12 @@ func (m *TokenMutation) ResetCreatedBy() {
 }
 
 // SetUserID sets the "user_id" field.
-func (m *TokenMutation) SetUserID(i int64) {
-	m.user = &i
+func (m *TokenMutation) SetUserID(u uuid.UUID) {
+	m.user = &u
 }
 
 // UserID returns the value of the "user_id" field in the mutation.
-func (m *TokenMutation) UserID() (r int64, exists bool) {
+func (m *TokenMutation) UserID() (r uuid.UUID, exists bool) {
 	v := m.user
 	if v == nil {
 		return
@@ -6680,7 +6680,7 @@ func (m *TokenMutation) UserID() (r int64, exists bool) {
 // OldUserID returns the old "user_id" field's value of the Token entity.
 // If the Token object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TokenMutation) OldUserID(ctx context.Context) (v int64, err error) {
+func (m *TokenMutation) OldUserID(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
 	}
@@ -6857,7 +6857,7 @@ func (m *TokenMutation) UserCleared() bool {
 // UserIDs returns the "user" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // UserID instead. It exists only for internal usage by the builders.
-func (m *TokenMutation) UserIDs() (ids []int64) {
+func (m *TokenMutation) UserIDs() (ids []uuid.UUID) {
 	if id := m.user; id != nil {
 		ids = append(ids, *id)
 	}
@@ -7023,7 +7023,7 @@ func (m *TokenMutation) SetField(name string, value ent.Value) error {
 		m.SetCreatedBy(v)
 		return nil
 	case token.FieldUserID:
-		v, ok := value.(int64)
+		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -7064,16 +7064,13 @@ func (m *TokenMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *TokenMutation) AddedFields() []string {
-	var fields []string
-	return fields
+	return nil
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *TokenMutation) AddedField(name string) (ent.Value, bool) {
-	switch name {
-	}
 	return nil, false
 }
 
@@ -7219,20 +7216,19 @@ type UserMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *int64
+	id            *uuid.UUID
 	created_at    *time.Time
 	updated_at    *time.Time
-	updated_by    *uuid.UUID
-	created_by    *uuid.UUID
 	status        *bool
 	username      *string
+	password      *string
 	email         *string
 	clearedFields map[string]struct{}
-	roles         map[int64]struct{}
-	removedroles  map[int64]struct{}
+	roles         map[uuid.UUID]struct{}
+	removedroles  map[uuid.UUID]struct{}
 	clearedroles  bool
-	tokens        map[int64]struct{}
-	removedtokens map[int64]struct{}
+	tokens        map[uuid.UUID]struct{}
+	removedtokens map[uuid.UUID]struct{}
 	clearedtokens bool
 	done          bool
 	oldValue      func(context.Context) (*User, error)
@@ -7259,7 +7255,7 @@ func newUserMutation(c config, op Op, opts ...userOption) *UserMutation {
 }
 
 // withUserID sets the ID field of the mutation.
-func withUserID(id int64) userOption {
+func withUserID(id uuid.UUID) userOption {
 	return func(m *UserMutation) {
 		var (
 			err   error
@@ -7311,13 +7307,13 @@ func (m UserMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of User entities.
-func (m *UserMutation) SetID(id int64) {
+func (m *UserMutation) SetID(id uuid.UUID) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *UserMutation) ID() (id int64, exists bool) {
+func (m *UserMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -7328,12 +7324,12 @@ func (m *UserMutation) ID() (id int64, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *UserMutation) IDs(ctx context.Context) ([]int64, error) {
+func (m *UserMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int64{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -7415,78 +7411,6 @@ func (m *UserMutation) ResetUpdatedAt() {
 	m.updated_at = nil
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (m *UserMutation) SetUpdatedBy(u uuid.UUID) {
-	m.updated_by = &u
-}
-
-// UpdatedBy returns the value of the "updated_by" field in the mutation.
-func (m *UserMutation) UpdatedBy() (r uuid.UUID, exists bool) {
-	v := m.updated_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUpdatedBy returns the old "updated_by" field's value of the User entity.
-// If the User object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldUpdatedBy(ctx context.Context) (v uuid.UUID, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
-	}
-	return oldValue.UpdatedBy, nil
-}
-
-// ResetUpdatedBy resets all changes to the "updated_by" field.
-func (m *UserMutation) ResetUpdatedBy() {
-	m.updated_by = nil
-}
-
-// SetCreatedBy sets the "created_by" field.
-func (m *UserMutation) SetCreatedBy(u uuid.UUID) {
-	m.created_by = &u
-}
-
-// CreatedBy returns the value of the "created_by" field in the mutation.
-func (m *UserMutation) CreatedBy() (r uuid.UUID, exists bool) {
-	v := m.created_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCreatedBy returns the old "created_by" field's value of the User entity.
-// If the User object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldCreatedBy(ctx context.Context) (v uuid.UUID, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
-	}
-	return oldValue.CreatedBy, nil
-}
-
-// ResetCreatedBy resets all changes to the "created_by" field.
-func (m *UserMutation) ResetCreatedBy() {
-	m.created_by = nil
-}
-
 // SetStatus sets the "status" field.
 func (m *UserMutation) SetStatus(b bool) {
 	m.status = &b
@@ -7559,6 +7483,42 @@ func (m *UserMutation) ResetUsername() {
 	m.username = nil
 }
 
+// SetPassword sets the "password" field.
+func (m *UserMutation) SetPassword(s string) {
+	m.password = &s
+}
+
+// Password returns the value of the "password" field in the mutation.
+func (m *UserMutation) Password() (r string, exists bool) {
+	v := m.password
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPassword returns the old "password" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldPassword(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPassword is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPassword requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPassword: %w", err)
+	}
+	return oldValue.Password, nil
+}
+
+// ResetPassword resets all changes to the "password" field.
+func (m *UserMutation) ResetPassword() {
+	m.password = nil
+}
+
 // SetEmail sets the "email" field.
 func (m *UserMutation) SetEmail(s string) {
 	m.email = &s
@@ -7596,9 +7556,9 @@ func (m *UserMutation) ResetEmail() {
 }
 
 // AddRoleIDs adds the "roles" edge to the RbacRole entity by ids.
-func (m *UserMutation) AddRoleIDs(ids ...int64) {
+func (m *UserMutation) AddRoleIDs(ids ...uuid.UUID) {
 	if m.roles == nil {
-		m.roles = make(map[int64]struct{})
+		m.roles = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		m.roles[ids[i]] = struct{}{}
@@ -7616,9 +7576,9 @@ func (m *UserMutation) RolesCleared() bool {
 }
 
 // RemoveRoleIDs removes the "roles" edge to the RbacRole entity by IDs.
-func (m *UserMutation) RemoveRoleIDs(ids ...int64) {
+func (m *UserMutation) RemoveRoleIDs(ids ...uuid.UUID) {
 	if m.removedroles == nil {
-		m.removedroles = make(map[int64]struct{})
+		m.removedroles = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		delete(m.roles, ids[i])
@@ -7627,7 +7587,7 @@ func (m *UserMutation) RemoveRoleIDs(ids ...int64) {
 }
 
 // RemovedRoles returns the removed IDs of the "roles" edge to the RbacRole entity.
-func (m *UserMutation) RemovedRolesIDs() (ids []int64) {
+func (m *UserMutation) RemovedRolesIDs() (ids []uuid.UUID) {
 	for id := range m.removedroles {
 		ids = append(ids, id)
 	}
@@ -7635,7 +7595,7 @@ func (m *UserMutation) RemovedRolesIDs() (ids []int64) {
 }
 
 // RolesIDs returns the "roles" edge IDs in the mutation.
-func (m *UserMutation) RolesIDs() (ids []int64) {
+func (m *UserMutation) RolesIDs() (ids []uuid.UUID) {
 	for id := range m.roles {
 		ids = append(ids, id)
 	}
@@ -7650,9 +7610,9 @@ func (m *UserMutation) ResetRoles() {
 }
 
 // AddTokenIDs adds the "tokens" edge to the Token entity by ids.
-func (m *UserMutation) AddTokenIDs(ids ...int64) {
+func (m *UserMutation) AddTokenIDs(ids ...uuid.UUID) {
 	if m.tokens == nil {
-		m.tokens = make(map[int64]struct{})
+		m.tokens = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		m.tokens[ids[i]] = struct{}{}
@@ -7670,9 +7630,9 @@ func (m *UserMutation) TokensCleared() bool {
 }
 
 // RemoveTokenIDs removes the "tokens" edge to the Token entity by IDs.
-func (m *UserMutation) RemoveTokenIDs(ids ...int64) {
+func (m *UserMutation) RemoveTokenIDs(ids ...uuid.UUID) {
 	if m.removedtokens == nil {
-		m.removedtokens = make(map[int64]struct{})
+		m.removedtokens = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		delete(m.tokens, ids[i])
@@ -7681,7 +7641,7 @@ func (m *UserMutation) RemoveTokenIDs(ids ...int64) {
 }
 
 // RemovedTokens returns the removed IDs of the "tokens" edge to the Token entity.
-func (m *UserMutation) RemovedTokensIDs() (ids []int64) {
+func (m *UserMutation) RemovedTokensIDs() (ids []uuid.UUID) {
 	for id := range m.removedtokens {
 		ids = append(ids, id)
 	}
@@ -7689,7 +7649,7 @@ func (m *UserMutation) RemovedTokensIDs() (ids []int64) {
 }
 
 // TokensIDs returns the "tokens" edge IDs in the mutation.
-func (m *UserMutation) TokensIDs() (ids []int64) {
+func (m *UserMutation) TokensIDs() (ids []uuid.UUID) {
 	for id := range m.tokens {
 		ids = append(ids, id)
 	}
@@ -7737,24 +7697,21 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 6)
 	if m.created_at != nil {
 		fields = append(fields, user.FieldCreatedAt)
 	}
 	if m.updated_at != nil {
 		fields = append(fields, user.FieldUpdatedAt)
 	}
-	if m.updated_by != nil {
-		fields = append(fields, user.FieldUpdatedBy)
-	}
-	if m.created_by != nil {
-		fields = append(fields, user.FieldCreatedBy)
-	}
 	if m.status != nil {
 		fields = append(fields, user.FieldStatus)
 	}
 	if m.username != nil {
 		fields = append(fields, user.FieldUsername)
+	}
+	if m.password != nil {
+		fields = append(fields, user.FieldPassword)
 	}
 	if m.email != nil {
 		fields = append(fields, user.FieldEmail)
@@ -7771,14 +7728,12 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedAt()
 	case user.FieldUpdatedAt:
 		return m.UpdatedAt()
-	case user.FieldUpdatedBy:
-		return m.UpdatedBy()
-	case user.FieldCreatedBy:
-		return m.CreatedBy()
 	case user.FieldStatus:
 		return m.Status()
 	case user.FieldUsername:
 		return m.Username()
+	case user.FieldPassword:
+		return m.Password()
 	case user.FieldEmail:
 		return m.Email()
 	}
@@ -7794,14 +7749,12 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldCreatedAt(ctx)
 	case user.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
-	case user.FieldUpdatedBy:
-		return m.OldUpdatedBy(ctx)
-	case user.FieldCreatedBy:
-		return m.OldCreatedBy(ctx)
 	case user.FieldStatus:
 		return m.OldStatus(ctx)
 	case user.FieldUsername:
 		return m.OldUsername(ctx)
+	case user.FieldPassword:
+		return m.OldPassword(ctx)
 	case user.FieldEmail:
 		return m.OldEmail(ctx)
 	}
@@ -7827,20 +7780,6 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedAt(v)
 		return nil
-	case user.FieldUpdatedBy:
-		v, ok := value.(uuid.UUID)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdatedBy(v)
-		return nil
-	case user.FieldCreatedBy:
-		v, ok := value.(uuid.UUID)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCreatedBy(v)
-		return nil
 	case user.FieldStatus:
 		v, ok := value.(bool)
 		if !ok {
@@ -7854,6 +7793,13 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUsername(v)
+		return nil
+	case user.FieldPassword:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPassword(v)
 		return nil
 	case user.FieldEmail:
 		v, ok := value.(string)
@@ -7917,17 +7863,14 @@ func (m *UserMutation) ResetField(name string) error {
 	case user.FieldUpdatedAt:
 		m.ResetUpdatedAt()
 		return nil
-	case user.FieldUpdatedBy:
-		m.ResetUpdatedBy()
-		return nil
-	case user.FieldCreatedBy:
-		m.ResetCreatedBy()
-		return nil
 	case user.FieldStatus:
 		m.ResetStatus()
 		return nil
 	case user.FieldUsername:
 		m.ResetUsername()
+		return nil
+	case user.FieldPassword:
+		m.ResetPassword()
 		return nil
 	case user.FieldEmail:
 		m.ResetEmail()

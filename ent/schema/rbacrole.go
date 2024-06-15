@@ -4,6 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // RbacRole holds the schema definition for the RbacRole entity.
@@ -14,7 +15,7 @@ type RbacRole struct {
 // Fields of the RbacRole.
 func (RbacRole) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int64("id").Unique(),
+		field.UUID("id", uuid.UUID{}).Unique().Default(uuid.New),
 		field.Bool("status").Default(true),
 		field.String("name").NotEmpty().MaxLen(20),
 		field.String("description").Default("").MaxLen(255),

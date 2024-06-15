@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 const (
@@ -71,6 +72,8 @@ var (
 	ActValidator func(string) error
 	// URIValidator is a validator for the "uri" field. It is called by the builders before save.
 	URIValidator func(string) error
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
 )
 
 // OrderOption defines the ordering options for the RbacPolicy queries.

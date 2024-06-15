@@ -40,7 +40,7 @@ func (rrd *RbacRoleDelete) ExecX(ctx context.Context) int {
 }
 
 func (rrd *RbacRoleDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(rbacrole.Table, sqlgraph.NewFieldSpec(rbacrole.FieldID, field.TypeInt64))
+	_spec := sqlgraph.NewDeleteSpec(rbacrole.Table, sqlgraph.NewFieldSpec(rbacrole.FieldID, field.TypeUUID))
 	if ps := rrd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

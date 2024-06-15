@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // RbacPolicy holds the schema definition for the RbacPolicy entity.
@@ -13,7 +14,7 @@ type RbacPolicy struct {
 // Fields of the RbacPolicy.
 func (RbacPolicy) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int64("id").Unique(),
+		field.UUID("id", uuid.UUID{}).Unique().Default(uuid.New),
 		field.String("role").MaxLen(20).Optional().Comment("role or user"),
 		field.String("obj").MaxLen(20).Optional().Comment("module or api"),
 		field.String("act").MaxLen(20).Optional().Comment("action or method"),

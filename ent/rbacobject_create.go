@@ -82,8 +82,16 @@ func (roc *RbacObjectCreate) SetValue(s string) *RbacObjectCreate {
 }
 
 // SetID sets the "id" field.
-func (roc *RbacObjectCreate) SetID(i int64) *RbacObjectCreate {
-	roc.mutation.SetID(i)
+func (roc *RbacObjectCreate) SetID(u uuid.UUID) *RbacObjectCreate {
+	roc.mutation.SetID(u)
+	return roc
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (roc *RbacObjectCreate) SetNillableID(u *uuid.UUID) *RbacObjectCreate {
+	if u != nil {
+		roc.SetID(*u)
+	}
 	return roc
 }
 
@@ -134,6 +142,10 @@ func (roc *RbacObjectCreate) defaults() {
 		v := rbacobject.DefaultStatus
 		roc.mutation.SetStatus(v)
 	}
+	if _, ok := roc.mutation.ID(); !ok {
+		v := rbacobject.DefaultID()
+		roc.mutation.SetID(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -175,9 +187,12 @@ func (roc *RbacObjectCreate) sqlSave(ctx context.Context) (*RbacObject, error) {
 		}
 		return nil, err
 	}
-	if _spec.ID.Value != _node.ID {
-		id := _spec.ID.Value.(int64)
-		_node.ID = int64(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
 	}
 	roc.mutation.id = &_node.ID
 	roc.mutation.done = true
@@ -187,11 +202,11 @@ func (roc *RbacObjectCreate) sqlSave(ctx context.Context) (*RbacObject, error) {
 func (roc *RbacObjectCreate) createSpec() (*RbacObject, *sqlgraph.CreateSpec) {
 	var (
 		_node = &RbacObject{config: roc.config}
-		_spec = sqlgraph.NewCreateSpec(rbacobject.Table, sqlgraph.NewFieldSpec(rbacobject.FieldID, field.TypeInt64))
+		_spec = sqlgraph.NewCreateSpec(rbacobject.Table, sqlgraph.NewFieldSpec(rbacobject.FieldID, field.TypeUUID))
 	)
 	if id, ok := roc.mutation.ID(); ok {
 		_node.ID = id
-		_spec.ID.Value = id
+		_spec.ID.Value = &id
 	}
 	if value, ok := roc.mutation.CreatedAt(); ok {
 		_spec.SetField(rbacobject.FieldCreatedAt, field.TypeTime, value)
@@ -265,10 +280,6 @@ func (rocb *RbacObjectCreateBulk) Save(ctx context.Context) ([]*RbacObject, erro
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int64(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // Dictionary holds the schema definition for the Dictionary entity.
@@ -13,7 +14,7 @@ type Dictionary struct {
 // Fields of the Dictionary.
 func (Dictionary) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int64("id").Unique(),
+		field.UUID("id", uuid.UUID{}).Unique().Default(uuid.New),
 		field.String("category").MaxLen(20),
 		field.String("key").MaxLen(20),
 		field.String("value").MaxLen(100),

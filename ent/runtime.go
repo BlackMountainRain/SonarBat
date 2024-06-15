@@ -50,6 +50,10 @@ func init() {
 	dictionaryDescValue := dictionaryFields[3].Descriptor()
 	// dictionary.ValueValidator is a validator for the "value" field. It is called by the builders before save.
 	dictionary.ValueValidator = dictionaryDescValue.Validators[0].(func(string) error)
+	// dictionaryDescID is the schema descriptor for id field.
+	dictionaryDescID := dictionaryFields[0].Descriptor()
+	// dictionary.DefaultID holds the default value on creation for the id field.
+	dictionary.DefaultID = dictionaryDescID.Default.(func() uuid.UUID)
 	hostMixin := schema.Host{}.Mixin()
 	hostMixinFields0 := hostMixin[0].Fields()
 	_ = hostMixinFields0
@@ -173,6 +177,10 @@ func init() {
 			return nil
 		}
 	}()
+	// rbacobjectDescID is the schema descriptor for id field.
+	rbacobjectDescID := rbacobjectFields[0].Descriptor()
+	// rbacobject.DefaultID holds the default value on creation for the id field.
+	rbacobject.DefaultID = rbacobjectDescID.Default.(func() uuid.UUID)
 	rbacpolicyMixin := schema.RbacPolicy{}.Mixin()
 	rbacpolicyMixinFields0 := rbacpolicyMixin[0].Fields()
 	_ = rbacpolicyMixinFields0
@@ -204,6 +212,10 @@ func init() {
 	rbacpolicyDescURI := rbacpolicyFields[4].Descriptor()
 	// rbacpolicy.URIValidator is a validator for the "uri" field. It is called by the builders before save.
 	rbacpolicy.URIValidator = rbacpolicyDescURI.Validators[0].(func(string) error)
+	// rbacpolicyDescID is the schema descriptor for id field.
+	rbacpolicyDescID := rbacpolicyFields[0].Descriptor()
+	// rbacpolicy.DefaultID holds the default value on creation for the id field.
+	rbacpolicy.DefaultID = rbacpolicyDescID.Default.(func() uuid.UUID)
 	rbacroleMixin := schema.RbacRole{}.Mixin()
 	rbacroleMixinFields0 := rbacroleMixin[0].Fields()
 	_ = rbacroleMixinFields0
@@ -247,6 +259,10 @@ func init() {
 	rbacrole.DefaultDescription = rbacroleDescDescription.Default.(string)
 	// rbacrole.DescriptionValidator is a validator for the "description" field. It is called by the builders before save.
 	rbacrole.DescriptionValidator = rbacroleDescDescription.Validators[0].(func(string) error)
+	// rbacroleDescID is the schema descriptor for id field.
+	rbacroleDescID := rbacroleFields[0].Descriptor()
+	// rbacrole.DefaultID holds the default value on creation for the id field.
+	rbacrole.DefaultID = rbacroleDescID.Default.(func() uuid.UUID)
 	subtaskMixin := schema.Subtask{}.Mixin()
 	subtaskMixinFields0 := subtaskMixin[0].Fields()
 	_ = subtaskMixinFields0
@@ -378,6 +394,10 @@ func init() {
 			return nil
 		}
 	}()
+	// tokenDescID is the schema descriptor for id field.
+	tokenDescID := tokenFields[0].Descriptor()
+	// token.DefaultID holds the default value on creation for the id field.
+	token.DefaultID = tokenDescID.Default.(func() uuid.UUID)
 	userMixin := schema.User{}.Mixin()
 	userMixinFields0 := userMixin[0].Fields()
 	_ = userMixinFields0
@@ -415,8 +435,26 @@ func init() {
 			return nil
 		}
 	}()
+	// userDescPassword is the schema descriptor for password field.
+	userDescPassword := userFields[3].Descriptor()
+	// user.PasswordValidator is a validator for the "password" field. It is called by the builders before save.
+	user.PasswordValidator = func() func(string) error {
+		validators := userDescPassword.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(password string) error {
+			for _, fn := range fns {
+				if err := fn(password); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	// userDescEmail is the schema descriptor for email field.
-	userDescEmail := userFields[3].Descriptor()
+	userDescEmail := userFields[4].Descriptor()
 	// user.EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	user.EmailValidator = func() func(string) error {
 		validators := userDescEmail.Validators
@@ -433,4 +471,8 @@ func init() {
 			return nil
 		}
 	}()
+	// userDescID is the schema descriptor for id field.
+	userDescID := userFields[0].Descriptor()
+	// user.DefaultID holds the default value on creation for the id field.
+	user.DefaultID = userDescID.Default.(func() uuid.UUID)
 }

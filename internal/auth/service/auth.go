@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"sonar-bat/internal/auth/biz"
 
 	pb "sonar-bat/api/auth/v1"
@@ -27,14 +26,6 @@ func (s *AuthService) SignInWithOAuth(ctx context.Context, req *pb.SignInWithOAu
 	return &pb.AuthReply{}, nil
 }
 func (s *AuthService) SignUp(ctx context.Context, req *pb.SignUpRequest) (*pb.AuthReply, error) {
-	if req.Password == "" {
-		return nil, fmt.Errorf("password is required")
-	}
-
-	if req.Email == "" {
-		return nil, fmt.Errorf("email is required")
-	}
-
 	token, err := s.auth.SignUp(ctx, req)
 	if err != nil {
 		return nil, err

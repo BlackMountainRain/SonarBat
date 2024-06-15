@@ -3,6 +3,7 @@ syntax = "proto3";
 package api.auth.v1;
 
 import "google/api/annotations.proto";
+import "validate/validate.proto";
 
 option go_package = "sonar-bat/api/auth/v1;v1";
 option java_multiple_files = true;
@@ -74,8 +75,8 @@ message SignInWithOAuthRequest {
 }
 
 message SignUpRequest {
-	string email = 1;
-	string password = 2;
+	string email = 1 [(validate.rules).string.email = true];
+	string password = 2 [(validate.rules).string = {min_len: 5, max_len: 50}];
 }
 
 message EmptyRequest {}

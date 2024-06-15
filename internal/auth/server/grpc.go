@@ -7,6 +7,7 @@
 package server
 
 import (
+	"github.com/go-kratos/kratos/v2/middleware/validate"
 	v1 "sonar-bat/api/auth/v1"
 	"sonar-bat/internal/auth/service"
 	"sonar-bat/internal/conf"
@@ -21,6 +22,7 @@ func NewGRPCServer(c *conf.Server, auth *service.AuthService, _ log.Logger) *grp
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
+			validate.Validator(),
 		),
 	}
 	if c.Grpc.Network != "" {

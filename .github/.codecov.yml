@@ -1,0 +1,10 @@
+codecov:
+  notify:
+    wait_for_ci: true
+
+ignore:
+  - "ent"
+  - "api"
+  - "cmd/**/wire*.go"
+
+comment: false

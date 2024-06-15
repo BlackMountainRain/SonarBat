@@ -9,12 +9,10 @@ package biz
 import (
 	"context"
 	"github.com/google/uuid"
-	pb "sonar-bat/api/auth/v1"
+	"sonar-bat/api/auth/v1"
 	"sonar-bat/ent"
 	"sonar-bat/internal/auth/biz/util"
 	"sonar-bat/internal/conf"
-
-	v1 "sonar-bat/api/helloworld/v1"
 
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
@@ -31,6 +29,7 @@ type AuthRepo interface {
 	Save(context.Context, *ent.User) (*ent.User, error)
 	Update(context.Context, *ent.User) (*ent.User, error)
 	FindByID(context.Context, uuid.UUID) (*ent.User, error)
+	FindByEmail(context.Context, string) (*ent.User, error)
 	ListAll(context.Context) ([]*ent.User, error)
 }
 
@@ -51,19 +50,29 @@ func NewAuthUseCase(c *conf.Auth, repo AuthRepo, logger log.Logger) *AuthUseCase
 }
 
 // SignUp creates a new user.
-func (uc *AuthUseCase) SignUp(ctx context.Context, params *pb.SignUpRequest) (string, error) {
+func (uc *AuthUseCase) SignUp(ctx context.Context, params *v1.SignUpRequest) (string, error) {
+	// confirm the user does not exist
+	usr, err := uc.repo.FindByEmail(ctx, params.Email)
+	if err != nil {
+		return "", err
+	}
+	if usr != nil {
+		return "", v1.ErrorUserAlreadyExists("user already exists")
+	}
+
+	// create the user
 	data := &ent.User{
 		Username: params.Email,
 		Email:    params.Email,
 		Password: params.Password,
 	}
-
 	user, err := uc.repo.
 		Create(ctx, data)
 	if err != nil {
 		return "", err
 	}
 
+	// generate the token
 	return util.GenerateToken([]byte(uc.cfg.Jwt.Secret), uc.cfg.Jwt.Expiration.AsDuration(), map[string]interface{}{
 		"uid":      user.ID,
 		"username": user.Username,

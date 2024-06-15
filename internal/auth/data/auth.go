@@ -11,6 +11,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	"sonar-bat/ent"
+	"sonar-bat/ent/user"
 	"sonar-bat/internal/auth/biz"
 )
 
@@ -43,6 +44,10 @@ func (r *authRepo) Update(ctx context.Context, user *ent.User) (*ent.User, error
 
 func (r *authRepo) FindByID(ctx context.Context, id uuid.UUID) (*ent.User, error) {
 	return nil, nil
+}
+
+func (r *authRepo) FindByEmail(ctx context.Context, email string) (*ent.User, error) {
+	return r.data.cli.User.Query().Where(user.EmailEQ(email)).Only(ctx)
 }
 
 func (r *authRepo) ListAll(ctx context.Context) ([]*ent.User, error) {

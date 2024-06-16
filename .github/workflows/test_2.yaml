@@ -22,7 +22,7 @@ jobs:
           go-version: '1.22'
 
       - name: Run coverage
-        run: sh -c "sleep 5" && go test -race -covermode=atomic -coverprofile=coverage.out -coverpkg=./... ./...
+        run: sh -c "sleep 30" && go test -race -covermode=atomic -coverprofile=coverage.out -coverpkg=./... ./...
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1

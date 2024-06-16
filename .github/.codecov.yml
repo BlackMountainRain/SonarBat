@@ -2,9 +2,13 @@ codecov:
   notify:
     wait_for_ci: true
 
-ignore:
-  - "ent"
-  - "api"
-  - "cmd/**/wire*.go"
+coverage:
+  status:
+    patch:
+      default:
+        threshold: 100% # allow patch coverage to be lower than project coverage by any amount
+    project:
+      default:
+        threshold: 5% # allow project coverage to drop at most 5%
 
 comment: false

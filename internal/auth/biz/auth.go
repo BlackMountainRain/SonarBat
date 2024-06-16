@@ -92,7 +92,6 @@ func (uc *AuthUseCase) SignUp(ctx context.Context, params *v1.SignUpRequest) (st
 	}
 	user, err := uc.repo.
 		Create(ctx, data)
-	// 11
 	if err != nil {
 		return "", err
 	}

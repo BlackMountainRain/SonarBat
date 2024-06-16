@@ -1,14 +1,24 @@
 import React, { useEffect } from 'react';
 import { useOAuth2 } from '@tasoskakour/react-use-oauth2';
 import { Button } from '@nextui-org/react';
-import { GrGithub, GrGoogle } from 'react-icons/gr';
+import {
+  GrAmazon, GrApple, GrFacebook, GrGithub,
+  GrGoogle, GrLinkedin, GrTwitter,
+} from 'react-icons/gr';
+import { FaMicrosoft } from 'react-icons/fa';
 import { OAuthProvider } from '@/app/types/auth';
 import { fetchOAuthProviders, fetchToken } from '@/app/lib/data';
 import toast from '@/app/lib/toast';
 
 const Icons: Record<string, React.ReactNode> = {
-  github: <GrGithub size={20} />,
-  google: <GrGoogle size={20} />,
+  GitHub: <GrGithub size={20} />,
+  Google: <GrGoogle size={20} />,
+  X: <GrTwitter size={20} />,
+  Facebook: <GrFacebook size={20} />,
+  Microsoft: <FaMicrosoft size={20} />,
+  LinkedIn: <GrLinkedin size={20} />,
+  Apple: <GrApple size={20} />,
+  Amazon: <GrAmazon size={20} />,
 };
 
 const OAuthForm = () => {
@@ -38,13 +48,13 @@ const OAuthForm = () => {
   };
 
   const handleOAuthClick = (provider: OAuthProvider) => {
-    const { getAuth } = useOAuth2({
+    const { getAuth } = useOAuth2<string>({
       authorizeUrl: provider.authorize_url,
       clientId: provider.client_id,
       redirectUri: provider.redirect_uri,
       scope: provider.scope,
       responseType: provider.response_type,
-      exchangeCodeForTokenQueryFn: async (callbackParameters) => {
+      exchangeCodeForTokenQueryFn: async (callbackParameters): Promise<string> => {
         try {
           return await fetchToken(provider.provider, callbackParameters.code);
         } catch (error) {

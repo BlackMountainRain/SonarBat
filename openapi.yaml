@@ -491,7 +491,7 @@ components:
             properties:
                 provider:
                     type: string
-                oauthToken:
+                code:
                     type: string
         api.auth.v1.SignUpRequest:
             type: object

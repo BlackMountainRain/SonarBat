@@ -19,8 +19,8 @@ import (
 )
 
 var (
-	// ErrUserNotFound is user not found.
-	ErrUserNotFound = errors.NotFound(v1.ErrorReason_USER_NOT_FOUND.String(), "user not found")
+	ErrUserNotFound             = errors.NotFound(v1.ErrorReason_USER_NOT_FOUND.String(), "user not found")
+	ErrEmailOrPasswordIncorrect = errors.NotFound(v1.ErrorReason_INVALID_EMAIL_OR_PASSWORD.String(), "email or password incorrect")
 )
 
 // AuthRepo is a Auth repo.
@@ -49,22 +49,46 @@ func NewAuthUseCase(c *conf.Auth, repo AuthRepo, logger log.Logger) *AuthUseCase
 	}
 }
 
+// SignIn signs in and returns a token.
+func (uc *AuthUseCase) SignIn(ctx context.Context, params *v1.SignInRequest) (string, error) {
+	usr, err := uc.repo.FindByEmail(ctx, params.Email)
+	if err != nil || usr == nil {
+		return "", ErrEmailOrPasswordIncorrect
+	}
+
+	if !util.CompareHashAndPassword(params.Password, usr.Password) {
+		return "", ErrEmailOrPasswordIncorrect
+	}
+
+	return util.GenerateToken([]byte(uc.cfg.Jwt.Secret), uc.cfg.Jwt.Expiration.AsDuration(), map[string]interface{}{
+		"uid":      usr.ID,
+		"username": usr.Username,
+		"email":    usr.Email,
+		"status":   usr.Status,
+	})
+}
+
 // SignUp creates a new user.
 func (uc *AuthUseCase) SignUp(ctx context.Context, params *v1.SignUpRequest) (string, error) {
 	// confirm the user does not exist
 	usr, err := uc.repo.FindByEmail(ctx, params.Email)
-	if err != nil {
+	if err != nil && !ErrUserNotFound.Is(err) {
 		return "", err
 	}
 	if usr != nil {
 		return "", v1.ErrorUserAlreadyExists("user already exists")
 	}
 
+	hashedPass, err := util.HashPassword(params.Password)
+	if err != nil {
+		return "", err
+	}
+
 	// create the user
 	data := &ent.User{
 		Username: params.Email,
 		Email:    params.Email,
-		Password: params.Password,
+		Password: hashedPass,
 	}
 	user, err := uc.repo.
 		Create(ctx, data)

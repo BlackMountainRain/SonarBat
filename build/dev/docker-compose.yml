@@ -23,8 +23,8 @@ services:
     container_name: sb-backend
     restart: always
     ports:
-      - 8000:8000
-      - 9000:9000
+      - ${BACKEND_HTTP_PORT}:${BACKEND_HTTP_PORT}
+      - ${BACKEND_GRPC_PORT}:${BACKEND_GRPC_PORT}
     volumes:
       - .:/go/src/sb
     environment:
@@ -32,6 +32,6 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
       - GOPROXY=https://goproxy.cn,direct
-    command: sh -c "make all && tail -f /dev/null"
+    command: sh -c "tail -f /dev/null"
     env_file:
       - .env

@@ -16,6 +16,12 @@ message Server {
     string network = 1;
     string addr = 2;
     google.protobuf.Duration timeout = 3;
+    bool enable_cors = 4;
+    string allowed_origins = 5;
+    repeated string allowed_methods = 6;
+    repeated string allowed_headers = 7;
+    repeated string exposed_headers = 8;
+    bool allow_credentials = 9;
   }
   message GRPC {
     string network = 1;

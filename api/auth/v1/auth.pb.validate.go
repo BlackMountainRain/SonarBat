@@ -163,7 +163,7 @@ func (m *SignInWithOAuthRequest) validate(all bool) error {
 
 	// no validation rules for Provider
 
-	// no validation rules for OauthToken
+	// no validation rules for Code
 
 	if len(errors) > 0 {
 		return SignInWithOAuthRequestMultiError(errors)

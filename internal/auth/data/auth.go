@@ -47,7 +47,11 @@ func (r *authRepo) FindByID(ctx context.Context, id uuid.UUID) (*ent.User, error
 }
 
 func (r *authRepo) FindByEmail(ctx context.Context, email string) (*ent.User, error) {
-	return r.data.cli.User.Query().Where(user.EmailEQ(email)).Only(ctx)
+	usr, err := r.data.cli.User.Query().Where(user.EmailEQ(email)).Only(ctx)
+	if err != nil && ent.IsNotFound(err) {
+		return nil, biz.ErrUserNotFound
+	}
+	return usr, err
 }
 
 func (r *authRepo) ListAll(ctx context.Context) ([]*ent.User, error) {

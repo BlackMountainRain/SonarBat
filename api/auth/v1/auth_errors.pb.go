@@ -34,3 +34,15 @@ func IsUserAlreadyExists(err error) bool {
 func ErrorUserAlreadyExists(format string, args ...interface{}) *errors.Error {
 	return errors.New(409, ErrorReason_USER_ALREADY_EXISTS.String(), fmt.Sprintf(format, args...))
 }
+
+func IsInvalidEmailOrPassword(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_INVALID_EMAIL_OR_PASSWORD.String() && e.Code == 401
+}
+
+func ErrorInvalidEmailOrPassword(format string, args ...interface{}) *errors.Error {
+	return errors.New(401, ErrorReason_INVALID_EMAIL_OR_PASSWORD.String(), fmt.Sprintf(format, args...))
+}

@@ -2,6 +2,22 @@ server:
   http:
     addr: "${HTTP_ADDR:0.0.0.0:8000}"
     timeout: 1s
+    enable_cors: true
+    allowed_origins: "${ALLOWED_ORIGINS:http://localhost:3000}" # you can combine multiple origins with comma, e.g., "http://localhost:3000,http://localhost:3001"
+    allowed_methods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "PATCH"
+      - "OPTIONS"
+    allowed_headers:
+      - "Content-Type"
+      - "Authorization"
+    exposed_headers:
+      - "Content-Length"
+    allow_credentials: true
+
   grpc:
     addr: "${GRPC_ADDR:0.0.0.0:9000}"
     timeout: 1s

@@ -20,7 +20,13 @@ func NewAuthService(auth *biz.AuthUseCase) *AuthService {
 }
 
 func (s *AuthService) SignIn(ctx context.Context, req *pb.SignInRequest) (*pb.AuthReply, error) {
-	return &pb.AuthReply{}, nil
+	token, err := s.auth.SignIn(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.AuthReply{
+		Token: token,
+	}, nil
 }
 func (s *AuthService) SignInWithOAuth(ctx context.Context, req *pb.SignInWithOAuthRequest) (*pb.AuthReply, error) {
 	return &pb.AuthReply{}, nil

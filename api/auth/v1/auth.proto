@@ -72,7 +72,7 @@ message SignInRequest {
 
 message SignInWithOAuthRequest {
 	string provider = 1;
-	string oauth_token = 2;
+	string code = 2;
 }
 
 message SignUpRequest {
@@ -150,4 +150,5 @@ enum ErrorReason {
 	option (errors.default_code) = 500;
 	USER_NOT_FOUND = 0 [(errors.code) = 404];
 	USER_ALREADY_EXISTS = 1 [(errors.code) = 409];
+	INVALID_EMAIL_OR_PASSWORD = 2 [(errors.code) = 401];
 }

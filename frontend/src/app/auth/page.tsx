@@ -1,69 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Button, Input } from '@nextui-org/react';
-import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
-import { Spacer } from '@nextui-org/spacer';
 import { Toaster } from 'react-hot-toast';
-import OAuthForm from '@/app/ui/auth/oauth-form';
-
-const LoginForm = () => {
-  const [isVisible, setIsVisible] = React.useState(false);
-  const [isSignUp, setIsSignUp] = React.useState(false);
-
-  const toggleVisibility = () => setIsVisible(!isVisible);
-  const toggleSignUp = () => setIsSignUp(!isSignUp);
-
-  return (
-    <>
-      <Input
-        key="email"
-        type="email"
-        label="Email"
-        labelPlacement="outside"
-        placeholder="Please enter your email"
-      />
-      <Input
-        key="password"
-        type={isVisible ? 'text' : 'password'}
-        label="Password"
-        labelPlacement="outside"
-        placeholder="Please enter your password"
-        endContent={(
-          <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
-            {isVisible ? (
-              <FaRegEyeSlash className="text-2xl text-default-400 pointer-events-none" />
-            ) : (
-              <FaRegEye className="text-2xl text-default-400 pointer-events-none" />
-            )}
-          </button>
-            )}
-      />
-
-      <Spacer y={1} />
-
-      <Button
-        className="w-full dark:bg-blue-800"
-      >
-        Sign In
-      </Button>
-
-      <OAuthForm />
-
-      <div className="flex items-center gap-x-2">
-        <div>
-          {isSignUp ? 'Already have an account?' : 'Don\'t have an account?'}
-        </div>
-        <div
-          className="font-bold text-blue-700 dark:text-blue-500 cursor-pointer hover:underline"
-          onClick={toggleSignUp}
-        >
-          {isSignUp ? 'Sign In' : 'Sign Up'}
-        </div>
-      </div>
-    </>
-  );
-};
+import LoginForm from '@/app/ui/auth/login-form';
 
 const LeftPanel = (): React.ReactNode => (
   <div className="border-5 sm:w-[30%] md:w-[40%] lg:w-[50%] h-full rounded-l-3xl border-slate-50

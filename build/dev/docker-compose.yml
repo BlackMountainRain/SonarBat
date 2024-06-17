@@ -19,7 +19,9 @@ services:
       - .env
 
   backend:
-    image: ghcr.io/blackmountainrain/sb-go-dev:latest
+    build:
+      context: .
+      dockerfile: build/dev/go/Dockerfile
     container_name: sb-backend
     restart: always
     ports:

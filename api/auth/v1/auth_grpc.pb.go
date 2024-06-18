@@ -19,15 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	Auth_SignIn_FullMethodName                     = "/api.auth.v1.Auth/SignIn"
-	Auth_SignInWithOAuth_FullMethodName            = "/api.auth.v1.Auth/SignInWithOAuth"
-	Auth_SignUp_FullMethodName                     = "/api.auth.v1.Auth/SignUp"
-	Auth_GetSupportedOAuthProviders_FullMethodName = "/api.auth.v1.Auth/GetSupportedOAuthProviders"
-	Auth_ValidateJWT_FullMethodName                = "/api.auth.v1.Auth/ValidateJWT"
-	Auth_CheckPermission_FullMethodName            = "/api.auth.v1.Auth/CheckPermission"
-	Auth_RequestPasswordReset_FullMethodName       = "/api.auth.v1.Auth/RequestPasswordReset"
-	Auth_VerifyPasswordResetToken_FullMethodName   = "/api.auth.v1.Auth/VerifyPasswordResetToken"
-	Auth_ResetPassword_FullMethodName              = "/api.auth.v1.Auth/ResetPassword"
+	Auth_SignIn_FullMethodName                   = "/api.auth.v1.Auth/SignIn"
+	Auth_SignInWithOAuth_FullMethodName          = "/api.auth.v1.Auth/SignInWithOAuth"
+	Auth_SignUp_FullMethodName                   = "/api.auth.v1.Auth/SignUp"
+	Auth_ValidateJWT_FullMethodName              = "/api.auth.v1.Auth/ValidateJWT"
+	Auth_CheckPermission_FullMethodName          = "/api.auth.v1.Auth/CheckPermission"
+	Auth_RequestPasswordReset_FullMethodName     = "/api.auth.v1.Auth/RequestPasswordReset"
+	Auth_VerifyPasswordResetToken_FullMethodName = "/api.auth.v1.Auth/VerifyPasswordResetToken"
+	Auth_ResetPassword_FullMethodName            = "/api.auth.v1.Auth/ResetPassword"
 )
 
 // AuthClient is the client API for Auth service.
@@ -37,7 +36,6 @@ type AuthClient interface {
 	SignIn(ctx context.Context, in *SignInRequest, opts ...grpc.CallOption) (*AuthReply, error)
 	SignInWithOAuth(ctx context.Context, in *SignInWithOAuthRequest, opts ...grpc.CallOption) (*AuthReply, error)
 	SignUp(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*AuthReply, error)
-	GetSupportedOAuthProviders(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*SupportedOAuthProvidersReply, error)
 	ValidateJWT(ctx context.Context, in *ValidateJWTRequest, opts ...grpc.CallOption) (*UserInfoReply, error)
 	CheckPermission(ctx context.Context, in *CheckPermissionRequest, opts ...grpc.CallOption) (*PermissionReply, error)
 	RequestPasswordReset(ctx context.Context, in *RequestPasswordResetRequest, opts ...grpc.CallOption) (*RequestPasswordResetReply, error)
@@ -77,16 +75,6 @@ func (c *authClient) SignUp(ctx context.Context, in *SignUpRequest, opts ...grpc
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AuthReply)
 	err := c.cc.Invoke(ctx, Auth_SignUp_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *authClient) GetSupportedOAuthProviders(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*SupportedOAuthProvidersReply, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SupportedOAuthProvidersReply)
-	err := c.cc.Invoke(ctx, Auth_GetSupportedOAuthProviders_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -150,7 +138,6 @@ type AuthServer interface {
 	SignIn(context.Context, *SignInRequest) (*AuthReply, error)
 	SignInWithOAuth(context.Context, *SignInWithOAuthRequest) (*AuthReply, error)
 	SignUp(context.Context, *SignUpRequest) (*AuthReply, error)
-	GetSupportedOAuthProviders(context.Context, *EmptyRequest) (*SupportedOAuthProvidersReply, error)
 	ValidateJWT(context.Context, *ValidateJWTRequest) (*UserInfoReply, error)
 	CheckPermission(context.Context, *CheckPermissionRequest) (*PermissionReply, error)
 	RequestPasswordReset(context.Context, *RequestPasswordResetRequest) (*RequestPasswordResetReply, error)
@@ -171,9 +158,6 @@ func (UnimplementedAuthServer) SignInWithOAuth(context.Context, *SignInWithOAuth
 }
 func (UnimplementedAuthServer) SignUp(context.Context, *SignUpRequest) (*AuthReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SignUp not implemented")
-}
-func (UnimplementedAuthServer) GetSupportedOAuthProviders(context.Context, *EmptyRequest) (*SupportedOAuthProvidersReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetSupportedOAuthProviders not implemented")
 }
 func (UnimplementedAuthServer) ValidateJWT(context.Context, *ValidateJWTRequest) (*UserInfoReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidateJWT not implemented")
@@ -253,24 +237,6 @@ func _Auth_SignUp_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServer).SignUp(ctx, req.(*SignUpRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Auth_GetSupportedOAuthProviders_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EmptyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthServer).GetSupportedOAuthProviders(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Auth_GetSupportedOAuthProviders_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServer).GetSupportedOAuthProviders(ctx, req.(*EmptyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -383,10 +349,6 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SignUp",
 			Handler:    _Auth_SignUp_Handler,
-		},
-		{
-			MethodName: "GetSupportedOAuthProviders",
-			Handler:    _Auth_GetSupportedOAuthProviders_Handler,
 		},
 		{
 			MethodName: "ValidateJWT",

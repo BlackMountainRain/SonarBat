@@ -20,6 +20,7 @@ func (User) Fields() []ent.Field {
 		field.String("username").NotEmpty().MaxLen(255),
 		field.String("password").NotEmpty().MaxLen(255),
 		field.String("email").NotEmpty().MaxLen(255),
+		field.String("avatar_url").MaxLen(255).Optional(),
 	}
 }
 

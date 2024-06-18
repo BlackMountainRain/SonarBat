@@ -4,7 +4,7 @@
  * @Date 2024/6/15
  */
 
-package util
+package helper
 
 import (
 	"github.com/golang-jwt/jwt/v5"

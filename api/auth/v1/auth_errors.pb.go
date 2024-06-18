@@ -46,3 +46,15 @@ func IsInvalidEmailOrPassword(err error) bool {
 func ErrorInvalidEmailOrPassword(format string, args ...interface{}) *errors.Error {
 	return errors.New(401, ErrorReason_INVALID_EMAIL_OR_PASSWORD.String(), fmt.Sprintf(format, args...))
 }
+
+func IsProviderNotSupported(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_PROVIDER_NOT_SUPPORTED.String() && e.Code == 400
+}
+
+func ErrorProviderNotSupported(format string, args ...interface{}) *errors.Error {
+	return errors.New(400, ErrorReason_PROVIDER_NOT_SUPPORTED.String(), fmt.Sprintf(format, args...))
+}

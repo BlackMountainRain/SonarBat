@@ -1,7 +1,5 @@
-import { OAuthProvider } from '@/app/types/auth';
-
 export async function fetchToken(
-  provider: 'Self' | 'GitHub' | 'Google' | 'X' | 'Facebook' | 'Microsoft' | 'LinkedIn' | 'Apple' | 'Amazon',
+  provider: 'SELF' | 'GITHUB' | 'GOOGLE' | 'X' | 'FACEBOOK' | 'MICROSOFT' | 'LINKEDIN' | 'APPLE' | 'AMAZON',
   code: string = '',
   email: string = '',
   password: string = '',
@@ -13,7 +11,7 @@ export async function fetchToken(
 
   let url = '';
   let payload = '';
-  if (provider === 'Self') {
+  if (provider === 'SELF') {
     payload = JSON.stringify({ email, password });
     url = `${process.env.NEXT_PUBLIC_AUTH_HTTP_ADDR}/api/v1/auth/sign-in/password`;
   } else {
@@ -71,27 +69,4 @@ export async function signUp(
   }
   const data = await response.json();
   return data.token;
-}
-
-export async function fetchOAuthProviders(): Promise<OAuthProvider[]> {
-  return new Promise((resolve) => {
-    resolve([
-      {
-        provider: 'GitHub',
-        authorize_url: 'https://github.com/login/oauth/authorize',
-        client_id: process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID || '',
-        redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL || ''}/auth/callback`,
-        scope: 'read:user',
-        response_type: 'code',
-      },
-      {
-        provider: 'Google',
-        authorize_url: 'https://accounts.google.com/o/oauth2/auth',
-        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '',
-        redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL || ''}/auth/callback`,
-        scope: 'openid profile email',
-        response_type: 'code',
-      },
-    ]);
-  });
 }

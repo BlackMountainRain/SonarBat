@@ -26,10 +26,18 @@ const LoginForm = () => {
 
   const handleSignIn = async () => {
     try {
-      const token = await fetchToken('Self', '', email, password);
+      const token = await fetchToken('SELF', '', email, password);
       localStorage.setItem('token', token);
     } catch (error) {
       toast.error(String(error));
+    }
+  };
+
+  const handleClick = async () => {
+    if (isSignUp) {
+      await handleSignUp();
+    } else {
+      await handleSignIn();
     }
   };
 
@@ -67,9 +75,7 @@ const LoginForm = () => {
 
       <Button
         className="w-full dark:bg-blue-800"
-        onClick={() => {
-          isSignUp ? handleSignUp() : handleSignIn();
-        }}
+        onClick={handleClick}
       >
         {isSignUp ? 'Sign Up' : 'Sign In'}
       </Button>

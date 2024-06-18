@@ -39,7 +39,9 @@ func (r *authRepo) Save(ctx context.Context, user *ent.User) (*ent.User, error) 
 }
 
 func (r *authRepo) Update(ctx context.Context, user *ent.User) (*ent.User, error) {
-	return nil, nil
+	return r.data.cli.User.UpdateOneID(user.ID).
+		SetUsername(user.Username).SetEmail(user.Email).SetAvatarURL(user.AvatarURL).
+		Save(ctx)
 }
 
 func (r *authRepo) FindByID(ctx context.Context, id uuid.UUID) (*ent.User, error) {

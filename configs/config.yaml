@@ -1,7 +1,7 @@
 server:
   http:
     addr: "${HTTP_ADDR:0.0.0.0:8000}"
-    timeout: 1s
+    timeout: 30s
     enable_cors: true
     allowed_origins: "${ALLOWED_ORIGINS:http://localhost:3000}" # you can combine multiple origins with comma, e.g., "http://localhost:3000,http://localhost:3001"
     allowed_methods:
@@ -20,7 +20,7 @@ server:
 
   grpc:
     addr: "${GRPC_ADDR:0.0.0.0:9000}"
-    timeout: 1s
+    timeout: 30s
 data:
   database:
     driver: postgres

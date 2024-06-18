@@ -20,7 +20,6 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationAuthCheckPermission = "/api.auth.v1.Auth/CheckPermission"
-const OperationAuthGetSupportedOAuthProviders = "/api.auth.v1.Auth/GetSupportedOAuthProviders"
 const OperationAuthRequestPasswordReset = "/api.auth.v1.Auth/RequestPasswordReset"
 const OperationAuthResetPassword = "/api.auth.v1.Auth/ResetPassword"
 const OperationAuthSignIn = "/api.auth.v1.Auth/SignIn"
@@ -31,7 +30,6 @@ const OperationAuthVerifyPasswordResetToken = "/api.auth.v1.Auth/VerifyPasswordR
 
 type AuthHTTPServer interface {
 	CheckPermission(context.Context, *CheckPermissionRequest) (*PermissionReply, error)
-	GetSupportedOAuthProviders(context.Context, *EmptyRequest) (*SupportedOAuthProvidersReply, error)
 	RequestPasswordReset(context.Context, *RequestPasswordResetRequest) (*RequestPasswordResetReply, error)
 	ResetPassword(context.Context, *ResetPasswordRequest) (*ResetPasswordReply, error)
 	SignIn(context.Context, *SignInRequest) (*AuthReply, error)
@@ -46,7 +44,6 @@ func RegisterAuthHTTPServer(s *http.Server, srv AuthHTTPServer) {
 	r.POST("/api/v1/auth/sign-in/password", _Auth_SignIn0_HTTP_Handler(srv))
 	r.POST("/api/v1/auth/sign-in/oauth", _Auth_SignInWithOAuth0_HTTP_Handler(srv))
 	r.POST("/api/v1/auth/sign-up", _Auth_SignUp0_HTTP_Handler(srv))
-	r.GET("/api/v1/auth/oauth/providers", _Auth_GetSupportedOAuthProviders0_HTTP_Handler(srv))
 	r.POST("/api/v1/auth/validate-jwt", _Auth_ValidateJWT0_HTTP_Handler(srv))
 	r.POST("/api/v1/auth/check-permission", _Auth_CheckPermission0_HTTP_Handler(srv))
 	r.POST("/api/v1/auth/request-password-reset", _Auth_RequestPasswordReset0_HTTP_Handler(srv))
@@ -116,25 +113,6 @@ func _Auth_SignUp0_HTTP_Handler(srv AuthHTTPServer) func(ctx http.Context) error
 			return err
 		}
 		reply := out.(*AuthReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _Auth_GetSupportedOAuthProviders0_HTTP_Handler(srv AuthHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in EmptyRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationAuthGetSupportedOAuthProviders)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetSupportedOAuthProviders(ctx, req.(*EmptyRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*SupportedOAuthProvidersReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -248,7 +226,6 @@ func _Auth_ResetPassword0_HTTP_Handler(srv AuthHTTPServer) func(ctx http.Context
 
 type AuthHTTPClient interface {
 	CheckPermission(ctx context.Context, req *CheckPermissionRequest, opts ...http.CallOption) (rsp *PermissionReply, err error)
-	GetSupportedOAuthProviders(ctx context.Context, req *EmptyRequest, opts ...http.CallOption) (rsp *SupportedOAuthProvidersReply, err error)
 	RequestPasswordReset(ctx context.Context, req *RequestPasswordResetRequest, opts ...http.CallOption) (rsp *RequestPasswordResetReply, err error)
 	ResetPassword(ctx context.Context, req *ResetPasswordRequest, opts ...http.CallOption) (rsp *ResetPasswordReply, err error)
 	SignIn(ctx context.Context, req *SignInRequest, opts ...http.CallOption) (rsp *AuthReply, err error)
@@ -273,19 +250,6 @@ func (c *AuthHTTPClientImpl) CheckPermission(ctx context.Context, in *CheckPermi
 	opts = append(opts, http.Operation(OperationAuthCheckPermission))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, nil
-}
-
-func (c *AuthHTTPClientImpl) GetSupportedOAuthProviders(ctx context.Context, in *EmptyRequest, opts ...http.CallOption) (*SupportedOAuthProvidersReply, error) {
-	var out SupportedOAuthProvidersReply
-	pattern := "/api/v1/auth/oauth/providers"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationAuthGetSupportedOAuthProviders))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

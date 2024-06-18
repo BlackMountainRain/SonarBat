@@ -52,5 +52,14 @@ message Auth {
     string secret = 1;
     google.protobuf.Duration expiration = 2;
   }
+  message OAuth {
+    string google_client_id = 1;
+    string google_client_secret = 2;
+    string google_redirect_url = 3;
+    string github_client_id = 4;
+    string github_client_secret = 5;
+    string github_redirect_url = 6;
+  }
   Jwt jwt = 1;
+  OAuth oauth = 2;
 }

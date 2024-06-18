@@ -24,18 +24,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.auth.v1.PermissionReply'
-    /api/v1/auth/oauth/providers:
-        get:
-            tags:
-                - Auth
-            operationId: Auth_GetSupportedOAuthProviders
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.auth.v1.SupportedOAuthProvidersReply'
     /api/v1/auth/request-password-reset:
         post:
             tags:
@@ -490,7 +478,8 @@ components:
             type: object
             properties:
                 provider:
-                    type: string
+                    type: integer
+                    format: enum
                 code:
                     type: string
         api.auth.v1.SignUpRequest:
@@ -500,28 +489,6 @@ components:
                     type: string
                 password:
                     type: string
-        api.auth.v1.SupportedOAuthProvider:
-            type: object
-            properties:
-                provider:
-                    type: string
-                authorizeUrl:
-                    type: string
-                clientId:
-                    type: string
-                redirectUri:
-                    type: string
-                scope:
-                    type: string
-                responseType:
-                    type: string
-        api.auth.v1.SupportedOAuthProvidersReply:
-            type: object
-            properties:
-                providers:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/api.auth.v1.SupportedOAuthProvider'
         api.auth.v1.UserInfoReply:
             type: object
             properties:

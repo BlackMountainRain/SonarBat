@@ -28,9 +28,17 @@ func (s *AuthService) SignIn(ctx context.Context, req *pb.SignInRequest) (*pb.Au
 		Token: token,
 	}, nil
 }
+
 func (s *AuthService) SignInWithOAuth(ctx context.Context, req *pb.SignInWithOAuthRequest) (*pb.AuthReply, error) {
-	return &pb.AuthReply{}, nil
+	token, err := s.auth.SignInWithOAuth(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.AuthReply{
+		Token: token,
+	}, nil
 }
+
 func (s *AuthService) SignUp(ctx context.Context, req *pb.SignUpRequest) (*pb.AuthReply, error) {
 	token, err := s.auth.SignUp(ctx, req)
 	if err != nil {
@@ -40,9 +48,7 @@ func (s *AuthService) SignUp(ctx context.Context, req *pb.SignUpRequest) (*pb.Au
 		Token: token,
 	}, nil
 }
-func (s *AuthService) GetSupportedOAuthProviders(ctx context.Context, req *pb.EmptyRequest) (*pb.SupportedOAuthProvidersReply, error) {
-	return &pb.SupportedOAuthProvidersReply{}, nil
-}
+
 func (s *AuthService) ValidateJWT(ctx context.Context, req *pb.ValidateJWTRequest) (*pb.UserInfoReply, error) {
 	return &pb.UserInfoReply{}, nil
 }

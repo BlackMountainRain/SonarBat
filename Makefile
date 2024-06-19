@@ -114,6 +114,13 @@ help:
 dev:
 	docker compose -f ./build/dev/docker-compose.yml --project-directory . up -d
 
+# start the dev environment
+dev-f:
+	docker compose -f ./build/dev/docker-compose.yml --project-directory . up -d --force-recreate
+
+dev-del:
+	docker rmi sonarbat-backend:latest
+
 # tear down the dev environment
 down:
 	docker compose -f ./build/dev/docker-compose.yml --project-directory . down

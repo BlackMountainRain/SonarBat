@@ -4,6 +4,8 @@ WORKDIR /go/src/sb
 
 COPY ./ ./
 
+ENV GOPROXY=https://goproxy.cn,direct
+
 RUN make init
 
 FROM golang:1.22-bookworm as runtime

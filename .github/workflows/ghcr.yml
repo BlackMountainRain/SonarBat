@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        image: ["build/dev/go"]
+        image: []
 
     steps:
       - name: checkout

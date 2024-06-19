@@ -20,7 +20,9 @@ const OAuthForm = () => {
     redirectUri: `${process.env.NEXT_PUBLIC_BASE_URL || ''}/auth/callback`,
     scope: 'read:user',
     responseType: 'code',
-    exchangeCodeForTokenQueryFn: async (callbackParameters): Promise<string> => {
+    exchangeCodeForTokenQueryFn: async (
+      callbackParameters,
+    ): Promise<string> => {
       try {
         return await fetchToken('GITHUB', callbackParameters.code);
       } catch (error) {
@@ -37,7 +39,9 @@ const OAuthForm = () => {
     redirectUri: `${process.env.NEXT_PUBLIC_BASE_URL || ''}/auth/callback`,
     scope: 'openid profile email',
     responseType: 'code',
-    exchangeCodeForTokenQueryFn: async (callbackParameters): Promise<string> => {
+    exchangeCodeForTokenQueryFn: async (
+      callbackParameters,
+    ): Promise<string> => {
       try {
         return await fetchToken('GOOGLE', callbackParameters.code);
       } catch (error) {

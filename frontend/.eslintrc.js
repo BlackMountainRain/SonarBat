@@ -15,9 +15,7 @@ module.exports = {
       env: {
         node: true,
       },
-      files: [
-        '.eslintrc.{js,cjs}',
-      ],
+      files: ['.eslintrc.{js,cjs}'],
       excludedFiles: '.eslintrc.js',
       parserOptions: {
         sourceType: 'script',
@@ -28,18 +26,16 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.json',
   },
-  plugins: [
-    '@typescript-eslint',
-    'react',
-  ],
+  plugins: ['@typescript-eslint', 'react'],
   rules: {
     // Allow state modification in reduce and Redux reducers
-    'no-param-reassign': ['error', {
-      props: true,
-      ignorePropertyModificationsFor: [
-        'acc', 'state',
-      ],
-    }],
+    'no-param-reassign': [
+      'error',
+      {
+        props: true,
+        ignorePropertyModificationsFor: ['acc', 'state'],
+      },
+    ],
     // For https://stackoverflow.com/questions/55844608/stuck-with-eslint-error-i-e-separately-loops-should-be-avoided-in-favor-of-arra
     'no-restricted-syntax': 'off',
     'import/prefer-default-export': 'off',
@@ -47,11 +43,14 @@ module.exports = {
     'jsx-a11y/no-static-element-interactions': 'off',
     'jsx-a11y/click-events-have-key-events': 'off',
     // For https://github.com/airbnb/javascript/issues/1885
-    'jsx-a11y/label-has-associated-control': [2, {
-      required: {
-        some: ['nesting', 'id'],
+    'jsx-a11y/label-has-associated-control': [
+      2,
+      {
+        required: {
+          some: ['nesting', 'id'],
+        },
       },
-    }],
+    ],
     'react/no-array-index-key': 'off',
     'react/function-component-definition': [
       'error',
@@ -60,12 +59,16 @@ module.exports = {
         unnamedComponents: 'arrow-function',
       },
     ],
-    'import/extensions': ['error', 'ignorePackages', {
-      js: 'never',
-      jsx: 'never',
-      ts: 'never',
-      tsx: 'never',
-      '': 'never',
-    }],
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+        '': 'never',
+      },
+    ],
   },
 };

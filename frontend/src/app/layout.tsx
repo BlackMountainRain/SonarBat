@@ -30,9 +30,7 @@ const RootLayout = ({
 }): React.ReactNode => (
   <html lang="en">
     <body className={lusitana.className} suppressHydrationWarning>
-      <Providers>
-        {children}
-      </Providers>
+      <Providers>{children}</Providers>
     </body>
   </html>
 );

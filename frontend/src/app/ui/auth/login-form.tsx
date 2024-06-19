@@ -1,7 +1,6 @@
 import React from 'react';
-import { Button, Input } from '@nextui-org/react';
+import { Button, Input, Spacer } from '@nextui-org/react';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
-import { Spacer } from '@nextui-org/spacer';
 import toast from '@/app/lib/toast';
 import { fetchToken, signUp } from '@/app/lib/data';
 import OAuthForm from '@/app/ui/auth/oauth-form';
@@ -58,25 +57,26 @@ const LoginForm = () => {
         label="Password"
         labelPlacement="outside"
         placeholder="Please enter your password"
-        endContent={(
-          <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
+        endContent={
+          <button
+            className="focus:outline-none"
+            type="button"
+            onClick={toggleVisibility}
+          >
             {isVisible ? (
               <FaRegEyeSlash className="text-2xl text-default-400 pointer-events-none" />
             ) : (
               <FaRegEye className="text-2xl text-default-400 pointer-events-none" />
             )}
           </button>
-        )}
+        }
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
 
       <Spacer y={1} />
 
-      <Button
-        className="w-full dark:bg-blue-800"
-        onClick={handleClick}
-      >
+      <Button className="w-full dark:bg-blue-800" onClick={handleClick}>
         {isSignUp ? 'Sign Up' : 'Sign In'}
       </Button>
 
@@ -84,7 +84,7 @@ const LoginForm = () => {
 
       <div className="flex items-center gap-x-2">
         <div>
-          {isSignUp ? 'Already have an account?' : 'Don\'t have an account?'}
+          {isSignUp ? 'Already have an account?' : "Don't have an account?"}
         </div>
         <div
           className="font-bold text-blue-700 dark:text-blue-500 cursor-pointer hover:underline"

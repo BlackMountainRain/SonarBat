@@ -1,3 +1,4 @@
 #!/bin/sh
 cd frontend || exit
 npx lint-staged
+npm test

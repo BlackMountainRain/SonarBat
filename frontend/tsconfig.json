@@ -19,7 +19,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["jest"]
   },
   "include": [
     ".eslintrc.js",

@@ -40,9 +40,4 @@ const SidebarItem = ({ icon, title, isActive = false, href = '' }: Props) => {
   );
 };
 
-SidebarItem.defaultProps = {
-  isActive: false,
-  href: '',
-};
-
 export { SidebarItem };

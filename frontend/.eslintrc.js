@@ -71,5 +71,11 @@ module.exports = {
         '': 'never',
       },
     ],
+    'react/require-default-props': [
+      'error',
+      {
+        functions: 'defaultArguments',
+      },
+    ],
   },
 };

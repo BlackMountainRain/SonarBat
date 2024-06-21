@@ -1,21 +1,33 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import SideBar from '@/app/ui/dashboard/sidebar';
 import { SidebarContext } from '@/app/dashboard/layout-context';
 import { useLockedBody } from '@/app/hooks/useBodyLock';
+import { isTokenExpired } from '@/app/utils/jwt';
 
 const DashboardLayout = ({
   children,
 }: {
   children: React.ReactNode;
 }): React.ReactNode => {
+  const pathname = usePathname();
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const [, setLocked] = useLockedBody(false);
   const handleToggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
     setLocked(!sidebarOpen);
   };
+
+  useEffect(() => {
+    // verify token
+    const token = localStorage.getItem('token') ?? '';
+    if (isTokenExpired(token)) {
+      router.push('/auth');
+    }
+  }, [pathname]);
 
   const value = useMemo(
     () => ({

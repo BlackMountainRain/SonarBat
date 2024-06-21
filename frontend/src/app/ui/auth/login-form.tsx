@@ -1,11 +1,13 @@
 import React from 'react';
-import { Button, Input, Spacer } from '@nextui-org/react';
+import { Button, Divider, Input, Spacer } from '@nextui-org/react';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
+import { useRouter } from 'next/navigation';
 import toast from '@/app/lib/toast';
 import { fetchToken, signUp } from '@/app/lib/data';
 import OAuthForm from '@/app/ui/auth/oauth-form';
 
 const LoginForm = () => {
+  const router = useRouter();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [isVisible, setIsVisible] = React.useState(false);
@@ -18,6 +20,8 @@ const LoginForm = () => {
     try {
       const token = await signUp(email, password);
       localStorage.setItem('token', token);
+      router.push('/dashboard');
+      toast.info('Sign up successfully');
     } catch (error) {
       toast.error(String(error));
     }
@@ -27,12 +31,19 @@ const LoginForm = () => {
     try {
       const token = await fetchToken('SELF', '', email, password);
       localStorage.setItem('token', token);
+      router.push('/dashboard');
+      toast.info('Sign in successfully');
     } catch (error) {
       toast.error(String(error));
     }
   };
 
   const handleClick = async () => {
+    if (!email || !password) {
+      toast.error('Email and password are required');
+      return;
+    }
+
     if (isSignUp) {
       await handleSignUp();
     } else {
@@ -43,6 +54,7 @@ const LoginForm = () => {
   return (
     <>
       <Input
+        isRequired
         key="email"
         type="email"
         label="Email"
@@ -52,6 +64,7 @@ const LoginForm = () => {
         onChange={(e) => setEmail(e.target.value)}
       />
       <Input
+        isRequired
         key="password"
         type={isVisible ? 'text' : 'password'}
         label="Password"
@@ -80,8 +93,6 @@ const LoginForm = () => {
         {isSignUp ? 'Sign Up' : 'Sign In'}
       </Button>
 
-      <OAuthForm />
-
       <div className="flex items-center gap-x-2">
         <div>
           {isSignUp ? 'Already have an account?' : "Don't have an account?"}
@@ -93,6 +104,10 @@ const LoginForm = () => {
           {isSignUp ? 'Sign In' : 'Sign Up'}
         </div>
       </div>
+
+      <Divider />
+
+      <OAuthForm />
     </>
   );
 };

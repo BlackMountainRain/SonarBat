@@ -1,5 +1,7 @@
 # Sonar Bat
 
+[![codecov](https://codecov.io/gh/BlackMountainRain/SonarBat/graph/badge.svg?token=XUMKY9D690)](https://codecov.io/gh/BlackMountainRain/SonarBat)
+
 🦇 Sonar Bat is a large-scale network detection system designed to help users configure and execute network-related tasks on specific endpoints or hosts. It features a user-friendly web interface (webui) for task configuration and is built using a microservice architecture with Go as the primary programming language.
 
 ## Features

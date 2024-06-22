@@ -43,6 +43,7 @@ Example branch names:
 - **release**: For preparing a new release.
 - **chore**: For routine maintenance tasks.
 - **refactor**: For refactoring code without changing its external behavior.
+- **test**: For adding or modifying tests.
 
 ## Other Guidelines
 

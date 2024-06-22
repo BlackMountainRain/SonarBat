@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
-import Home from './page';
+import Home from '@/app/page';
 
-describe('Page', () => {
+describe('Home Page', () => {
   it('renders home page', () => {
     // eslint-disable-next-line react/react-in-jsx-scope
     render(<Home />);

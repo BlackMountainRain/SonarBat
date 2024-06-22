@@ -37,12 +37,12 @@ export default {
     }
     idMap.delete(id);
   },
-  settingsChanged: (msg: string) => {
+
+  info: (msg: string) => {
     toast(msg, {
-      position: 'bottom-right',
+      position: 'top-center',
       className: 'bg-neutral-700',
 
-      icon: '⚙️',
       style: {
         background: '#333',
         color: '#fff',
@@ -51,8 +51,8 @@ export default {
     });
   },
 
-  info: (msg: string) => {
-    toast(msg, {
+  success: (msg: string) => {
+    toast.success(msg, {
       position: 'top-center',
       className: 'bg-neutral-700',
 

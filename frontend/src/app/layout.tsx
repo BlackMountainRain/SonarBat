@@ -36,3 +36,4 @@ const RootLayout = ({
 );
 
 export default RootLayout;
+export { Providers };

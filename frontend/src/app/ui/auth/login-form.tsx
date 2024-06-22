@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Divider, Input, Spacer } from '@nextui-org/react';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 import { useRouter } from 'next/navigation';
-import toast from '@/app/lib/toast';
+import toast from '@/app/utils/toast';
 import { fetchToken, signUp } from '@/app/lib/data';
 import OAuthForm from '@/app/ui/auth/oauth-form';
 
@@ -21,7 +21,7 @@ const LoginForm = () => {
       const token = await signUp(email, password);
       localStorage.setItem('token', token);
       router.push('/dashboard');
-      toast.info('Sign up successfully');
+      toast.success('Sign up successfully');
     } catch (error) {
       toast.error(String(error));
     }
@@ -32,7 +32,7 @@ const LoginForm = () => {
       const token = await fetchToken('SELF', '', email, password);
       localStorage.setItem('token', token);
       router.push('/dashboard');
-      toast.info('Sign in successfully');
+      toast.success('Sign in successfully');
     } catch (error) {
       toast.error(String(error));
     }
@@ -75,6 +75,7 @@ const LoginForm = () => {
             className="focus:outline-none"
             type="button"
             onClick={toggleVisibility}
+            data-testid="toggle-visibility"
           >
             {isVisible ? (
               <FaRegEyeSlash className="text-2xl text-default-400 pointer-events-none" />
@@ -89,7 +90,11 @@ const LoginForm = () => {
 
       <Spacer y={1} />
 
-      <Button className="w-full dark:bg-blue-800" onClick={handleClick}>
+      <Button
+        className="w-full dark:bg-blue-800"
+        onClick={handleClick}
+        data-testid="submit-button"
+      >
         {isSignUp ? 'Sign Up' : 'Sign In'}
       </Button>
 
@@ -100,6 +105,7 @@ const LoginForm = () => {
         <div
           className="font-bold text-blue-700 dark:text-blue-500 cursor-pointer hover:underline"
           onClick={toggleSignUp}
+          data-testid="toggle-sign-up"
         >
           {isSignUp ? 'Sign In' : 'Sign Up'}
         </div>

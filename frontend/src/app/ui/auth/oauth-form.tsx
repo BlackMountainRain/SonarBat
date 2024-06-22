@@ -4,7 +4,7 @@ import { Button } from '@nextui-org/react';
 import { GrGithub, GrGoogle } from 'react-icons/gr';
 import { useRouter } from 'next/navigation';
 import { fetchToken } from '@/app/lib/data';
-import toast from '@/app/lib/toast';
+import toast from '@/app/utils/toast';
 
 const OAuthForm = () => {
   const router = useRouter();
@@ -12,7 +12,7 @@ const OAuthForm = () => {
   const onSuccess = (token: string) => {
     localStorage.setItem('token', token);
     router.push('/dashboard');
-    toast.info('Sign in successfully');
+    toast.success('Sign in successfully');
   };
   const onError = (err: string) => {
     toast.error(`Sign in failed: ${err}`);
@@ -62,6 +62,7 @@ const OAuthForm = () => {
         className="w-full"
         onClick={getGitHubAuth}
         startContent={<GrGithub size={20} />}
+        data-testid="github-button"
       >
         Sign in with GitHub
       </Button>
@@ -69,6 +70,7 @@ const OAuthForm = () => {
         className="w-full"
         onClick={getGoogleAuth}
         startContent={<GrGoogle size={20} />}
+        data-testid="google-button"
       >
         Sign in with Google
       </Button>

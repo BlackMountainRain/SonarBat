@@ -1,11 +1,17 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
+import { useOAuth2 } from '@tasoskakour/react-use-oauth2';
 import {
   fetchToken as originalFetchToken,
   signUp as originalSignUp,
 } from '@/app/lib/data';
 import LoginForm from '@/app/ui/auth/login-form';
 import toast from '@/app/utils/toast';
+
+jest.mock('@tasoskakour/react-use-oauth2');
+
+const mockUseOAuth = useOAuth2 as jest.Mock;
+mockUseOAuth.mockReturnValue({ getAuth: jest.fn() });
 
 const pushMock = jest.fn();
 

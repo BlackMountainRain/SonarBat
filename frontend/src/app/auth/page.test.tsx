@@ -1,6 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { useOAuth2 } from '@tasoskakour/react-use-oauth2';
 import LoginPage from '@/app/auth/page';
+
+jest.mock('@tasoskakour/react-use-oauth2');
+
+const mockUseOAuth = useOAuth2 as jest.Mock;
+mockUseOAuth.mockReturnValue({ getAuth: jest.fn() });
 
 jest.mock('next/navigation', () => ({
   useRouter() {

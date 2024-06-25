@@ -2,8 +2,9 @@
 
 import React, { useContext } from 'react';
 import { usePathname } from 'next/navigation';
-import { Avatar } from '@nextui-org/react';
+import { Image } from '@nextui-org/react';
 import { HiBugAnt, HiChartPie, HiMiniCube } from 'react-icons/hi2';
+import { useTheme } from 'next-themes';
 import { Sidebar } from '@/app/ui/dashboard/sidebar.style';
 import { SidebarContext } from '@/app/dashboard/layout-context';
 import { SidebarItem } from '@/app/ui/dashboard/sidebar-item';
@@ -38,11 +39,12 @@ const links = [
 ];
 
 const SideBar = (): React.ReactNode => {
+  const { theme } = useTheme();
   const pathname = usePathname();
   const { collapsed, setCollapsed } = useContext(SidebarContext);
 
   return (
-    <aside className="h-screen z-[20] sticky top-0">
+    <aside className="h-screen z-[20] sticky top-0 select-none">
       {collapsed ? (
         <div className={Sidebar.Overlay()} onClick={setCollapsed} />
       ) : null}
@@ -52,7 +54,22 @@ const SideBar = (): React.ReactNode => {
         })}
       >
         <div className={Sidebar.Header()}>
-          <Avatar src="/logo.white.webp" size="lg" />
+          {theme === 'light' ? (
+            <Image
+              width={40}
+              height={40}
+              src="/logo.black.webp"
+              className="select-none hover:scale-105"
+            />
+          ) : (
+            <Image
+              width={40}
+              height={40}
+              src="/logo.white.webp"
+              className="hover:scale-105"
+            />
+          )}
+
           <div>Sonar Bat</div>
         </div>
         <div className="flex flex-col justify-between h-full">
@@ -66,7 +83,7 @@ const SideBar = (): React.ReactNode => {
                         key={item.name}
                         isActive={pathname === item.href}
                         title={item.name}
-                        icon={<item.icon />}
+                        icon={<item.icon size={24} />}
                         href={item.href}
                       />
                     ))}
@@ -78,7 +95,7 @@ const SideBar = (): React.ReactNode => {
                   key={link.name}
                   isActive={pathname === link.href}
                   title={link.name}
-                  icon={<link.icon />}
+                  icon={<link.icon size={24} />}
                   href={link.href}
                 />
               );

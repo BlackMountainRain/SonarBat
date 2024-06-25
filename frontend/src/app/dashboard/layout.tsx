@@ -6,6 +6,7 @@ import SideBar from '@/app/ui/dashboard/sidebar';
 import { SidebarContext } from '@/app/dashboard/layout-context';
 import { useLockedBody } from '@/app/hooks/useBodyLock';
 import { isTokenExpired } from '@/app/utils/jwt';
+import NavBar from '@/app/ui/dashboard/navbar';
 
 const DashboardLayout = ({
   children,
@@ -39,11 +40,12 @@ const DashboardLayout = ({
 
   return (
     <SidebarContext.Provider value={value}>
-      <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-        <div className="w-full flex-none md:w-64">
-          <SideBar />
+      <div className="flex">
+        <SideBar />
+        <div className="flex flex-col flex-1">
+          <NavBar />
+          <div className="grow p-6 md:overflow-y-auto md:p-12">{children}</div>
         </div>
-        <div className="grow p-6 md:overflow-y-auto md:p-12">{children}</div>
       </div>
     </SidebarContext.Provider>
   );

@@ -17,26 +17,28 @@ import (
 func TestGenerateTokenWithPayloadAndExpiration(t *testing.T) {
 	// Arrange
 	secret := []byte("my-secret")
+	issuer := "test-issuer"
 	exp := time.Hour
-	payload := map[string]interface{}{"user": "testuser"}
+	payload := Claims{Username: "test-user"}
 
 	// Act
-	token, err := GenerateToken(secret, exp, payload)
+	token, err := GenerateToken(secret, payload, issuer, exp)
 
 	// Assert
 	assert.NoError(t, err)
 	assert.NotEmpty(t, token)
 }
 
-// Handles nil payload by initializing an empty map
+// Handles nil payload by initializing an empty claims
 func TestGenerateTokenWithNilPayload(t *testing.T) {
 	// Arrange
 	secret := []byte("my-secret")
+	issuer := "test-issuer"
 	exp := time.Hour
-	var payload map[string]interface{}
+	var payload Claims
 
 	// Act
-	token, err := GenerateToken(secret, exp, payload)
+	token, err := GenerateToken(secret, payload, issuer, exp)
 
 	// Assert
 	assert.NoError(t, err)
@@ -46,11 +48,12 @@ func TestGenerateTokenWithNilPayload(t *testing.T) {
 func TestGenerateTokenWithEmptySecret(t *testing.T) {
 	// Arrange
 	var secret []byte
+	issuer := "test-issuer"
 	exp := time.Hour
-	payload := map[string]interface{}{"user": "testuser"}
+	payload := Claims{Username: "test-user"}
 
 	// Act
-	token, err := GenerateToken(secret, exp, payload)
+	token, err := GenerateToken(secret, payload, issuer, exp)
 
 	// Assert
 	assert.ErrorIs(t, err, jwt.ErrInvalidKey)

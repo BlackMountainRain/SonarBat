@@ -6,7 +6,7 @@ import { Image } from '@nextui-org/react';
 import { HiBugAnt, HiChartPie, HiMiniCube } from 'react-icons/hi2';
 import { useTheme } from 'next-themes';
 import { Sidebar } from '@/app/ui/dashboard/sidebar.style';
-import { SidebarContext } from '@/app/dashboard/layout-context';
+import { DashboardContext } from '@/app/dashboard/layout-context';
 import { SidebarItem } from '@/app/ui/dashboard/sidebar-item';
 import { SidebarMenu } from '@/app/ui/dashboard/sidebar-menu';
 
@@ -41,7 +41,7 @@ const links = [
 const SideBar = (): React.ReactNode => {
   const { theme } = useTheme();
   const pathname = usePathname();
-  const { collapsed, setCollapsed } = useContext(SidebarContext);
+  const { collapsed, setCollapsed } = useContext(DashboardContext);
 
   return (
     <aside className="h-screen z-[20] sticky top-0 select-none">

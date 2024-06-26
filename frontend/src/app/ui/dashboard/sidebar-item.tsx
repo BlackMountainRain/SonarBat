@@ -1,7 +1,7 @@
 import NextLink from 'next/link';
 import React from 'react';
 import clsx from 'clsx';
-import { useSidebarContext } from '@/app/dashboard/layout-context';
+import { useDashboardContext } from '@/app/dashboard/layout-context';
 
 interface Props {
   title: string;
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const SidebarItem = ({ icon, title, isActive = false, href = '' }: Props) => {
-  const { setCollapsed } = useSidebarContext();
+  const { setCollapsed } = useDashboardContext();
 
   const handleClick = () => {
     if (window.innerWidth < 768) {

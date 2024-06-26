@@ -51,6 +51,7 @@ message Auth {
   message Jwt {
     string secret = 1;
     google.protobuf.Duration expiration = 2;
+    string issuer = 3;
   }
   message OAuth {
     string google_client_id = 1;

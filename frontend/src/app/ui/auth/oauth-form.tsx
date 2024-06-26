@@ -2,16 +2,15 @@ import React from 'react';
 import { useOAuth2 } from '@tasoskakour/react-use-oauth2';
 import { Button } from '@nextui-org/react';
 import { GrGithub, GrGoogle } from 'react-icons/gr';
-import { useRouter } from 'next/navigation';
 import { fetchToken } from '@/app/lib/data';
-import toast from '@/app/utils/toast';
+import toast from '@/app/helpers/toast';
+import useAuth from '@/app/hooks/useAuth';
 
 const OAuthForm = () => {
-  const router = useRouter();
+  const { handleSignIn } = useAuth();
 
   const onSuccess = (token: string) => {
-    localStorage.setItem('token', token);
-    router.push('/dashboard');
+    handleSignIn(token);
     toast.success('Sign in successfully');
   };
   const onError = (err: string) => {

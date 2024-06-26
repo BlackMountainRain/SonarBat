@@ -61,12 +61,13 @@ func (uc *AuthUseCase) SignIn(ctx context.Context, params *v1.SignInRequest) (st
 		return "", ErrEmailOrPasswordIncorrect
 	}
 
-	return helper.GenerateToken([]byte(uc.cfg.Jwt.Secret), uc.cfg.Jwt.Expiration.AsDuration(), map[string]interface{}{
-		"uid":      usr.ID,
-		"username": usr.Username,
-		"email":    usr.Email,
-		"status":   usr.Status,
-	})
+	return helper.GenerateToken([]byte(uc.cfg.Jwt.Secret), helper.Claims{
+		UID:       usr.ID.String(),
+		Username:  usr.Username,
+		Email:     usr.Email,
+		Status:    usr.Status,
+		AvatarURL: usr.AvatarURL,
+	}, uc.cfg.Jwt.Issuer, uc.cfg.Jwt.Expiration.AsDuration())
 }
 
 // SignUp creates a new user.
@@ -97,12 +98,13 @@ func (uc *AuthUseCase) SignUp(ctx context.Context, params *v1.SignUpRequest) (st
 	}
 
 	// generate the token
-	return helper.GenerateToken([]byte(uc.cfg.Jwt.Secret), uc.cfg.Jwt.Expiration.AsDuration(), map[string]interface{}{
-		"uid":      user.ID,
-		"username": user.Username,
-		"email":    user.Email,
-		"status":   user.Status,
-	})
+	return helper.GenerateToken([]byte(uc.cfg.Jwt.Secret), helper.Claims{
+		UID:       user.ID.String(),
+		Username:  user.Username,
+		Email:     user.Email,
+		Status:    user.Status,
+		AvatarURL: user.AvatarURL,
+	}, uc.cfg.Jwt.Issuer, uc.cfg.Jwt.Expiration.AsDuration())
 }
 
 // SignInWithOAuth signs in with oauth and returns a token.
@@ -156,12 +158,13 @@ func (uc *AuthUseCase) SignInWithOAuth(ctx context.Context, params *v1.SignInWit
 		}
 	}
 
-	return helper.GenerateToken([]byte(uc.cfg.Jwt.Secret), uc.cfg.Jwt.Expiration.AsDuration(), map[string]interface{}{
-		"uid":      user.ID,
-		"username": user.Username,
-		"email":    user.Email,
-		"status":   user.Status,
-	})
+	return helper.GenerateToken([]byte(uc.cfg.Jwt.Secret), helper.Claims{
+		UID:       user.ID.String(),
+		Username:  user.Username,
+		Email:     user.Email,
+		Status:    user.Status,
+		AvatarURL: user.AvatarURL,
+	}, uc.cfg.Jwt.Issuer, uc.cfg.Jwt.Expiration.AsDuration())
 }
 
 func (uc *AuthUseCase) UpdateAuth(ctx context.Context, t *ent.User) (*ent.User, error) {

@@ -6,7 +6,7 @@ import {
   signUp as originalSignUp,
 } from '@/app/lib/data';
 import LoginForm from '@/app/ui/auth/login-form';
-import toast from '@/app/utils/toast';
+import toast from '@/app/helpers/toast';
 
 jest.mock('@tasoskakour/react-use-oauth2');
 
@@ -29,7 +29,7 @@ jest.mock('@/app/lib/data', () => ({
   signUp: jest.fn(),
 }));
 
-jest.mock('@/app/utils/toast', () => ({
+jest.mock('@/app/helpers/toast', () => ({
   success: jest.fn(),
   error: jest.fn(),
 }));

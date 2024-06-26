@@ -11,6 +11,7 @@ mockUseOAuth.mockReturnValue({ getAuth: jest.fn() });
 jest.mock('next/navigation', () => ({
   useRouter() {
     return {
+      push: jest.fn(),
       prefetch: () => null,
     };
   },

@@ -5,10 +5,10 @@ import { CiSearch } from 'react-icons/ci';
 import { HiBars3BottomLeft, HiBars3BottomRight } from 'react-icons/hi2';
 import ThemeToggleButton from '@/app/ui/dashboard/theme-switcher';
 import UserDropdown from '@/app/ui/dashboard/user-dropdown';
-import { SidebarContext } from '@/app/dashboard/layout-context';
+import { DashboardContext } from '@/app/dashboard/layout-context';
 
 const NavBar = (): React.ReactNode => {
-  const { collapsed, setCollapsed } = useContext(SidebarContext);
+  const { collapsed, setCollapsed } = useContext(DashboardContext);
 
   return (
     <Navbar

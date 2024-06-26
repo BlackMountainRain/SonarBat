@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button, Divider, Input, Spacer } from '@nextui-org/react';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
-import { useRouter } from 'next/navigation';
-import toast from '@/app/utils/toast';
+import toast from '@/app/helpers/toast';
 import { fetchToken, signUp } from '@/app/lib/data';
 import OAuthForm from '@/app/ui/auth/oauth-form';
+import useAuth from '@/app/hooks/useAuth';
 
 const LoginForm = () => {
-  const router = useRouter();
+  const { handleSignIn: signIn } = useAuth();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [isVisible, setIsVisible] = React.useState(false);
@@ -19,8 +19,7 @@ const LoginForm = () => {
   const handleSignUp = async () => {
     try {
       const token = await signUp(email, password);
-      localStorage.setItem('token', token);
-      router.push('/dashboard');
+      signIn(token);
       toast.success('Sign up successfully');
     } catch (error) {
       toast.error(String(error));
@@ -30,8 +29,7 @@ const LoginForm = () => {
   const handleSignIn = async () => {
     try {
       const token = await fetchToken('SELF', '', email, password);
-      localStorage.setItem('token', token);
-      router.push('/dashboard');
+      signIn(token);
       toast.success('Sign in successfully');
     } catch (error) {
       toast.error(String(error));

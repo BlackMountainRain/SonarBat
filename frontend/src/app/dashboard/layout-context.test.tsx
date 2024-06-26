@@ -1,21 +1,28 @@
 import React from 'react';
 import { renderHook } from '@testing-library/react';
 import {
-  useSidebarContext,
-  SidebarContext,
+  useDashboardContext,
+  DashboardContext,
 } from '@/app/dashboard/layout-context';
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <SidebarContext.Provider value={{ collapsed: false, setCollapsed: () => {} }}>
+  <DashboardContext.Provider
+    value={{
+      collapsed: false,
+      setCollapsed: () => {},
+      user: null,
+      setUser: () => {},
+    }}
+  >
     {children}
-  </SidebarContext.Provider>
+  </DashboardContext.Provider>
 );
 
 describe('useSidebarContext', () => {
   // returns default context values when no provider is used
   it('should return default context values when no provider is used', () => {
     // Arrange
-    const { result } = renderHook(() => useSidebarContext(), { wrapper });
+    const { result } = renderHook(() => useDashboardContext(), { wrapper });
 
     // Act
 

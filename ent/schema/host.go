@@ -44,6 +44,7 @@ func (Host) Edges() []ent.Edge {
 func (Host) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		TimeMixin{},
+		OperatorMixin{},
 	}
 }
 

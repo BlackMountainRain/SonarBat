@@ -28,6 +28,8 @@ var (
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeUUID},
+		{Name: "created_by", Type: field.TypeUUID},
 		{Name: "status", Type: field.TypeBool, Default: true},
 		{Name: "name", Type: field.TypeString, Size: 250},
 		{Name: "live_at", Type: field.TypeTime, Nullable: true},

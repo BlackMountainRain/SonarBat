@@ -24,6 +24,10 @@ type Host struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy uuid.UUID `json:"updated_by,omitempty"`
+	// CreatedBy holds the value of the "created_by" field.
+	CreatedBy uuid.UUID `json:"created_by,omitempty"`
 	// Status holds the value of the "status" field.
 	Status bool `json:"status,omitempty"`
 	// Name holds the value of the "name" field.
@@ -79,7 +83,7 @@ func (*Host) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case host.FieldCreatedAt, host.FieldUpdatedAt, host.FieldLiveAt:
 			values[i] = new(sql.NullTime)
-		case host.FieldID:
+		case host.FieldID, host.FieldUpdatedBy, host.FieldCreatedBy:
 			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -113,6 +117,18 @@ func (h *Host) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				h.UpdatedAt = value.Time
+			}
+		case host.FieldUpdatedBy:
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value != nil {
+				h.UpdatedBy = *value
+			}
+		case host.FieldCreatedBy:
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value != nil {
+				h.CreatedBy = *value
 			}
 		case host.FieldStatus:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -212,6 +228,12 @@ func (h *Host) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(h.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(fmt.Sprintf("%v", h.UpdatedBy))
+	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(fmt.Sprintf("%v", h.CreatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", h.Status))

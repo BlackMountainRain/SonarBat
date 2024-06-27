@@ -1,0 +1,139 @@
+syntax = "proto3";
+
+package api.resource.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "sonar-bat/api/resource/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.resource.v1";
+
+service Resource {
+	rpc CreateHost (CreateHostRequest) returns (CreateHostReply) {
+		option (google.api.http) = {
+			post: "/api/v1/hosts"
+			body: "*"
+		};
+	};
+	rpc UpdateHost (UpdateHostRequest) returns (UpdateHostReply) {
+		option (google.api.http) = {
+			patch: "/api/v1/hosts"
+			body: "*"
+		};
+	};
+	rpc OverwriteHost (OverwriteHostRequest) returns (OverwriteHostReply) {
+		option (google.api.http) = {
+			put: "/api/v1/hosts"
+			body: "*"
+		};
+	};
+	rpc DeleteHost (DeleteHostRequest) returns (DeleteHostReply) {
+		option (google.api.http) = {
+			delete: "/api/v1/hosts/{id}"
+		};
+	};
+	rpc GetHost (GetHostRequest) returns (GetHostReply) {
+		option (google.api.http) = {
+			get: "/api/v1/hosts/{id}"
+		};
+	};
+	rpc GetHosts (GetHostsRequest) returns (GetHostsReply) {
+		option (google.api.http) = {
+			get: "/api/v1/hosts"
+		};
+	};
+}
+
+enum NetType {
+	UNKNOWN = 0;
+	DUAL_STACK = 2;
+	IPV4_ONLY = 4;
+	IPV6_ONLY = 6;
+}
+
+message CreateHostRequest {
+	string name = 1;
+	bool status = 2;
+	bool is_agent_installed = 3;
+	string agent_version = 4;
+	repeated string ips = 5;
+	NetType net_type = 6;
+	map<string, string> additions = 7;
+	google.protobuf.Timestamp live_at = 8;
+}
+message CreateHostReply {
+	string id = 1;
+}
+
+message UpdateHostRequest {
+	string id = 1;
+	string name = 2;
+	bool status = 3;
+	bool is_agent_installed = 4;
+	string agent_version = 5;
+	repeated string ips = 6;
+	NetType net_type = 7;
+	map<string, string> additions = 8;
+	google.protobuf.Timestamp live_at = 9;
+}
+message UpdateHostReply {
+	uint32 rows_affected = 1;
+}
+
+message OverwriteHostRequest {
+	string id = 1;
+	optional string name = 2;
+	optional bool status = 3;
+	optional bool is_agent_installed = 4;
+	optional string agent_version = 5;
+	repeated string ips = 6;
+	optional NetType net_type = 7;
+	map<string, string> additions = 8;
+	google.protobuf.Timestamp live_at = 9;
+}
+message OverwriteHostReply {
+	uint32 rows_affected = 1;
+}
+
+message DeleteHostRequest {
+	string id = 1;
+}
+message DeleteHostReply {
+	uint32 rows_affected = 1;
+}
+
+message GetHostRequest {
+	string id = 1;
+}
+message GetHostReply {
+	string id = 1;
+	string name = 2;
+	bool status = 3;
+	bool is_agent_installed = 4;
+	string agent_version = 5;
+	repeated string ips = 6;
+	NetType net_type = 7;
+	map<string, string> additions = 8;
+	string created_at = 9;
+	string updated_at = 10;
+	google.protobuf.Timestamp live_at = 11;
+}
+
+message SingleHost {
+	string id = 1;
+	string name = 2;
+	bool status = 3;
+	bool is_agent_installed = 4;
+	string agent_version = 5;
+	repeated string ips = 6;
+	NetType net_type = 7;
+	map<string, string> additions = 8;
+	string created_at = 9;
+	string updated_at = 10;
+	google.protobuf.Timestamp live_at = 11;
+}
+message GetHostsRequest {}
+message GetHostsReply {
+	repeated SingleHost hosts = 1;
+}

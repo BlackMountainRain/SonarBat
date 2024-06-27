@@ -38,6 +38,34 @@ func (hu *HostUpdate) SetUpdatedAt(t time.Time) *HostUpdate {
 	return hu
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (hu *HostUpdate) SetUpdatedBy(u uuid.UUID) *HostUpdate {
+	hu.mutation.SetUpdatedBy(u)
+	return hu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (hu *HostUpdate) SetNillableUpdatedBy(u *uuid.UUID) *HostUpdate {
+	if u != nil {
+		hu.SetUpdatedBy(*u)
+	}
+	return hu
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (hu *HostUpdate) SetCreatedBy(u uuid.UUID) *HostUpdate {
+	hu.mutation.SetCreatedBy(u)
+	return hu
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (hu *HostUpdate) SetNillableCreatedBy(u *uuid.UUID) *HostUpdate {
+	if u != nil {
+		hu.SetCreatedBy(*u)
+	}
+	return hu
+}
+
 // SetStatus sets the "status" field.
 func (hu *HostUpdate) SetStatus(b bool) *HostUpdate {
 	hu.mutation.SetStatus(b)
@@ -284,6 +312,12 @@ func (hu *HostUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := hu.mutation.UpdatedAt(); ok {
 		_spec.SetField(host.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := hu.mutation.UpdatedBy(); ok {
+		_spec.SetField(host.FieldUpdatedBy, field.TypeUUID, value)
+	}
+	if value, ok := hu.mutation.CreatedBy(); ok {
+		_spec.SetField(host.FieldCreatedBy, field.TypeUUID, value)
+	}
 	if value, ok := hu.mutation.Status(); ok {
 		_spec.SetField(host.FieldStatus, field.TypeBool, value)
 	}
@@ -399,6 +433,34 @@ type HostUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (huo *HostUpdateOne) SetUpdatedAt(t time.Time) *HostUpdateOne {
 	huo.mutation.SetUpdatedAt(t)
+	return huo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (huo *HostUpdateOne) SetUpdatedBy(u uuid.UUID) *HostUpdateOne {
+	huo.mutation.SetUpdatedBy(u)
+	return huo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (huo *HostUpdateOne) SetNillableUpdatedBy(u *uuid.UUID) *HostUpdateOne {
+	if u != nil {
+		huo.SetUpdatedBy(*u)
+	}
+	return huo
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (huo *HostUpdateOne) SetCreatedBy(u uuid.UUID) *HostUpdateOne {
+	huo.mutation.SetCreatedBy(u)
+	return huo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (huo *HostUpdateOne) SetNillableCreatedBy(u *uuid.UUID) *HostUpdateOne {
+	if u != nil {
+		huo.SetCreatedBy(*u)
+	}
 	return huo
 }
 
@@ -677,6 +739,12 @@ func (huo *HostUpdateOne) sqlSave(ctx context.Context) (_node *Host, err error) 
 	}
 	if value, ok := huo.mutation.UpdatedAt(); ok {
 		_spec.SetField(host.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := huo.mutation.UpdatedBy(); ok {
+		_spec.SetField(host.FieldUpdatedBy, field.TypeUUID, value)
+	}
+	if value, ok := huo.mutation.CreatedBy(); ok {
+		_spec.SetField(host.FieldCreatedBy, field.TypeUUID, value)
 	}
 	if value, ok := huo.mutation.Status(); ok {
 		_spec.SetField(host.FieldStatus, field.TypeBool, value)

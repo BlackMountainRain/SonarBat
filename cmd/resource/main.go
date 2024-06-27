@@ -1,7 +1,7 @@
 /**
- * Package task
+ * Package resource
  * @Author iFurySt <ifuryst@gmail.com>
- * @Date 2024/5/6
+ * @Date 2024/6/27
  */
 
 package main
@@ -73,7 +73,7 @@ func main() {
 
 	c := config.New(
 		config.WithSource(
-			env.NewSource("TASK_"),
+			env.NewSource("RESOURCE_"),
 			file.NewSource(flagconf),
 		),
 	)

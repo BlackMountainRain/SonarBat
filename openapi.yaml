@@ -149,6 +149,104 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.auth.v1.VerifyPasswordResetTokenReply'
+    /api/v1/hosts:
+        get:
+            tags:
+                - Resource
+            operationId: Resource_GetHosts
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.resource.v1.GetHostsReply'
+        put:
+            tags:
+                - Resource
+            operationId: Resource_OverwriteHost
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.resource.v1.OverwriteHostRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.resource.v1.OverwriteHostReply'
+        post:
+            tags:
+                - Resource
+            operationId: Resource_CreateHost
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.resource.v1.CreateHostRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.resource.v1.CreateHostReply'
+        patch:
+            tags:
+                - Resource
+            operationId: Resource_UpdateHost
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.resource.v1.UpdateHostRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.resource.v1.UpdateHostReply'
+    /api/v1/hosts/{id}:
+        get:
+            tags:
+                - Resource
+            operationId: Resource_GetHost
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.resource.v1.GetHostReply'
+        delete:
+            tags:
+                - Resource
+            operationId: Resource_DeleteHost
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.resource.v1.DeleteHostReply'
     /api/v1/tasks:
         get:
             tags:
@@ -510,6 +608,177 @@ components:
             properties:
                 valid:
                     type: boolean
+        api.resource.v1.CreateHostReply:
+            type: object
+            properties:
+                id:
+                    type: string
+        api.resource.v1.CreateHostRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                status:
+                    type: boolean
+                isAgentInstalled:
+                    type: boolean
+                agentVersion:
+                    type: string
+                ips:
+                    type: array
+                    items:
+                        type: string
+                netType:
+                    type: integer
+                    format: enum
+                additions:
+                    type: object
+                    additionalProperties:
+                        type: string
+                liveAt:
+                    type: string
+                    format: date-time
+        api.resource.v1.DeleteHostReply:
+            type: object
+            properties:
+                rowsAffected:
+                    type: integer
+                    format: uint32
+        api.resource.v1.GetHostReply:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                status:
+                    type: boolean
+                isAgentInstalled:
+                    type: boolean
+                agentVersion:
+                    type: string
+                ips:
+                    type: array
+                    items:
+                        type: string
+                netType:
+                    type: integer
+                    format: enum
+                additions:
+                    type: object
+                    additionalProperties:
+                        type: string
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+                liveAt:
+                    type: string
+                    format: date-time
+        api.resource.v1.GetHostsReply:
+            type: object
+            properties:
+                hosts:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.resource.v1.SingleHost'
+        api.resource.v1.OverwriteHostReply:
+            type: object
+            properties:
+                rowsAffected:
+                    type: integer
+                    format: uint32
+        api.resource.v1.OverwriteHostRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                status:
+                    type: boolean
+                isAgentInstalled:
+                    type: boolean
+                agentVersion:
+                    type: string
+                ips:
+                    type: array
+                    items:
+                        type: string
+                netType:
+                    type: integer
+                    format: enum
+                additions:
+                    type: object
+                    additionalProperties:
+                        type: string
+                liveAt:
+                    type: string
+                    format: date-time
+        api.resource.v1.SingleHost:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                status:
+                    type: boolean
+                isAgentInstalled:
+                    type: boolean
+                agentVersion:
+                    type: string
+                ips:
+                    type: array
+                    items:
+                        type: string
+                netType:
+                    type: integer
+                    format: enum
+                additions:
+                    type: object
+                    additionalProperties:
+                        type: string
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+                liveAt:
+                    type: string
+                    format: date-time
+        api.resource.v1.UpdateHostReply:
+            type: object
+            properties:
+                rowsAffected:
+                    type: integer
+                    format: uint32
+        api.resource.v1.UpdateHostRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                status:
+                    type: boolean
+                isAgentInstalled:
+                    type: boolean
+                agentVersion:
+                    type: string
+                ips:
+                    type: array
+                    items:
+                        type: string
+                netType:
+                    type: integer
+                    format: enum
+                additions:
+                    type: object
+                    additionalProperties:
+                        type: string
+                liveAt:
+                    type: string
+                    format: date-time
         api.task.v1.CreateSubtaskReply:
             type: object
             properties:
@@ -799,5 +1068,6 @@ tags:
     - name: Auth
     - name: Greeter
       description: The greeting service definition.
+    - name: Resource
     - name: Subtask
     - name: Task

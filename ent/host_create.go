@@ -51,6 +51,18 @@ func (hc *HostCreate) SetNillableUpdatedAt(t *time.Time) *HostCreate {
 	return hc
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (hc *HostCreate) SetUpdatedBy(u uuid.UUID) *HostCreate {
+	hc.mutation.SetUpdatedBy(u)
+	return hc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (hc *HostCreate) SetCreatedBy(u uuid.UUID) *HostCreate {
+	hc.mutation.SetCreatedBy(u)
+	return hc
+}
+
 // SetStatus sets the "status" field.
 func (hc *HostCreate) SetStatus(b bool) *HostCreate {
 	hc.mutation.SetStatus(b)
@@ -233,6 +245,12 @@ func (hc *HostCreate) check() error {
 	if _, ok := hc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Host.updated_at"`)}
 	}
+	if _, ok := hc.mutation.UpdatedBy(); !ok {
+		return &ValidationError{Name: "updated_by", err: errors.New(`ent: missing required field "Host.updated_by"`)}
+	}
+	if _, ok := hc.mutation.CreatedBy(); !ok {
+		return &ValidationError{Name: "created_by", err: errors.New(`ent: missing required field "Host.created_by"`)}
+	}
 	if _, ok := hc.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`ent: missing required field "Host.status"`)}
 	}
@@ -294,6 +312,14 @@ func (hc *HostCreate) createSpec() (*Host, *sqlgraph.CreateSpec) {
 	if value, ok := hc.mutation.UpdatedAt(); ok {
 		_spec.SetField(host.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := hc.mutation.UpdatedBy(); ok {
+		_spec.SetField(host.FieldUpdatedBy, field.TypeUUID, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := hc.mutation.CreatedBy(); ok {
+		_spec.SetField(host.FieldCreatedBy, field.TypeUUID, value)
+		_node.CreatedBy = value
 	}
 	if value, ok := hc.mutation.Status(); ok {
 		_spec.SetField(host.FieldStatus, field.TypeBool, value)

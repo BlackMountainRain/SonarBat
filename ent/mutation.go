@@ -603,6 +603,8 @@ type HostMutation struct {
 	id                    *uuid.UUID
 	created_at            *time.Time
 	updated_at            *time.Time
+	updated_by            *uuid.UUID
+	created_by            *uuid.UUID
 	status                *bool
 	name                  *string
 	live_at               *time.Time
@@ -796,6 +798,78 @@ func (m *HostMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error
 // ResetUpdatedAt resets all changes to the "updated_at" field.
 func (m *HostMutation) ResetUpdatedAt() {
 	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *HostMutation) SetUpdatedBy(u uuid.UUID) {
+	m.updated_by = &u
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *HostMutation) UpdatedBy() (r uuid.UUID, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Host entity.
+// If the Host object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HostMutation) OldUpdatedBy(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *HostMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *HostMutation) SetCreatedBy(u uuid.UUID) {
+	m.created_by = &u
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *HostMutation) CreatedBy() (r uuid.UUID, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Host entity.
+// If the Host object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HostMutation) OldCreatedBy(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *HostMutation) ResetCreatedBy() {
+	m.created_by = nil
 }
 
 // SetStatus sets the "status" field.
@@ -1276,12 +1350,18 @@ func (m *HostMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *HostMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 12)
 	if m.created_at != nil {
 		fields = append(fields, host.FieldCreatedAt)
 	}
 	if m.updated_at != nil {
 		fields = append(fields, host.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, host.FieldUpdatedBy)
+	}
+	if m.created_by != nil {
+		fields = append(fields, host.FieldCreatedBy)
 	}
 	if m.status != nil {
 		fields = append(fields, host.FieldStatus)
@@ -1319,6 +1399,10 @@ func (m *HostMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedAt()
 	case host.FieldUpdatedAt:
 		return m.UpdatedAt()
+	case host.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case host.FieldCreatedBy:
+		return m.CreatedBy()
 	case host.FieldStatus:
 		return m.Status()
 	case host.FieldName:
@@ -1348,6 +1432,10 @@ func (m *HostMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldCreatedAt(ctx)
 	case host.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
+	case host.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case host.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
 	case host.FieldStatus:
 		return m.OldStatus(ctx)
 	case host.FieldName:
@@ -1386,6 +1474,20 @@ func (m *HostMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedAt(v)
+		return nil
+	case host.FieldUpdatedBy:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case host.FieldCreatedBy:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
 		return nil
 	case host.FieldStatus:
 		v, ok := value.(bool)
@@ -1545,6 +1647,12 @@ func (m *HostMutation) ResetField(name string) error {
 		return nil
 	case host.FieldUpdatedAt:
 		m.ResetUpdatedAt()
+		return nil
+	case host.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case host.FieldCreatedBy:
+		m.ResetCreatedBy()
 		return nil
 	case host.FieldStatus:
 		m.ResetStatus()

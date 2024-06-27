@@ -6,7 +6,7 @@ describe('Resources Page', () => {
   it('renders resource page', () => {
     render(<ResourcePage />);
 
-    const heading = screen.getByText('Resources Page');
+    const heading = screen.getByText('All Resources');
 
     expect(heading).toBeInTheDocument();
   });

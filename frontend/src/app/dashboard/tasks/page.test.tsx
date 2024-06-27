@@ -6,7 +6,7 @@ describe('Tasks Page', () => {
   it('renders task page', () => {
     render(<TaskPage />);
 
-    const heading = screen.getByText('Tasks Page');
+    const heading = screen.getByText('All Tasks');
 
     expect(heading).toBeInTheDocument();
   });

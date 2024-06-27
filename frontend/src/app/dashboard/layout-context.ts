@@ -8,6 +8,7 @@ interface Context {
   setCollapsed: () => void;
   user: User | null;
   setUser: (user: User | null) => void;
+  handleSignOut: () => void;
 }
 
 export const DashboardContext = createContext<Context>({
@@ -15,6 +16,7 @@ export const DashboardContext = createContext<Context>({
   setCollapsed: () => {},
   user: null,
   setUser: () => {},
+  handleSignOut: () => {},
 });
 
 export const useDashboardContext = () => {

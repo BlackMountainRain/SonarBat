@@ -6,11 +6,11 @@ import {
   NavbarItem,
   User,
 } from '@nextui-org/react';
-import React from 'react';
-import useAuth from '@/app/hooks/useAuth';
+import React, { useContext } from 'react';
+import { DashboardContext } from '@/app/dashboard/layout-context';
 
 const UserDropdown = () => {
-  const { user, handleSignOut } = useAuth();
+  const { user, handleSignOut } = useContext(DashboardContext);
 
   return (
     <Dropdown>

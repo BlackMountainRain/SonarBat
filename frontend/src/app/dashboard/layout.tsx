@@ -20,7 +20,7 @@ const DashboardLayout = ({
     setSidebarOpen(!sidebarOpen);
     setLocked(!sidebarOpen);
   };
-  const { user, setUser, refreshUserInfo } = useAuth();
+  const { user, setUser, handleSignOut, refreshUserInfo } = useAuth();
 
   useEffect(() => {
     refreshUserInfo();
@@ -32,6 +32,7 @@ const DashboardLayout = ({
       setCollapsed: handleToggleSidebar,
       user,
       setUser,
+      handleSignOut,
     }),
     [sidebarOpen, handleToggleSidebar],
   );

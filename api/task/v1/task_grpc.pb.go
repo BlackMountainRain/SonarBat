@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
+	Task_HealthCheck_FullMethodName   = "/api.task.v1.Task/HealthCheck"
 	Task_CreateTask_FullMethodName    = "/api.task.v1.Task/CreateTask"
 	Task_UpdateTask_FullMethodName    = "/api.task.v1.Task/UpdateTask"
 	Task_OverwriteTask_FullMethodName = "/api.task.v1.Task/OverwriteTask"
@@ -31,6 +32,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TaskClient interface {
+	HealthCheck(ctx context.Context, in *HealthRequest, opts ...grpc.CallOption) (*HealthReply, error)
 	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*CreateTaskReply, error)
 	UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*UpdateTaskReply, error)
 	OverwriteTask(ctx context.Context, in *OverwriteTaskRequest, opts ...grpc.CallOption) (*OverwriteTaskReply, error)
@@ -45,6 +47,16 @@ type taskClient struct {
 
 func NewTaskClient(cc grpc.ClientConnInterface) TaskClient {
 	return &taskClient{cc}
+}
+
+func (c *taskClient) HealthCheck(ctx context.Context, in *HealthRequest, opts ...grpc.CallOption) (*HealthReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HealthReply)
+	err := c.cc.Invoke(ctx, Task_HealthCheck_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *taskClient) CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*CreateTaskReply, error) {
@@ -111,6 +123,7 @@ func (c *taskClient) GetTasks(ctx context.Context, in *GetTasksRequest, opts ...
 // All implementations must embed UnimplementedTaskServer
 // for forward compatibility
 type TaskServer interface {
+	HealthCheck(context.Context, *HealthRequest) (*HealthReply, error)
 	CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskReply, error)
 	UpdateTask(context.Context, *UpdateTaskRequest) (*UpdateTaskReply, error)
 	OverwriteTask(context.Context, *OverwriteTaskRequest) (*OverwriteTaskReply, error)
@@ -124,6 +137,9 @@ type TaskServer interface {
 type UnimplementedTaskServer struct {
 }
 
+func (UnimplementedTaskServer) HealthCheck(context.Context, *HealthRequest) (*HealthReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HealthCheck not implemented")
+}
 func (UnimplementedTaskServer) CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTask not implemented")
 }
@@ -153,6 +169,24 @@ type UnsafeTaskServer interface {
 
 func RegisterTaskServer(s grpc.ServiceRegistrar, srv TaskServer) {
 	s.RegisterService(&Task_ServiceDesc, srv)
+}
+
+func _Task_HealthCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HealthRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServer).HealthCheck(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Task_HealthCheck_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServer).HealthCheck(ctx, req.(*HealthRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Task_CreateTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -270,6 +304,10 @@ var Task_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "api.task.v1.Task",
 	HandlerType: (*TaskServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "HealthCheck",
+			Handler:    _Task_HealthCheck_Handler,
+		},
 		{
 			MethodName: "CreateTask",
 			Handler:    _Task_CreateTask_Handler,

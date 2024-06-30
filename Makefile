@@ -52,6 +52,18 @@ api:
 build:
 	mkdir -p bin/ && go build -ldflags "-X main.Version=$(VERSION)" -o ./bin/ ./...
 
+run: $(filter-out $@,$(MAKECMDGOALS))
+	@:
+
+auth:
+	go run -ldflags "-X main.Version=$(VERSION) -X main.Name=auth" ./cmd/auth/
+
+resource:
+	go run -ldflags "-X main.Version=$(VERSION) -X main.Name=resource" ./cmd/resource/
+
+task:
+	go run -ldflags "-X main.Version=$(VERSION) -X main.Name=task" ./cmd/task/
+
 .PHONY: generate
 # generate
 generate:

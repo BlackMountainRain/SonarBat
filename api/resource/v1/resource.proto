@@ -10,6 +10,11 @@ option java_multiple_files = true;
 option java_package = "api.resource.v1";
 
 service Resource {
+	rpc HealthCheck (HealthRequest) returns (HealthReply)  {
+		option (google.api.http) = {
+			get: "/api/v1/resource/health",
+		};
+	}
 	rpc CreateHost (CreateHostRequest) returns (CreateHostReply) {
 		option (google.api.http) = {
 			post: "/api/v1/hosts"
@@ -43,6 +48,17 @@ service Resource {
 			get: "/api/v1/hosts"
 		};
 	};
+}
+
+enum Status {
+	UP = 0;
+	DOWN = 1;
+}
+message HealthRequest {}
+message HealthReply {
+	Status status = 1;
+	string version = 2;
+	google.protobuf.Timestamp uptime = 3;
 }
 
 enum NetType {

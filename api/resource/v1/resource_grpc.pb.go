@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
+	Resource_HealthCheck_FullMethodName   = "/api.resource.v1.Resource/HealthCheck"
 	Resource_CreateHost_FullMethodName    = "/api.resource.v1.Resource/CreateHost"
 	Resource_UpdateHost_FullMethodName    = "/api.resource.v1.Resource/UpdateHost"
 	Resource_OverwriteHost_FullMethodName = "/api.resource.v1.Resource/OverwriteHost"
@@ -31,6 +32,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ResourceClient interface {
+	HealthCheck(ctx context.Context, in *HealthRequest, opts ...grpc.CallOption) (*HealthReply, error)
 	CreateHost(ctx context.Context, in *CreateHostRequest, opts ...grpc.CallOption) (*CreateHostReply, error)
 	UpdateHost(ctx context.Context, in *UpdateHostRequest, opts ...grpc.CallOption) (*UpdateHostReply, error)
 	OverwriteHost(ctx context.Context, in *OverwriteHostRequest, opts ...grpc.CallOption) (*OverwriteHostReply, error)
@@ -45,6 +47,16 @@ type resourceClient struct {
 
 func NewResourceClient(cc grpc.ClientConnInterface) ResourceClient {
 	return &resourceClient{cc}
+}
+
+func (c *resourceClient) HealthCheck(ctx context.Context, in *HealthRequest, opts ...grpc.CallOption) (*HealthReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HealthReply)
+	err := c.cc.Invoke(ctx, Resource_HealthCheck_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *resourceClient) CreateHost(ctx context.Context, in *CreateHostRequest, opts ...grpc.CallOption) (*CreateHostReply, error) {
@@ -111,6 +123,7 @@ func (c *resourceClient) GetHosts(ctx context.Context, in *GetHostsRequest, opts
 // All implementations must embed UnimplementedResourceServer
 // for forward compatibility
 type ResourceServer interface {
+	HealthCheck(context.Context, *HealthRequest) (*HealthReply, error)
 	CreateHost(context.Context, *CreateHostRequest) (*CreateHostReply, error)
 	UpdateHost(context.Context, *UpdateHostRequest) (*UpdateHostReply, error)
 	OverwriteHost(context.Context, *OverwriteHostRequest) (*OverwriteHostReply, error)
@@ -124,6 +137,9 @@ type ResourceServer interface {
 type UnimplementedResourceServer struct {
 }
 
+func (UnimplementedResourceServer) HealthCheck(context.Context, *HealthRequest) (*HealthReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HealthCheck not implemented")
+}
 func (UnimplementedResourceServer) CreateHost(context.Context, *CreateHostRequest) (*CreateHostReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateHost not implemented")
 }
@@ -153,6 +169,24 @@ type UnsafeResourceServer interface {
 
 func RegisterResourceServer(s grpc.ServiceRegistrar, srv ResourceServer) {
 	s.RegisterService(&Resource_ServiceDesc, srv)
+}
+
+func _Resource_HealthCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HealthRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ResourceServer).HealthCheck(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Resource_HealthCheck_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ResourceServer).HealthCheck(ctx, req.(*HealthRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Resource_CreateHost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -270,6 +304,10 @@ var Resource_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "api.resource.v1.Resource",
 	HandlerType: (*ResourceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "HealthCheck",
+			Handler:    _Resource_HealthCheck_Handler,
+		},
 		{
 			MethodName: "CreateHost",
 			Handler:    _Resource_CreateHost_Handler,

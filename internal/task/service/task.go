@@ -2,7 +2,9 @@ package service
 
 import (
 	"context"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"sonar-bat/ent"
+	"sonar-bat/internal/runtime"
 	"sonar-bat/internal/task/biz"
 	"time"
 
@@ -10,15 +12,25 @@ import (
 )
 
 type TaskService struct {
-	task *biz.TaskUseCase
+	task        *biz.TaskUseCase
+	runtimeInfo runtime.Info
 
 	pb.UnimplementedTaskServer
 }
 
-func NewTaskService(task *biz.TaskUseCase) *TaskService {
+func NewTaskService(task *biz.TaskUseCase, runtimeInfo runtime.Info) *TaskService {
 	return &TaskService{
-		task: task,
+		task:        task,
+		runtimeInfo: runtimeInfo,
 	}
+}
+
+func (s *TaskService) HealthCheck(_ context.Context, _ *pb.HealthRequest) (*pb.HealthReply, error) {
+	return &pb.HealthReply{
+		Status:  pb.Status_UP,
+		Version: s.runtimeInfo.Version,
+		Uptime:  timestamppb.New(s.runtimeInfo.Uptime),
+	}, nil
 }
 
 func (s *TaskService) CreateTask(ctx context.Context, req *pb.CreateTaskRequest) (*pb.CreateTaskReply, error) {

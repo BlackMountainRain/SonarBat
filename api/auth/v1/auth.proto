@@ -5,12 +5,18 @@ package api.auth.v1;
 import "google/api/annotations.proto";
 import "validate/validate.proto";
 import "errors/errors.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "sonar-bat/api/auth/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.auth.v1";
 
 service Auth {
+	rpc HealthCheck (HealthRequest) returns (HealthReply)  {
+		option (google.api.http) = {
+			get: "/api/v1/auth/health",
+		};
+	}
 	rpc SignIn (SignInRequest) returns (AuthReply) {
 		option (google.api.http) = {
 			post: "/api/v1/auth/sign-in/password"
@@ -58,6 +64,17 @@ service Auth {
 			body: "*"
 		};
 	}
+}
+
+enum Status {
+		UP = 0;
+		DOWN = 1;
+}
+message HealthRequest {}
+message HealthReply {
+	Status status = 1;
+	string version = 2;
+	google.protobuf.Timestamp uptime = 3;
 }
 
 message SignInRequest {

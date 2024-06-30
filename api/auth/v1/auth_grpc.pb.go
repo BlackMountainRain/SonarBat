@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
+	Auth_HealthCheck_FullMethodName              = "/api.auth.v1.Auth/HealthCheck"
 	Auth_SignIn_FullMethodName                   = "/api.auth.v1.Auth/SignIn"
 	Auth_SignInWithOAuth_FullMethodName          = "/api.auth.v1.Auth/SignInWithOAuth"
 	Auth_SignUp_FullMethodName                   = "/api.auth.v1.Auth/SignUp"
@@ -33,6 +34,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthClient interface {
+	HealthCheck(ctx context.Context, in *HealthRequest, opts ...grpc.CallOption) (*HealthReply, error)
 	SignIn(ctx context.Context, in *SignInRequest, opts ...grpc.CallOption) (*AuthReply, error)
 	SignInWithOAuth(ctx context.Context, in *SignInWithOAuthRequest, opts ...grpc.CallOption) (*AuthReply, error)
 	SignUp(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*AuthReply, error)
@@ -49,6 +51,16 @@ type authClient struct {
 
 func NewAuthClient(cc grpc.ClientConnInterface) AuthClient {
 	return &authClient{cc}
+}
+
+func (c *authClient) HealthCheck(ctx context.Context, in *HealthRequest, opts ...grpc.CallOption) (*HealthReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HealthReply)
+	err := c.cc.Invoke(ctx, Auth_HealthCheck_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *authClient) SignIn(ctx context.Context, in *SignInRequest, opts ...grpc.CallOption) (*AuthReply, error) {
@@ -135,6 +147,7 @@ func (c *authClient) ResetPassword(ctx context.Context, in *ResetPasswordRequest
 // All implementations must embed UnimplementedAuthServer
 // for forward compatibility
 type AuthServer interface {
+	HealthCheck(context.Context, *HealthRequest) (*HealthReply, error)
 	SignIn(context.Context, *SignInRequest) (*AuthReply, error)
 	SignInWithOAuth(context.Context, *SignInWithOAuthRequest) (*AuthReply, error)
 	SignUp(context.Context, *SignUpRequest) (*AuthReply, error)
@@ -150,6 +163,9 @@ type AuthServer interface {
 type UnimplementedAuthServer struct {
 }
 
+func (UnimplementedAuthServer) HealthCheck(context.Context, *HealthRequest) (*HealthReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HealthCheck not implemented")
+}
 func (UnimplementedAuthServer) SignIn(context.Context, *SignInRequest) (*AuthReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SignIn not implemented")
 }
@@ -185,6 +201,24 @@ type UnsafeAuthServer interface {
 
 func RegisterAuthServer(s grpc.ServiceRegistrar, srv AuthServer) {
 	s.RegisterService(&Auth_ServiceDesc, srv)
+}
+
+func _Auth_HealthCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HealthRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServer).HealthCheck(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Auth_HealthCheck_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServer).HealthCheck(ctx, req.(*HealthRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Auth_SignIn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -338,6 +372,10 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "api.auth.v1.Auth",
 	HandlerType: (*AuthServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "HealthCheck",
+			Handler:    _Auth_HealthCheck_Handler,
+		},
 		{
 			MethodName: "SignIn",
 			Handler:    _Auth_SignIn_Handler,

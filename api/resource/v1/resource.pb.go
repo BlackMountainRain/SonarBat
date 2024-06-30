@@ -22,6 +22,52 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type Status int32
+
+const (
+	Status_UP   Status = 0
+	Status_DOWN Status = 1
+)
+
+// Enum value maps for Status.
+var (
+	Status_name = map[int32]string{
+		0: "UP",
+		1: "DOWN",
+	}
+	Status_value = map[string]int32{
+		"UP":   0,
+		"DOWN": 1,
+	}
+)
+
+func (x Status) Enum() *Status {
+	p := new(Status)
+	*p = x
+	return p
+}
+
+func (x Status) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Status) Descriptor() protoreflect.EnumDescriptor {
+	return file_api_resource_v1_resource_proto_enumTypes[0].Descriptor()
+}
+
+func (Status) Type() protoreflect.EnumType {
+	return &file_api_resource_v1_resource_proto_enumTypes[0]
+}
+
+func (x Status) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Status.Descriptor instead.
+func (Status) EnumDescriptor() ([]byte, []int) {
+	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{0}
+}
+
 type NetType int32
 
 const (
@@ -58,11 +104,11 @@ func (x NetType) String() string {
 }
 
 func (NetType) Descriptor() protoreflect.EnumDescriptor {
-	return file_api_resource_v1_resource_proto_enumTypes[0].Descriptor()
+	return file_api_resource_v1_resource_proto_enumTypes[1].Descriptor()
 }
 
 func (NetType) Type() protoreflect.EnumType {
-	return &file_api_resource_v1_resource_proto_enumTypes[0]
+	return &file_api_resource_v1_resource_proto_enumTypes[1]
 }
 
 func (x NetType) Number() protoreflect.EnumNumber {
@@ -71,7 +117,108 @@ func (x NetType) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use NetType.Descriptor instead.
 func (NetType) EnumDescriptor() ([]byte, []int) {
+	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{1}
+}
+
+type HealthRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *HealthRequest) Reset() {
+	*x = HealthRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_resource_v1_resource_proto_msgTypes[0]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *HealthRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HealthRequest) ProtoMessage() {}
+
+func (x *HealthRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_resource_v1_resource_proto_msgTypes[0]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HealthRequest.ProtoReflect.Descriptor instead.
+func (*HealthRequest) Descriptor() ([]byte, []int) {
 	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{0}
+}
+
+type HealthReply struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Status  Status                 `protobuf:"varint,1,opt,name=status,proto3,enum=api.resource.v1.Status" json:"status,omitempty"`
+	Version string                 `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
+	Uptime  *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=uptime,proto3" json:"uptime,omitempty"`
+}
+
+func (x *HealthReply) Reset() {
+	*x = HealthReply{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_resource_v1_resource_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *HealthReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HealthReply) ProtoMessage() {}
+
+func (x *HealthReply) ProtoReflect() protoreflect.Message {
+	mi := &file_api_resource_v1_resource_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HealthReply.ProtoReflect.Descriptor instead.
+func (*HealthReply) Descriptor() ([]byte, []int) {
+	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *HealthReply) GetStatus() Status {
+	if x != nil {
+		return x.Status
+	}
+	return Status_UP
+}
+
+func (x *HealthReply) GetVersion() string {
+	if x != nil {
+		return x.Version
+	}
+	return ""
+}
+
+func (x *HealthReply) GetUptime() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Uptime
+	}
+	return nil
 }
 
 type CreateHostRequest struct {
@@ -92,7 +239,7 @@ type CreateHostRequest struct {
 func (x *CreateHostRequest) Reset() {
 	*x = CreateHostRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_resource_v1_resource_proto_msgTypes[0]
+		mi := &file_api_resource_v1_resource_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -105,7 +252,7 @@ func (x *CreateHostRequest) String() string {
 func (*CreateHostRequest) ProtoMessage() {}
 
 func (x *CreateHostRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_resource_v1_resource_proto_msgTypes[0]
+	mi := &file_api_resource_v1_resource_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -118,7 +265,7 @@ func (x *CreateHostRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateHostRequest.ProtoReflect.Descriptor instead.
 func (*CreateHostRequest) Descriptor() ([]byte, []int) {
-	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{0}
+	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *CreateHostRequest) GetName() string {
@@ -188,7 +335,7 @@ type CreateHostReply struct {
 func (x *CreateHostReply) Reset() {
 	*x = CreateHostReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_resource_v1_resource_proto_msgTypes[1]
+		mi := &file_api_resource_v1_resource_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -201,7 +348,7 @@ func (x *CreateHostReply) String() string {
 func (*CreateHostReply) ProtoMessage() {}
 
 func (x *CreateHostReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_resource_v1_resource_proto_msgTypes[1]
+	mi := &file_api_resource_v1_resource_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -214,7 +361,7 @@ func (x *CreateHostReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateHostReply.ProtoReflect.Descriptor instead.
 func (*CreateHostReply) Descriptor() ([]byte, []int) {
-	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{1}
+	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *CreateHostReply) GetId() string {
@@ -243,7 +390,7 @@ type UpdateHostRequest struct {
 func (x *UpdateHostRequest) Reset() {
 	*x = UpdateHostRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_resource_v1_resource_proto_msgTypes[2]
+		mi := &file_api_resource_v1_resource_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -256,7 +403,7 @@ func (x *UpdateHostRequest) String() string {
 func (*UpdateHostRequest) ProtoMessage() {}
 
 func (x *UpdateHostRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_resource_v1_resource_proto_msgTypes[2]
+	mi := &file_api_resource_v1_resource_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -269,7 +416,7 @@ func (x *UpdateHostRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateHostRequest.ProtoReflect.Descriptor instead.
 func (*UpdateHostRequest) Descriptor() ([]byte, []int) {
-	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{2}
+	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *UpdateHostRequest) GetId() string {
@@ -346,7 +493,7 @@ type UpdateHostReply struct {
 func (x *UpdateHostReply) Reset() {
 	*x = UpdateHostReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_resource_v1_resource_proto_msgTypes[3]
+		mi := &file_api_resource_v1_resource_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -359,7 +506,7 @@ func (x *UpdateHostReply) String() string {
 func (*UpdateHostReply) ProtoMessage() {}
 
 func (x *UpdateHostReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_resource_v1_resource_proto_msgTypes[3]
+	mi := &file_api_resource_v1_resource_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -372,7 +519,7 @@ func (x *UpdateHostReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateHostReply.ProtoReflect.Descriptor instead.
 func (*UpdateHostReply) Descriptor() ([]byte, []int) {
-	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{3}
+	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *UpdateHostReply) GetRowsAffected() uint32 {
@@ -401,7 +548,7 @@ type OverwriteHostRequest struct {
 func (x *OverwriteHostRequest) Reset() {
 	*x = OverwriteHostRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_resource_v1_resource_proto_msgTypes[4]
+		mi := &file_api_resource_v1_resource_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -414,7 +561,7 @@ func (x *OverwriteHostRequest) String() string {
 func (*OverwriteHostRequest) ProtoMessage() {}
 
 func (x *OverwriteHostRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_resource_v1_resource_proto_msgTypes[4]
+	mi := &file_api_resource_v1_resource_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -427,7 +574,7 @@ func (x *OverwriteHostRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OverwriteHostRequest.ProtoReflect.Descriptor instead.
 func (*OverwriteHostRequest) Descriptor() ([]byte, []int) {
-	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{4}
+	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *OverwriteHostRequest) GetId() string {
@@ -504,7 +651,7 @@ type OverwriteHostReply struct {
 func (x *OverwriteHostReply) Reset() {
 	*x = OverwriteHostReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_resource_v1_resource_proto_msgTypes[5]
+		mi := &file_api_resource_v1_resource_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -517,7 +664,7 @@ func (x *OverwriteHostReply) String() string {
 func (*OverwriteHostReply) ProtoMessage() {}
 
 func (x *OverwriteHostReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_resource_v1_resource_proto_msgTypes[5]
+	mi := &file_api_resource_v1_resource_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -530,7 +677,7 @@ func (x *OverwriteHostReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OverwriteHostReply.ProtoReflect.Descriptor instead.
 func (*OverwriteHostReply) Descriptor() ([]byte, []int) {
-	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{5}
+	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *OverwriteHostReply) GetRowsAffected() uint32 {
@@ -551,7 +698,7 @@ type DeleteHostRequest struct {
 func (x *DeleteHostRequest) Reset() {
 	*x = DeleteHostRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_resource_v1_resource_proto_msgTypes[6]
+		mi := &file_api_resource_v1_resource_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -564,7 +711,7 @@ func (x *DeleteHostRequest) String() string {
 func (*DeleteHostRequest) ProtoMessage() {}
 
 func (x *DeleteHostRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_resource_v1_resource_proto_msgTypes[6]
+	mi := &file_api_resource_v1_resource_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -577,7 +724,7 @@ func (x *DeleteHostRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteHostRequest.ProtoReflect.Descriptor instead.
 func (*DeleteHostRequest) Descriptor() ([]byte, []int) {
-	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{6}
+	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *DeleteHostRequest) GetId() string {
@@ -598,7 +745,7 @@ type DeleteHostReply struct {
 func (x *DeleteHostReply) Reset() {
 	*x = DeleteHostReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_resource_v1_resource_proto_msgTypes[7]
+		mi := &file_api_resource_v1_resource_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -611,7 +758,7 @@ func (x *DeleteHostReply) String() string {
 func (*DeleteHostReply) ProtoMessage() {}
 
 func (x *DeleteHostReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_resource_v1_resource_proto_msgTypes[7]
+	mi := &file_api_resource_v1_resource_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -624,7 +771,7 @@ func (x *DeleteHostReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteHostReply.ProtoReflect.Descriptor instead.
 func (*DeleteHostReply) Descriptor() ([]byte, []int) {
-	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{7}
+	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *DeleteHostReply) GetRowsAffected() uint32 {
@@ -645,7 +792,7 @@ type GetHostRequest struct {
 func (x *GetHostRequest) Reset() {
 	*x = GetHostRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_resource_v1_resource_proto_msgTypes[8]
+		mi := &file_api_resource_v1_resource_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -658,7 +805,7 @@ func (x *GetHostRequest) String() string {
 func (*GetHostRequest) ProtoMessage() {}
 
 func (x *GetHostRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_resource_v1_resource_proto_msgTypes[8]
+	mi := &file_api_resource_v1_resource_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -671,7 +818,7 @@ func (x *GetHostRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetHostRequest.ProtoReflect.Descriptor instead.
 func (*GetHostRequest) Descriptor() ([]byte, []int) {
-	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{8}
+	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GetHostRequest) GetId() string {
@@ -702,7 +849,7 @@ type GetHostReply struct {
 func (x *GetHostReply) Reset() {
 	*x = GetHostReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_resource_v1_resource_proto_msgTypes[9]
+		mi := &file_api_resource_v1_resource_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -715,7 +862,7 @@ func (x *GetHostReply) String() string {
 func (*GetHostReply) ProtoMessage() {}
 
 func (x *GetHostReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_resource_v1_resource_proto_msgTypes[9]
+	mi := &file_api_resource_v1_resource_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -728,7 +875,7 @@ func (x *GetHostReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetHostReply.ProtoReflect.Descriptor instead.
 func (*GetHostReply) Descriptor() ([]byte, []int) {
-	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{9}
+	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *GetHostReply) GetId() string {
@@ -829,7 +976,7 @@ type SingleHost struct {
 func (x *SingleHost) Reset() {
 	*x = SingleHost{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_resource_v1_resource_proto_msgTypes[10]
+		mi := &file_api_resource_v1_resource_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -842,7 +989,7 @@ func (x *SingleHost) String() string {
 func (*SingleHost) ProtoMessage() {}
 
 func (x *SingleHost) ProtoReflect() protoreflect.Message {
-	mi := &file_api_resource_v1_resource_proto_msgTypes[10]
+	mi := &file_api_resource_v1_resource_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -855,7 +1002,7 @@ func (x *SingleHost) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SingleHost.ProtoReflect.Descriptor instead.
 func (*SingleHost) Descriptor() ([]byte, []int) {
-	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{10}
+	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *SingleHost) GetId() string {
@@ -944,7 +1091,7 @@ type GetHostsRequest struct {
 func (x *GetHostsRequest) Reset() {
 	*x = GetHostsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_resource_v1_resource_proto_msgTypes[11]
+		mi := &file_api_resource_v1_resource_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -957,7 +1104,7 @@ func (x *GetHostsRequest) String() string {
 func (*GetHostsRequest) ProtoMessage() {}
 
 func (x *GetHostsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_resource_v1_resource_proto_msgTypes[11]
+	mi := &file_api_resource_v1_resource_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -970,7 +1117,7 @@ func (x *GetHostsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetHostsRequest.ProtoReflect.Descriptor instead.
 func (*GetHostsRequest) Descriptor() ([]byte, []int) {
-	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{11}
+	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{13}
 }
 
 type GetHostsReply struct {
@@ -984,7 +1131,7 @@ type GetHostsReply struct {
 func (x *GetHostsReply) Reset() {
 	*x = GetHostsReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_resource_v1_resource_proto_msgTypes[12]
+		mi := &file_api_resource_v1_resource_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -997,7 +1144,7 @@ func (x *GetHostsReply) String() string {
 func (*GetHostsReply) ProtoMessage() {}
 
 func (x *GetHostsReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_resource_v1_resource_proto_msgTypes[12]
+	mi := &file_api_resource_v1_resource_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1010,7 +1157,7 @@ func (x *GetHostsReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetHostsReply.ProtoReflect.Descriptor instead.
 func (*GetHostsReply) Descriptor() ([]byte, []int) {
-	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{12}
+	return file_api_resource_v1_resource_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *GetHostsReply) GetHosts() []*SingleHost {
@@ -1030,6 +1177,16 @@ var file_api_resource_v1_resource_proto_rawDesc = []byte{
 	0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a,
 	0x1f, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
 	0x2f, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x22, 0x0f, 0x0a, 0x0d, 0x48, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x22, 0x8c, 0x01, 0x0a, 0x0b, 0x48, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x52, 0x65, 0x70, 0x6c,
+	0x79, 0x12, 0x2f, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0e, 0x32, 0x17, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
+	0x2e, 0x76, 0x31, 0x2e, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74,
+	0x75, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x32, 0x0a, 0x06,
+	0x75, 0x70, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67,
+	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54,
+	0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x06, 0x75, 0x70, 0x74, 0x69, 0x6d, 0x65,
 	0x22, 0x9d, 0x03, 0x0a, 0x11, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x52,
 	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74,
@@ -1199,57 +1356,65 @@ var file_api_resource_v1_resource_proto_rawDesc = []byte{
 	0x73, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x31, 0x0a, 0x05, 0x68, 0x6f, 0x73, 0x74, 0x73, 0x18,
 	0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x72, 0x65, 0x73, 0x6f,
 	0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x69, 0x6e, 0x67, 0x6c, 0x65, 0x48, 0x6f,
-	0x73, 0x74, 0x52, 0x05, 0x68, 0x6f, 0x73, 0x74, 0x73, 0x2a, 0x44, 0x0a, 0x07, 0x4e, 0x65, 0x74,
-	0x54, 0x79, 0x70, 0x65, 0x12, 0x0b, 0x0a, 0x07, 0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10,
-	0x00, 0x12, 0x0e, 0x0a, 0x0a, 0x44, 0x55, 0x41, 0x4c, 0x5f, 0x53, 0x54, 0x41, 0x43, 0x4b, 0x10,
-	0x02, 0x12, 0x0d, 0x0a, 0x09, 0x49, 0x50, 0x56, 0x34, 0x5f, 0x4f, 0x4e, 0x4c, 0x59, 0x10, 0x04,
-	0x12, 0x0d, 0x0a, 0x09, 0x49, 0x50, 0x56, 0x36, 0x5f, 0x4f, 0x4e, 0x4c, 0x59, 0x10, 0x06, 0x32,
-	0x99, 0x05, 0x0a, 0x08, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x6c, 0x0a, 0x0a,
-	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x12, 0x22, 0x2e, 0x61, 0x70, 0x69,
-	0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x72, 0x65,
-	0x61, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20,
+	0x73, 0x74, 0x52, 0x05, 0x68, 0x6f, 0x73, 0x74, 0x73, 0x2a, 0x1a, 0x0a, 0x06, 0x53, 0x74, 0x61,
+	0x74, 0x75, 0x73, 0x12, 0x06, 0x0a, 0x02, 0x55, 0x50, 0x10, 0x00, 0x12, 0x08, 0x0a, 0x04, 0x44,
+	0x4f, 0x57, 0x4e, 0x10, 0x01, 0x2a, 0x44, 0x0a, 0x07, 0x4e, 0x65, 0x74, 0x54, 0x79, 0x70, 0x65,
+	0x12, 0x0b, 0x0a, 0x07, 0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x00, 0x12, 0x0e, 0x0a,
+	0x0a, 0x44, 0x55, 0x41, 0x4c, 0x5f, 0x53, 0x54, 0x41, 0x43, 0x4b, 0x10, 0x02, 0x12, 0x0d, 0x0a,
+	0x09, 0x49, 0x50, 0x56, 0x34, 0x5f, 0x4f, 0x4e, 0x4c, 0x59, 0x10, 0x04, 0x12, 0x0d, 0x0a, 0x09,
+	0x49, 0x50, 0x56, 0x36, 0x5f, 0x4f, 0x4e, 0x4c, 0x59, 0x10, 0x06, 0x32, 0x87, 0x06, 0x0a, 0x08,
+	0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x6c, 0x0a, 0x0b, 0x48, 0x65, 0x61, 0x6c,
+	0x74, 0x68, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x12, 0x1e, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x72, 0x65,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x48, 0x65, 0x61, 0x6c, 0x74, 0x68,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x72, 0x65,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x48, 0x65, 0x61, 0x6c, 0x74, 0x68,
+	0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x1f, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x19, 0x12, 0x17, 0x2f,
+	0x61, 0x70, 0x69, 0x2f, 0x76, 0x31, 0x2f, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2f,
+	0x68, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x12, 0x6c, 0x0a, 0x0a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
+	0x48, 0x6f, 0x73, 0x74, 0x12, 0x22, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75,
+	0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x48, 0x6f, 0x73,
+	0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x72,
+	0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x48, 0x6f, 0x73, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x18, 0x82, 0xd3, 0xe4, 0x93,
+	0x02, 0x12, 0x3a, 0x01, 0x2a, 0x22, 0x0d, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x31, 0x2f, 0x68,
+	0x6f, 0x73, 0x74, 0x73, 0x12, 0x6c, 0x0a, 0x0a, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x48, 0x6f,
+	0x73, 0x74, 0x12, 0x22, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63,
+	0x65, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x72, 0x65, 0x73,
+	0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x48,
+	0x6f, 0x73, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x18, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x12,
+	0x3a, 0x01, 0x2a, 0x32, 0x0d, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x31, 0x2f, 0x68, 0x6f, 0x73,
+	0x74, 0x73, 0x12, 0x75, 0x0a, 0x0d, 0x4f, 0x76, 0x65, 0x72, 0x77, 0x72, 0x69, 0x74, 0x65, 0x48,
+	0x6f, 0x73, 0x74, 0x12, 0x25, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72,
+	0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x76, 0x65, 0x72, 0x77, 0x72, 0x69, 0x74, 0x65, 0x48,
+	0x6f, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x23, 0x2e, 0x61, 0x70, 0x69,
+	0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x76, 0x65,
+	0x72, 0x77, 0x72, 0x69, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22,
+	0x18, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x12, 0x3a, 0x01, 0x2a, 0x1a, 0x0d, 0x2f, 0x61, 0x70, 0x69,
+	0x2f, 0x76, 0x31, 0x2f, 0x68, 0x6f, 0x73, 0x74, 0x73, 0x12, 0x6e, 0x0a, 0x0a, 0x44, 0x65, 0x6c,
+	0x65, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x12, 0x22, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x72, 0x65,
+	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65,
+	0x48, 0x6f, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x61, 0x70,
+	0x69, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65,
+	0x6c, 0x65, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x1a, 0x82,
+	0xd3, 0xe4, 0x93, 0x02, 0x14, 0x2a, 0x12, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x31, 0x2f, 0x68,
+	0x6f, 0x73, 0x74, 0x73, 0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x12, 0x65, 0x0a, 0x07, 0x47, 0x65, 0x74,
+	0x48, 0x6f, 0x73, 0x74, 0x12, 0x1f, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75,
+	0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x48, 0x6f, 0x73, 0x74, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x72, 0x65, 0x73, 0x6f,
+	0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x48, 0x6f, 0x73, 0x74, 0x52,
+	0x65, 0x70, 0x6c, 0x79, 0x22, 0x1a, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x14, 0x12, 0x12, 0x2f, 0x61,
+	0x70, 0x69, 0x2f, 0x76, 0x31, 0x2f, 0x68, 0x6f, 0x73, 0x74, 0x73, 0x2f, 0x7b, 0x69, 0x64, 0x7d,
+	0x12, 0x63, 0x0a, 0x08, 0x47, 0x65, 0x74, 0x48, 0x6f, 0x73, 0x74, 0x73, 0x12, 0x20, 0x2e, 0x61,
+	0x70, 0x69, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x47,
+	0x65, 0x74, 0x48, 0x6f, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e,
 	0x2e, 0x61, 0x70, 0x69, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31,
-	0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79,
-	0x22, 0x18, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x12, 0x3a, 0x01, 0x2a, 0x22, 0x0d, 0x2f, 0x61, 0x70,
-	0x69, 0x2f, 0x76, 0x31, 0x2f, 0x68, 0x6f, 0x73, 0x74, 0x73, 0x12, 0x6c, 0x0a, 0x0a, 0x55, 0x70,
-	0x64, 0x61, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x12, 0x22, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x72,
-	0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74,
-	0x65, 0x48, 0x6f, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x61,
-	0x70, 0x69, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x55,
-	0x70, 0x64, 0x61, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x18,
-	0x82, 0xd3, 0xe4, 0x93, 0x02, 0x12, 0x3a, 0x01, 0x2a, 0x32, 0x0d, 0x2f, 0x61, 0x70, 0x69, 0x2f,
-	0x76, 0x31, 0x2f, 0x68, 0x6f, 0x73, 0x74, 0x73, 0x12, 0x75, 0x0a, 0x0d, 0x4f, 0x76, 0x65, 0x72,
-	0x77, 0x72, 0x69, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x12, 0x25, 0x2e, 0x61, 0x70, 0x69, 0x2e,
-	0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x76, 0x65, 0x72,
-	0x77, 0x72, 0x69, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x23, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e,
-	0x76, 0x31, 0x2e, 0x4f, 0x76, 0x65, 0x72, 0x77, 0x72, 0x69, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74,
-	0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x18, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x12, 0x3a, 0x01, 0x2a,
-	0x1a, 0x0d, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x31, 0x2f, 0x68, 0x6f, 0x73, 0x74, 0x73, 0x12,
-	0x6e, 0x0a, 0x0a, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x12, 0x22, 0x2e,
-	0x61, 0x70, 0x69, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e,
-	0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x20, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
-	0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x52, 0x65,
-	0x70, 0x6c, 0x79, 0x22, 0x1a, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x14, 0x2a, 0x12, 0x2f, 0x61, 0x70,
-	0x69, 0x2f, 0x76, 0x31, 0x2f, 0x68, 0x6f, 0x73, 0x74, 0x73, 0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x12,
-	0x65, 0x0a, 0x07, 0x47, 0x65, 0x74, 0x48, 0x6f, 0x73, 0x74, 0x12, 0x1f, 0x2e, 0x61, 0x70, 0x69,
-	0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74,
-	0x48, 0x6f, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x61, 0x70,
-	0x69, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65,
-	0x74, 0x48, 0x6f, 0x73, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x1a, 0x82, 0xd3, 0xe4, 0x93,
-	0x02, 0x14, 0x12, 0x12, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x31, 0x2f, 0x68, 0x6f, 0x73, 0x74,
-	0x73, 0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x12, 0x63, 0x0a, 0x08, 0x47, 0x65, 0x74, 0x48, 0x6f, 0x73,
-	0x74, 0x73, 0x12, 0x20, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63,
-	0x65, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x48, 0x6f, 0x73, 0x74, 0x73, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75,
-	0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x48, 0x6f, 0x73, 0x74, 0x73, 0x52,
-	0x65, 0x70, 0x6c, 0x79, 0x22, 0x15, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x0f, 0x12, 0x0d, 0x2f, 0x61,
-	0x70, 0x69, 0x2f, 0x76, 0x31, 0x2f, 0x68, 0x6f, 0x73, 0x74, 0x73, 0x42, 0x31, 0x0a, 0x0f, 0x61,
-	0x70, 0x69, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x50, 0x01,
-	0x5a, 0x1c, 0x73, 0x6f, 0x6e, 0x61, 0x72, 0x2d, 0x62, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f,
-	0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x2e, 0x47, 0x65, 0x74, 0x48, 0x6f, 0x73, 0x74, 0x73, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x15,
+	0x82, 0xd3, 0xe4, 0x93, 0x02, 0x0f, 0x12, 0x0d, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x31, 0x2f,
+	0x68, 0x6f, 0x73, 0x74, 0x73, 0x42, 0x31, 0x0a, 0x0f, 0x61, 0x70, 0x69, 0x2e, 0x72, 0x65, 0x73,
+	0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x76, 0x31, 0x50, 0x01, 0x5a, 0x1c, 0x73, 0x6f, 0x6e, 0x61,
+	0x72, 0x2d, 0x62, 0x61, 0x74, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72,
+	0x63, 0x65, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1264,64 +1429,71 @@ func file_api_resource_v1_resource_proto_rawDescGZIP() []byte {
 	return file_api_resource_v1_resource_proto_rawDescData
 }
 
-var file_api_resource_v1_resource_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_api_resource_v1_resource_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
+var file_api_resource_v1_resource_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_api_resource_v1_resource_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
 var file_api_resource_v1_resource_proto_goTypes = []any{
-	(NetType)(0),                  // 0: api.resource.v1.NetType
-	(*CreateHostRequest)(nil),     // 1: api.resource.v1.CreateHostRequest
-	(*CreateHostReply)(nil),       // 2: api.resource.v1.CreateHostReply
-	(*UpdateHostRequest)(nil),     // 3: api.resource.v1.UpdateHostRequest
-	(*UpdateHostReply)(nil),       // 4: api.resource.v1.UpdateHostReply
-	(*OverwriteHostRequest)(nil),  // 5: api.resource.v1.OverwriteHostRequest
-	(*OverwriteHostReply)(nil),    // 6: api.resource.v1.OverwriteHostReply
-	(*DeleteHostRequest)(nil),     // 7: api.resource.v1.DeleteHostRequest
-	(*DeleteHostReply)(nil),       // 8: api.resource.v1.DeleteHostReply
-	(*GetHostRequest)(nil),        // 9: api.resource.v1.GetHostRequest
-	(*GetHostReply)(nil),          // 10: api.resource.v1.GetHostReply
-	(*SingleHost)(nil),            // 11: api.resource.v1.SingleHost
-	(*GetHostsRequest)(nil),       // 12: api.resource.v1.GetHostsRequest
-	(*GetHostsReply)(nil),         // 13: api.resource.v1.GetHostsReply
-	nil,                           // 14: api.resource.v1.CreateHostRequest.AdditionsEntry
-	nil,                           // 15: api.resource.v1.UpdateHostRequest.AdditionsEntry
-	nil,                           // 16: api.resource.v1.OverwriteHostRequest.AdditionsEntry
-	nil,                           // 17: api.resource.v1.GetHostReply.AdditionsEntry
-	nil,                           // 18: api.resource.v1.SingleHost.AdditionsEntry
-	(*timestamppb.Timestamp)(nil), // 19: google.protobuf.Timestamp
+	(Status)(0),                   // 0: api.resource.v1.Status
+	(NetType)(0),                  // 1: api.resource.v1.NetType
+	(*HealthRequest)(nil),         // 2: api.resource.v1.HealthRequest
+	(*HealthReply)(nil),           // 3: api.resource.v1.HealthReply
+	(*CreateHostRequest)(nil),     // 4: api.resource.v1.CreateHostRequest
+	(*CreateHostReply)(nil),       // 5: api.resource.v1.CreateHostReply
+	(*UpdateHostRequest)(nil),     // 6: api.resource.v1.UpdateHostRequest
+	(*UpdateHostReply)(nil),       // 7: api.resource.v1.UpdateHostReply
+	(*OverwriteHostRequest)(nil),  // 8: api.resource.v1.OverwriteHostRequest
+	(*OverwriteHostReply)(nil),    // 9: api.resource.v1.OverwriteHostReply
+	(*DeleteHostRequest)(nil),     // 10: api.resource.v1.DeleteHostRequest
+	(*DeleteHostReply)(nil),       // 11: api.resource.v1.DeleteHostReply
+	(*GetHostRequest)(nil),        // 12: api.resource.v1.GetHostRequest
+	(*GetHostReply)(nil),          // 13: api.resource.v1.GetHostReply
+	(*SingleHost)(nil),            // 14: api.resource.v1.SingleHost
+	(*GetHostsRequest)(nil),       // 15: api.resource.v1.GetHostsRequest
+	(*GetHostsReply)(nil),         // 16: api.resource.v1.GetHostsReply
+	nil,                           // 17: api.resource.v1.CreateHostRequest.AdditionsEntry
+	nil,                           // 18: api.resource.v1.UpdateHostRequest.AdditionsEntry
+	nil,                           // 19: api.resource.v1.OverwriteHostRequest.AdditionsEntry
+	nil,                           // 20: api.resource.v1.GetHostReply.AdditionsEntry
+	nil,                           // 21: api.resource.v1.SingleHost.AdditionsEntry
+	(*timestamppb.Timestamp)(nil), // 22: google.protobuf.Timestamp
 }
 var file_api_resource_v1_resource_proto_depIdxs = []int32{
-	0,  // 0: api.resource.v1.CreateHostRequest.net_type:type_name -> api.resource.v1.NetType
-	14, // 1: api.resource.v1.CreateHostRequest.additions:type_name -> api.resource.v1.CreateHostRequest.AdditionsEntry
-	19, // 2: api.resource.v1.CreateHostRequest.live_at:type_name -> google.protobuf.Timestamp
-	0,  // 3: api.resource.v1.UpdateHostRequest.net_type:type_name -> api.resource.v1.NetType
-	15, // 4: api.resource.v1.UpdateHostRequest.additions:type_name -> api.resource.v1.UpdateHostRequest.AdditionsEntry
-	19, // 5: api.resource.v1.UpdateHostRequest.live_at:type_name -> google.protobuf.Timestamp
-	0,  // 6: api.resource.v1.OverwriteHostRequest.net_type:type_name -> api.resource.v1.NetType
-	16, // 7: api.resource.v1.OverwriteHostRequest.additions:type_name -> api.resource.v1.OverwriteHostRequest.AdditionsEntry
-	19, // 8: api.resource.v1.OverwriteHostRequest.live_at:type_name -> google.protobuf.Timestamp
-	0,  // 9: api.resource.v1.GetHostReply.net_type:type_name -> api.resource.v1.NetType
-	17, // 10: api.resource.v1.GetHostReply.additions:type_name -> api.resource.v1.GetHostReply.AdditionsEntry
-	19, // 11: api.resource.v1.GetHostReply.live_at:type_name -> google.protobuf.Timestamp
-	0,  // 12: api.resource.v1.SingleHost.net_type:type_name -> api.resource.v1.NetType
-	18, // 13: api.resource.v1.SingleHost.additions:type_name -> api.resource.v1.SingleHost.AdditionsEntry
-	19, // 14: api.resource.v1.SingleHost.live_at:type_name -> google.protobuf.Timestamp
-	11, // 15: api.resource.v1.GetHostsReply.hosts:type_name -> api.resource.v1.SingleHost
-	1,  // 16: api.resource.v1.Resource.CreateHost:input_type -> api.resource.v1.CreateHostRequest
-	3,  // 17: api.resource.v1.Resource.UpdateHost:input_type -> api.resource.v1.UpdateHostRequest
-	5,  // 18: api.resource.v1.Resource.OverwriteHost:input_type -> api.resource.v1.OverwriteHostRequest
-	7,  // 19: api.resource.v1.Resource.DeleteHost:input_type -> api.resource.v1.DeleteHostRequest
-	9,  // 20: api.resource.v1.Resource.GetHost:input_type -> api.resource.v1.GetHostRequest
-	12, // 21: api.resource.v1.Resource.GetHosts:input_type -> api.resource.v1.GetHostsRequest
-	2,  // 22: api.resource.v1.Resource.CreateHost:output_type -> api.resource.v1.CreateHostReply
-	4,  // 23: api.resource.v1.Resource.UpdateHost:output_type -> api.resource.v1.UpdateHostReply
-	6,  // 24: api.resource.v1.Resource.OverwriteHost:output_type -> api.resource.v1.OverwriteHostReply
-	8,  // 25: api.resource.v1.Resource.DeleteHost:output_type -> api.resource.v1.DeleteHostReply
-	10, // 26: api.resource.v1.Resource.GetHost:output_type -> api.resource.v1.GetHostReply
-	13, // 27: api.resource.v1.Resource.GetHosts:output_type -> api.resource.v1.GetHostsReply
-	22, // [22:28] is the sub-list for method output_type
-	16, // [16:22] is the sub-list for method input_type
-	16, // [16:16] is the sub-list for extension type_name
-	16, // [16:16] is the sub-list for extension extendee
-	0,  // [0:16] is the sub-list for field type_name
+	0,  // 0: api.resource.v1.HealthReply.status:type_name -> api.resource.v1.Status
+	22, // 1: api.resource.v1.HealthReply.uptime:type_name -> google.protobuf.Timestamp
+	1,  // 2: api.resource.v1.CreateHostRequest.net_type:type_name -> api.resource.v1.NetType
+	17, // 3: api.resource.v1.CreateHostRequest.additions:type_name -> api.resource.v1.CreateHostRequest.AdditionsEntry
+	22, // 4: api.resource.v1.CreateHostRequest.live_at:type_name -> google.protobuf.Timestamp
+	1,  // 5: api.resource.v1.UpdateHostRequest.net_type:type_name -> api.resource.v1.NetType
+	18, // 6: api.resource.v1.UpdateHostRequest.additions:type_name -> api.resource.v1.UpdateHostRequest.AdditionsEntry
+	22, // 7: api.resource.v1.UpdateHostRequest.live_at:type_name -> google.protobuf.Timestamp
+	1,  // 8: api.resource.v1.OverwriteHostRequest.net_type:type_name -> api.resource.v1.NetType
+	19, // 9: api.resource.v1.OverwriteHostRequest.additions:type_name -> api.resource.v1.OverwriteHostRequest.AdditionsEntry
+	22, // 10: api.resource.v1.OverwriteHostRequest.live_at:type_name -> google.protobuf.Timestamp
+	1,  // 11: api.resource.v1.GetHostReply.net_type:type_name -> api.resource.v1.NetType
+	20, // 12: api.resource.v1.GetHostReply.additions:type_name -> api.resource.v1.GetHostReply.AdditionsEntry
+	22, // 13: api.resource.v1.GetHostReply.live_at:type_name -> google.protobuf.Timestamp
+	1,  // 14: api.resource.v1.SingleHost.net_type:type_name -> api.resource.v1.NetType
+	21, // 15: api.resource.v1.SingleHost.additions:type_name -> api.resource.v1.SingleHost.AdditionsEntry
+	22, // 16: api.resource.v1.SingleHost.live_at:type_name -> google.protobuf.Timestamp
+	14, // 17: api.resource.v1.GetHostsReply.hosts:type_name -> api.resource.v1.SingleHost
+	2,  // 18: api.resource.v1.Resource.HealthCheck:input_type -> api.resource.v1.HealthRequest
+	4,  // 19: api.resource.v1.Resource.CreateHost:input_type -> api.resource.v1.CreateHostRequest
+	6,  // 20: api.resource.v1.Resource.UpdateHost:input_type -> api.resource.v1.UpdateHostRequest
+	8,  // 21: api.resource.v1.Resource.OverwriteHost:input_type -> api.resource.v1.OverwriteHostRequest
+	10, // 22: api.resource.v1.Resource.DeleteHost:input_type -> api.resource.v1.DeleteHostRequest
+	12, // 23: api.resource.v1.Resource.GetHost:input_type -> api.resource.v1.GetHostRequest
+	15, // 24: api.resource.v1.Resource.GetHosts:input_type -> api.resource.v1.GetHostsRequest
+	3,  // 25: api.resource.v1.Resource.HealthCheck:output_type -> api.resource.v1.HealthReply
+	5,  // 26: api.resource.v1.Resource.CreateHost:output_type -> api.resource.v1.CreateHostReply
+	7,  // 27: api.resource.v1.Resource.UpdateHost:output_type -> api.resource.v1.UpdateHostReply
+	9,  // 28: api.resource.v1.Resource.OverwriteHost:output_type -> api.resource.v1.OverwriteHostReply
+	11, // 29: api.resource.v1.Resource.DeleteHost:output_type -> api.resource.v1.DeleteHostReply
+	13, // 30: api.resource.v1.Resource.GetHost:output_type -> api.resource.v1.GetHostReply
+	16, // 31: api.resource.v1.Resource.GetHosts:output_type -> api.resource.v1.GetHostsReply
+	25, // [25:32] is the sub-list for method output_type
+	18, // [18:25] is the sub-list for method input_type
+	18, // [18:18] is the sub-list for extension type_name
+	18, // [18:18] is the sub-list for extension extendee
+	0,  // [0:18] is the sub-list for field type_name
 }
 
 func init() { file_api_resource_v1_resource_proto_init() }
@@ -1331,7 +1503,7 @@ func file_api_resource_v1_resource_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_api_resource_v1_resource_proto_msgTypes[0].Exporter = func(v any, i int) any {
-			switch v := v.(*CreateHostRequest); i {
+			switch v := v.(*HealthRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1343,7 +1515,7 @@ func file_api_resource_v1_resource_proto_init() {
 			}
 		}
 		file_api_resource_v1_resource_proto_msgTypes[1].Exporter = func(v any, i int) any {
-			switch v := v.(*CreateHostReply); i {
+			switch v := v.(*HealthReply); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1355,7 +1527,7 @@ func file_api_resource_v1_resource_proto_init() {
 			}
 		}
 		file_api_resource_v1_resource_proto_msgTypes[2].Exporter = func(v any, i int) any {
-			switch v := v.(*UpdateHostRequest); i {
+			switch v := v.(*CreateHostRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1367,7 +1539,7 @@ func file_api_resource_v1_resource_proto_init() {
 			}
 		}
 		file_api_resource_v1_resource_proto_msgTypes[3].Exporter = func(v any, i int) any {
-			switch v := v.(*UpdateHostReply); i {
+			switch v := v.(*CreateHostReply); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1379,7 +1551,7 @@ func file_api_resource_v1_resource_proto_init() {
 			}
 		}
 		file_api_resource_v1_resource_proto_msgTypes[4].Exporter = func(v any, i int) any {
-			switch v := v.(*OverwriteHostRequest); i {
+			switch v := v.(*UpdateHostRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1391,7 +1563,7 @@ func file_api_resource_v1_resource_proto_init() {
 			}
 		}
 		file_api_resource_v1_resource_proto_msgTypes[5].Exporter = func(v any, i int) any {
-			switch v := v.(*OverwriteHostReply); i {
+			switch v := v.(*UpdateHostReply); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1403,7 +1575,7 @@ func file_api_resource_v1_resource_proto_init() {
 			}
 		}
 		file_api_resource_v1_resource_proto_msgTypes[6].Exporter = func(v any, i int) any {
-			switch v := v.(*DeleteHostRequest); i {
+			switch v := v.(*OverwriteHostRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1415,7 +1587,7 @@ func file_api_resource_v1_resource_proto_init() {
 			}
 		}
 		file_api_resource_v1_resource_proto_msgTypes[7].Exporter = func(v any, i int) any {
-			switch v := v.(*DeleteHostReply); i {
+			switch v := v.(*OverwriteHostReply); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1427,7 +1599,7 @@ func file_api_resource_v1_resource_proto_init() {
 			}
 		}
 		file_api_resource_v1_resource_proto_msgTypes[8].Exporter = func(v any, i int) any {
-			switch v := v.(*GetHostRequest); i {
+			switch v := v.(*DeleteHostRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1439,7 +1611,7 @@ func file_api_resource_v1_resource_proto_init() {
 			}
 		}
 		file_api_resource_v1_resource_proto_msgTypes[9].Exporter = func(v any, i int) any {
-			switch v := v.(*GetHostReply); i {
+			switch v := v.(*DeleteHostReply); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1451,7 +1623,7 @@ func file_api_resource_v1_resource_proto_init() {
 			}
 		}
 		file_api_resource_v1_resource_proto_msgTypes[10].Exporter = func(v any, i int) any {
-			switch v := v.(*SingleHost); i {
+			switch v := v.(*GetHostRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1463,7 +1635,7 @@ func file_api_resource_v1_resource_proto_init() {
 			}
 		}
 		file_api_resource_v1_resource_proto_msgTypes[11].Exporter = func(v any, i int) any {
-			switch v := v.(*GetHostsRequest); i {
+			switch v := v.(*GetHostReply); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1475,6 +1647,30 @@ func file_api_resource_v1_resource_proto_init() {
 			}
 		}
 		file_api_resource_v1_resource_proto_msgTypes[12].Exporter = func(v any, i int) any {
+			switch v := v.(*SingleHost); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_resource_v1_resource_proto_msgTypes[13].Exporter = func(v any, i int) any {
+			switch v := v.(*GetHostsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_resource_v1_resource_proto_msgTypes[14].Exporter = func(v any, i int) any {
 			switch v := v.(*GetHostsReply); i {
 			case 0:
 				return &v.state
@@ -1487,14 +1683,14 @@ func file_api_resource_v1_resource_proto_init() {
 			}
 		}
 	}
-	file_api_resource_v1_resource_proto_msgTypes[4].OneofWrappers = []any{}
+	file_api_resource_v1_resource_proto_msgTypes[6].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_api_resource_v1_resource_proto_rawDesc,
-			NumEnums:      1,
-			NumMessages:   18,
+			NumEnums:      2,
+			NumMessages:   20,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

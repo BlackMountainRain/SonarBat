@@ -24,6 +24,18 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.auth.v1.PermissionReply'
+    /api/v1/auth/health:
+        get:
+            tags:
+                - Auth
+            operationId: Auth_HealthCheck
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.auth.v1.HealthReply'
     /api/v1/auth/request-password-reset:
         post:
             tags:
@@ -247,6 +259,30 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.resource.v1.DeleteHostReply'
+    /api/v1/resource/health:
+        get:
+            tags:
+                - Resource
+            operationId: Resource_HealthCheck
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.resource.v1.HealthReply'
+    /api/v1/task/health:
+        get:
+            tags:
+                - Task
+            operationId: Task_HealthCheck
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.task.v1.HealthReply'
     /api/v1/tasks:
         get:
             tags:
@@ -538,6 +574,17 @@ components:
                     type: string
                 uri:
                     type: string
+        api.auth.v1.HealthReply:
+            type: object
+            properties:
+                status:
+                    type: integer
+                    format: enum
+                version:
+                    type: string
+                uptime:
+                    type: string
+                    format: date-time
         api.auth.v1.PermissionReply:
             type: object
             properties:
@@ -682,6 +729,17 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/api.resource.v1.SingleHost'
+        api.resource.v1.HealthReply:
+            type: object
+            properties:
+                status:
+                    type: integer
+                    format: enum
+                version:
+                    type: string
+                uptime:
+                    type: string
+                    format: date-time
         api.resource.v1.OverwriteHostReply:
             type: object
             properties:
@@ -903,6 +961,17 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/api.task.v1.SingleTask'
+        api.task.v1.HealthReply:
+            type: object
+            properties:
+                status:
+                    type: integer
+                    format: enum
+                version:
+                    type: string
+                uptime:
+                    type: string
+                    format: date-time
         api.task.v1.OverwriteSubtaskReply:
             type: object
             properties:

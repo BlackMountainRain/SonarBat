@@ -14,6 +14,7 @@ import (
 	"sonar-bat/internal/auth/server"
 	"sonar-bat/internal/auth/service"
 	"sonar-bat/internal/conf"
+	"sonar-bat/internal/runtime"
 )
 
 import (
@@ -23,14 +24,14 @@ import (
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logger log.Logger) (*kratos.App, func(), error) {
+func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logger log.Logger, info runtime.Info) (*kratos.App, func(), error) {
 	dataData, cleanup, err := data.NewData(confData, logger)
 	if err != nil {
 		return nil, nil, err
 	}
 	authRepo := data.NewAuthRepo(dataData, logger)
 	authUseCase := biz.NewAuthUseCase(auth, authRepo, logger)
-	authService := service.NewAuthService(authUseCase)
+	authService := service.NewAuthService(authUseCase, info)
 	grpcServer := server.NewGRPCServer(confServer, authService, logger)
 	httpServer := server.NewHTTPServer(confServer, authService, logger)
 	app := newApp(logger, grpcServer, httpServer)

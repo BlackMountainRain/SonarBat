@@ -1,0 +1,43 @@
+upstream auth {
+    {{ range service "auth-http" }}
+        server {{ .Address }}:{{ .Port }};
+    {{ else }}
+        server 127.0.0.1:65535; # default to a non-routable address if no servers are available
+    {{ end }}
+}
+
+upstream task {
+    {{ range service "task-http" }}
+        server {{ .Address }}:{{ .Port }};
+    {{ else }}
+        server 127.0.0.1:65535; # default to a non-routable address if no servers are available
+    {{ end }}
+}
+
+upstream resource {
+    {{ range service "resource-http" }}
+        server {{ .Address }}:{{ .Port }};
+    {{ else }}
+        server 127.0.0.1:65535; # default to a non-routable address if no servers are available
+    {{ end }}
+}
+
+server {
+    listen 80;
+
+    location ~ ^/api/v1/auth {
+        proxy_pass http://auth;
+    }
+
+    location ~ ^/api/v1/(resource|hosts) {
+        proxy_pass http://resource;
+    }
+
+    location ~ ^/api/v1/(task|tasks) {
+        proxy_pass http://task;
+    }
+
+    location ~ ^/api/v1 {
+        return 403;
+    }
+}

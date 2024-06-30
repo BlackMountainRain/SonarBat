@@ -23,6 +23,7 @@ const OperationTaskCreateTask = "/api.task.v1.Task/CreateTask"
 const OperationTaskDeleteTask = "/api.task.v1.Task/DeleteTask"
 const OperationTaskGetTask = "/api.task.v1.Task/GetTask"
 const OperationTaskGetTasks = "/api.task.v1.Task/GetTasks"
+const OperationTaskHealthCheck = "/api.task.v1.Task/HealthCheck"
 const OperationTaskOverwriteTask = "/api.task.v1.Task/OverwriteTask"
 const OperationTaskUpdateTask = "/api.task.v1.Task/UpdateTask"
 
@@ -31,18 +32,39 @@ type TaskHTTPServer interface {
 	DeleteTask(context.Context, *DeleteTaskRequest) (*DeleteTaskReply, error)
 	GetTask(context.Context, *GetTaskRequest) (*GetTaskReply, error)
 	GetTasks(context.Context, *GetTasksRequest) (*GetTasksReply, error)
+	HealthCheck(context.Context, *HealthRequest) (*HealthReply, error)
 	OverwriteTask(context.Context, *OverwriteTaskRequest) (*OverwriteTaskReply, error)
 	UpdateTask(context.Context, *UpdateTaskRequest) (*UpdateTaskReply, error)
 }
 
 func RegisterTaskHTTPServer(s *http.Server, srv TaskHTTPServer) {
 	r := s.Route("/")
+	r.GET("/api/v1/task/health", _Task_HealthCheck1_HTTP_Handler(srv))
 	r.POST("/api/v1/tasks", _Task_CreateTask0_HTTP_Handler(srv))
 	r.PATCH("/api/v1/tasks/{id}", _Task_UpdateTask0_HTTP_Handler(srv))
 	r.PUT("/api/v1/tasks/{id}", _Task_OverwriteTask0_HTTP_Handler(srv))
 	r.DELETE("/api/v1/tasks/{id}", _Task_DeleteTask0_HTTP_Handler(srv))
 	r.GET("/api/v1/tasks/{id}", _Task_GetTask0_HTTP_Handler(srv))
 	r.GET("/api/v1/tasks", _Task_GetTasks0_HTTP_Handler(srv))
+}
+
+func _Task_HealthCheck1_HTTP_Handler(srv TaskHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in HealthRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationTaskHealthCheck)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.HealthCheck(ctx, req.(*HealthRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*HealthReply)
+		return ctx.Result(200, reply)
+	}
 }
 
 func _Task_CreateTask0_HTTP_Handler(srv TaskHTTPServer) func(ctx http.Context) error {
@@ -185,6 +207,7 @@ type TaskHTTPClient interface {
 	DeleteTask(ctx context.Context, req *DeleteTaskRequest, opts ...http.CallOption) (rsp *DeleteTaskReply, err error)
 	GetTask(ctx context.Context, req *GetTaskRequest, opts ...http.CallOption) (rsp *GetTaskReply, err error)
 	GetTasks(ctx context.Context, req *GetTasksRequest, opts ...http.CallOption) (rsp *GetTasksReply, err error)
+	HealthCheck(ctx context.Context, req *HealthRequest, opts ...http.CallOption) (rsp *HealthReply, err error)
 	OverwriteTask(ctx context.Context, req *OverwriteTaskRequest, opts ...http.CallOption) (rsp *OverwriteTaskReply, err error)
 	UpdateTask(ctx context.Context, req *UpdateTaskRequest, opts ...http.CallOption) (rsp *UpdateTaskReply, err error)
 }
@@ -241,6 +264,19 @@ func (c *TaskHTTPClientImpl) GetTasks(ctx context.Context, in *GetTasksRequest, 
 	pattern := "/api/v1/tasks"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationTaskGetTasks))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *TaskHTTPClientImpl) HealthCheck(ctx context.Context, in *HealthRequest, opts ...http.CallOption) (*HealthReply, error) {
+	var out HealthReply
+	pattern := "/api/v1/task/health"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationTaskHealthCheck))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

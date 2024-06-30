@@ -23,6 +23,7 @@ const OperationResourceCreateHost = "/api.resource.v1.Resource/CreateHost"
 const OperationResourceDeleteHost = "/api.resource.v1.Resource/DeleteHost"
 const OperationResourceGetHost = "/api.resource.v1.Resource/GetHost"
 const OperationResourceGetHosts = "/api.resource.v1.Resource/GetHosts"
+const OperationResourceHealthCheck = "/api.resource.v1.Resource/HealthCheck"
 const OperationResourceOverwriteHost = "/api.resource.v1.Resource/OverwriteHost"
 const OperationResourceUpdateHost = "/api.resource.v1.Resource/UpdateHost"
 
@@ -31,18 +32,39 @@ type ResourceHTTPServer interface {
 	DeleteHost(context.Context, *DeleteHostRequest) (*DeleteHostReply, error)
 	GetHost(context.Context, *GetHostRequest) (*GetHostReply, error)
 	GetHosts(context.Context, *GetHostsRequest) (*GetHostsReply, error)
+	HealthCheck(context.Context, *HealthRequest) (*HealthReply, error)
 	OverwriteHost(context.Context, *OverwriteHostRequest) (*OverwriteHostReply, error)
 	UpdateHost(context.Context, *UpdateHostRequest) (*UpdateHostReply, error)
 }
 
 func RegisterResourceHTTPServer(s *http.Server, srv ResourceHTTPServer) {
 	r := s.Route("/")
+	r.GET("/api/v1/resource/health", _Resource_HealthCheck2_HTTP_Handler(srv))
 	r.POST("/api/v1/hosts", _Resource_CreateHost0_HTTP_Handler(srv))
 	r.PATCH("/api/v1/hosts", _Resource_UpdateHost0_HTTP_Handler(srv))
 	r.PUT("/api/v1/hosts", _Resource_OverwriteHost0_HTTP_Handler(srv))
 	r.DELETE("/api/v1/hosts/{id}", _Resource_DeleteHost0_HTTP_Handler(srv))
 	r.GET("/api/v1/hosts/{id}", _Resource_GetHost0_HTTP_Handler(srv))
 	r.GET("/api/v1/hosts", _Resource_GetHosts0_HTTP_Handler(srv))
+}
+
+func _Resource_HealthCheck2_HTTP_Handler(srv ResourceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in HealthRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationResourceHealthCheck)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.HealthCheck(ctx, req.(*HealthRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*HealthReply)
+		return ctx.Result(200, reply)
+	}
 }
 
 func _Resource_CreateHost0_HTTP_Handler(srv ResourceHTTPServer) func(ctx http.Context) error {
@@ -179,6 +201,7 @@ type ResourceHTTPClient interface {
 	DeleteHost(ctx context.Context, req *DeleteHostRequest, opts ...http.CallOption) (rsp *DeleteHostReply, err error)
 	GetHost(ctx context.Context, req *GetHostRequest, opts ...http.CallOption) (rsp *GetHostReply, err error)
 	GetHosts(ctx context.Context, req *GetHostsRequest, opts ...http.CallOption) (rsp *GetHostsReply, err error)
+	HealthCheck(ctx context.Context, req *HealthRequest, opts ...http.CallOption) (rsp *HealthReply, err error)
 	OverwriteHost(ctx context.Context, req *OverwriteHostRequest, opts ...http.CallOption) (rsp *OverwriteHostReply, err error)
 	UpdateHost(ctx context.Context, req *UpdateHostRequest, opts ...http.CallOption) (rsp *UpdateHostReply, err error)
 }
@@ -235,6 +258,19 @@ func (c *ResourceHTTPClientImpl) GetHosts(ctx context.Context, in *GetHostsReque
 	pattern := "/api/v1/hosts"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationResourceGetHosts))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *ResourceHTTPClientImpl) HealthCheck(ctx context.Context, in *HealthRequest, opts ...http.CallOption) (*HealthReply, error) {
+	var out HealthReply
+	pattern := "/api/v1/resource/health"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationResourceHealthCheck))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

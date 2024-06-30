@@ -20,6 +20,7 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationAuthCheckPermission = "/api.auth.v1.Auth/CheckPermission"
+const OperationAuthHealthCheck = "/api.auth.v1.Auth/HealthCheck"
 const OperationAuthRequestPasswordReset = "/api.auth.v1.Auth/RequestPasswordReset"
 const OperationAuthResetPassword = "/api.auth.v1.Auth/ResetPassword"
 const OperationAuthSignIn = "/api.auth.v1.Auth/SignIn"
@@ -30,6 +31,7 @@ const OperationAuthVerifyPasswordResetToken = "/api.auth.v1.Auth/VerifyPasswordR
 
 type AuthHTTPServer interface {
 	CheckPermission(context.Context, *CheckPermissionRequest) (*PermissionReply, error)
+	HealthCheck(context.Context, *HealthRequest) (*HealthReply, error)
 	RequestPasswordReset(context.Context, *RequestPasswordResetRequest) (*RequestPasswordResetReply, error)
 	ResetPassword(context.Context, *ResetPasswordRequest) (*ResetPasswordReply, error)
 	SignIn(context.Context, *SignInRequest) (*AuthReply, error)
@@ -41,6 +43,7 @@ type AuthHTTPServer interface {
 
 func RegisterAuthHTTPServer(s *http.Server, srv AuthHTTPServer) {
 	r := s.Route("/")
+	r.GET("/api/v1/auth/health", _Auth_HealthCheck0_HTTP_Handler(srv))
 	r.POST("/api/v1/auth/sign-in/password", _Auth_SignIn0_HTTP_Handler(srv))
 	r.POST("/api/v1/auth/sign-in/oauth", _Auth_SignInWithOAuth0_HTTP_Handler(srv))
 	r.POST("/api/v1/auth/sign-up", _Auth_SignUp0_HTTP_Handler(srv))
@@ -49,6 +52,25 @@ func RegisterAuthHTTPServer(s *http.Server, srv AuthHTTPServer) {
 	r.POST("/api/v1/auth/request-password-reset", _Auth_RequestPasswordReset0_HTTP_Handler(srv))
 	r.GET("/api/v1/auth/verify-password-reset-token", _Auth_VerifyPasswordResetToken0_HTTP_Handler(srv))
 	r.POST("/api/v1/auth/reset-password", _Auth_ResetPassword0_HTTP_Handler(srv))
+}
+
+func _Auth_HealthCheck0_HTTP_Handler(srv AuthHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in HealthRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationAuthHealthCheck)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.HealthCheck(ctx, req.(*HealthRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*HealthReply)
+		return ctx.Result(200, reply)
+	}
 }
 
 func _Auth_SignIn0_HTTP_Handler(srv AuthHTTPServer) func(ctx http.Context) error {
@@ -226,6 +248,7 @@ func _Auth_ResetPassword0_HTTP_Handler(srv AuthHTTPServer) func(ctx http.Context
 
 type AuthHTTPClient interface {
 	CheckPermission(ctx context.Context, req *CheckPermissionRequest, opts ...http.CallOption) (rsp *PermissionReply, err error)
+	HealthCheck(ctx context.Context, req *HealthRequest, opts ...http.CallOption) (rsp *HealthReply, err error)
 	RequestPasswordReset(ctx context.Context, req *RequestPasswordResetRequest, opts ...http.CallOption) (rsp *RequestPasswordResetReply, err error)
 	ResetPassword(ctx context.Context, req *ResetPasswordRequest, opts ...http.CallOption) (rsp *ResetPasswordReply, err error)
 	SignIn(ctx context.Context, req *SignInRequest, opts ...http.CallOption) (rsp *AuthReply, err error)
@@ -250,6 +273,19 @@ func (c *AuthHTTPClientImpl) CheckPermission(ctx context.Context, in *CheckPermi
 	opts = append(opts, http.Operation(OperationAuthCheckPermission))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *AuthHTTPClientImpl) HealthCheck(ctx context.Context, in *HealthRequest, opts ...http.CallOption) (*HealthReply, error) {
+	var out HealthReply
+	pattern := "/api/v1/auth/health"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationAuthHealthCheck))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

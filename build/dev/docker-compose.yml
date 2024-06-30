@@ -17,6 +17,8 @@ services:
       - POSTGRES_PASSWORD=${DB_PASS}
     env_file:
       - .env
+    networks:
+      - sb_net
 
   backend:
     build:
@@ -24,9 +26,6 @@ services:
       dockerfile: build/dev/go/Dockerfile
     container_name: sb-backend
     restart: always
-    ports:
-      - ${BACKEND_HTTP_PORT}:${BACKEND_HTTP_PORT}
-      - ${BACKEND_GRPC_PORT}:${BACKEND_GRPC_PORT}
     volumes:
       - .:/go/src/sb
     environment:
@@ -37,3 +36,60 @@ services:
     command: sh -c "tail -f /dev/null"
     env_file:
       - .env
+    networks:
+      - sb_net
+
+  consul:
+    image: hashicorp/consul:1.19
+    container_name: sb-consul
+    ports:
+      - "8500:8500" # Consul Web UI
+      - "8600:8600/udp" # DNS
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    command: agent -server -bootstrap -ui -client=0.0.0.0
+    volumes:
+      - ./cache/consul_data:/consul/data
+    networks:
+      - sb_net
+
+  consul-template:
+    image: hashicorp/consul-template:0.39
+    container_name: sb-consul-template
+    volumes:
+      - ./build/nginx/consul/nginx.ctmpl:/etc/consul-template/nginx.ctmpl
+      - ./build/nginx/consul/consul-template-config.hcl:/etc/consul-template/config.hcl
+      - nginx_conf:/etc/nginx/conf.d
+      - nginx_signal:/nginx_signal
+    user: "root"
+    environment:
+      - CONSUL_HTTP_ADDR=consul:8500
+    command: ["consul-template", "-config", "/etc/consul-template/config.hcl"]
+    depends_on:
+      - consul
+    networks:
+      - sb_net
+
+  nginx:
+    image: nginx:latest
+    container_name: sb-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - nginx_conf:/etc/nginx/conf.d
+      - ./build/nginx/reload.sh:/reload_nginx.sh
+      - nginx_signal:/nginx_signal
+    depends_on:
+      - consul
+      - consul-template
+    networks:
+      - sb_net
+    entrypoint: [ "sh", "-c", "nginx -g 'daemon off;' & /reload_nginx.sh /nginx_signal/reload" ]
+
+networks:
+  sb_net:
+    driver: bridge
+
+volumes:
+  nginx_conf:
+  nginx_signal:

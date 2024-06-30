@@ -2,7 +2,9 @@ package service
 
 import (
 	"context"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"sonar-bat/internal/auth/biz"
+	"sonar-bat/internal/runtime"
 
 	pb "sonar-bat/api/auth/v1"
 )
@@ -10,13 +12,23 @@ import (
 type AuthService struct {
 	pb.UnimplementedAuthServer
 
-	auth *biz.AuthUseCase
+	auth        *biz.AuthUseCase
+	runtimeInfo runtime.Info
 }
 
-func NewAuthService(auth *biz.AuthUseCase) *AuthService {
+func NewAuthService(auth *biz.AuthUseCase, runtimeInfo runtime.Info) *AuthService {
 	return &AuthService{
-		auth: auth,
+		auth:        auth,
+		runtimeInfo: runtimeInfo,
 	}
+}
+
+func (s *AuthService) HealthCheck(_ context.Context, _ *pb.HealthRequest) (*pb.HealthReply, error) {
+	return &pb.HealthReply{
+		Status:  pb.Status_UP,
+		Version: s.runtimeInfo.Version,
+		Uptime:  timestamppb.New(s.runtimeInfo.Uptime),
+	}, nil
 }
 
 func (s *AuthService) SignIn(ctx context.Context, req *pb.SignInRequest) (*pb.AuthReply, error) {

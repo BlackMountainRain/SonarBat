@@ -3,12 +3,18 @@ syntax = "proto3";
 package api.task.v1;
 
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "sonar-bat/api/task/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.task.v1";
 
 service Task {
+	rpc HealthCheck (HealthRequest) returns (HealthReply)  {
+		option (google.api.http) = {
+			get: "/api/v1/task/health",
+		};
+	}
 	rpc CreateTask (CreateTaskRequest) returns (CreateTaskReply) {
 		option (google.api.http) = {
 			post: "/api/v1/tasks"
@@ -44,6 +50,16 @@ service Task {
 	};
 }
 
+enum Status {
+	UP = 0;
+	DOWN = 1;
+}
+message HealthRequest {}
+message HealthReply {
+	Status status = 1;
+	string version = 2;
+	google.protobuf.Timestamp uptime = 3;
+}
 
 message CreateTaskRequest {
 	bool status = 1;

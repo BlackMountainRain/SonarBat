@@ -3,7 +3,7 @@ module sonar-bat
 go 1.22
 
 require (
-	entgo.io/ent v0.13.1
+	entgo.io/ent v0.14.0
 	github.com/bytedance/sonic v1.11.9
 	github.com/envoyproxy/protoc-gen-validate v1.0.4
 	github.com/go-kratos/kratos/v2 v2.7.3

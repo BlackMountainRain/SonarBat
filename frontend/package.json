@@ -18,7 +18,7 @@
     ]
   },
   "dependencies": {
-    "@nextui-org/react": "^2.4.6",
+    "@nextui-org/react": "^2.6.7",
     "@tasoskakour/react-use-oauth2": "^2.0.1",
     "clsx": "^2.1.1",
     "eslint-config-airbnb": "^19.0.4",
